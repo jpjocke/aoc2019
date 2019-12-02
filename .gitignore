@@ -1,0 +1,12 @@
+*.iml
+*.swp
+*.log
+*.idea/
+*/target/*
+*/node/*
+*/node_modules/*
+.vscode/
+.settings/
+.classpath
+.project
+*.class
