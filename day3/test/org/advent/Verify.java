@@ -12,6 +12,7 @@ public class Verify {
         String w1List = "R8,U5,L5,D3";
         String w2List = "U7,R6,D4,L4";
         int expectedDistance = 6;
+        int expectedSteps = 30;
 
         List<Command> w1Commands = CommandParser.parseList(w1List);
         List<Command> w2Commands = CommandParser.parseList(w2List);
@@ -32,8 +33,12 @@ public class Verify {
             System.out.println(point.manhattanDistance(start));
         });
 
-        int smallest = ManhattanComparer.getSmallest(intersections, start);
-        Assert.assertEquals(expectedDistance, smallest);
+        int shortestDistance = ManhattanComparer.getSmallest(intersections, start);
+        Assert.assertEquals(expectedDistance, shortestDistance);
+
+        // steps
+        int smallestSteps = StepFinder.getShortestSteps(board, w1Commands, w2Commands);
+        Assert.assertEquals(expectedSteps, smallestSteps);
     }
 
 
@@ -42,6 +47,7 @@ public class Verify {
         String w1List = "R75,D30,R83,U83,L12,D49,R71,U7,L72";
         String w2List = "U62,R66,U55,R34,D71,R55,D58,R83";
         int expectedDistance = 159;
+        int expectedSteps = 610;
 
         List<Command> w1Commands = CommandParser.parseList(w1List);
         List<Command> w2Commands = CommandParser.parseList(w2List);
@@ -62,6 +68,9 @@ public class Verify {
 
         int smallest = ManhattanComparer.getSmallest(intersections, start);
         Assert.assertEquals(expectedDistance, smallest);
+
+        int smallestSteps = StepFinder.getShortestSteps(board, w1Commands, w2Commands);
+        Assert.assertEquals(expectedSteps, smallestSteps);
     }
 
     @Test
@@ -69,6 +78,7 @@ public class Verify {
         String w1List = "R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51";
         String w2List = "U98,R91,D20,R16,D67,R40,U7,R15,U6,R7";
         int expectedDistance = 135;
+        int expectedSteps = 410;
 
         List<Command> w1Commands = CommandParser.parseList(w1List);
         List<Command> w2Commands = CommandParser.parseList(w2List);
@@ -89,6 +99,9 @@ public class Verify {
 
         int smallest = ManhattanComparer.getSmallest(intersections, start);
         Assert.assertEquals(expectedDistance, smallest);
+
+        int smallestSteps = StepFinder.getShortestSteps(board, w1Commands, w2Commands);
+        Assert.assertEquals(expectedSteps, smallestSteps);
     }
 
     @Test

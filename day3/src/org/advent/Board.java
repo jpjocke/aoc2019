@@ -54,6 +54,35 @@ public class Board {
         return intersections;
     }
 
+    public int getStepsToIntersectionForCommands(List<Command> commands, IntPoint intersection) {
+        IntPoint wire = new IntPoint(start.x, start.y);
+
+        int steps = 0;
+        for (int i = 0; i < commands.size(); i++) {
+            if (wire.manhattanDistance(intersection) == 0) {
+                break;
+            }
+            steps += runLengthUntilIntersection(commands.get(i), wire, intersection);
+           // wire.runCommand(commands.get(i));
+          //  steps++;
+        }
+
+        return steps;
+    }
+
+    private int runLengthUntilIntersection(Command command, IntPoint wire, IntPoint intersection) {
+        int length = command.getLength();
+
+        while (length > 0) {
+            wire.runCommand(command);
+            if (wire.manhattanDistance(intersection) == 0) {
+                break;
+            }
+            length--;
+        }
+        return command.getLength() - length;
+    }
+
     public void print() {
         for (int i = 0; i < board.length; i++) {
             StringBuilder sb = new StringBuilder();

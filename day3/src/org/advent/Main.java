@@ -30,5 +30,9 @@ public class Main {
         System.out.println(smallest);
 
 
+        int smallestSteps = StepFinder.getShortestSteps(board, w1Commands, w2Commands);
+        System.out.println(smallestSteps);
+
+
     }
 }
