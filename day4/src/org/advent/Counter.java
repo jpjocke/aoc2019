@@ -2,6 +2,7 @@ package org.advent;
 
 import org.advent.verifier.CodeVerifier;
 import org.advent.verifier.DoubleDigitVerifier;
+import org.advent.verifier.OnlyDoubleDigitVerifier;
 import org.advent.verifier.RisingNumbersVerifier;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class Counter {
         verifiers = new ArrayList<>();
         verifiers.add(new DoubleDigitVerifier());
         verifiers.add(new RisingNumbersVerifier());
+        verifiers.add(new OnlyDoubleDigitVerifier());
     }
 
     public boolean isDone() {
