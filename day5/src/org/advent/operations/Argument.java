@@ -14,7 +14,11 @@ public class Argument {
         this.mode = mode;
     }
 
-    public int getValue(List<IntCode> intCodes) {
+    public int getValue() {
+        return value;
+    }
+
+    public int getRealValue(List<IntCode> intCodes) {
         switch (mode) {
             case REFERENCE:
                 return intCodes.get(value).getValue();
@@ -22,5 +26,13 @@ public class Argument {
             default:
                 return value;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Argument{" +
+                "value=" + value +
+                ", mode=" + mode +
+                '}';
     }
 }

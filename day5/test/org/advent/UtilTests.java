@@ -1,4 +1,4 @@
-package og.advent;
+package org.advent;
 
 import org.advent.IntCode;
 import org.advent.Util;

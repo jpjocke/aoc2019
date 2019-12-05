@@ -9,10 +9,16 @@ import java.util.List;
 public class IntMachine {
     private List<IntCode> codes;
     private List<Integer> output;
+    private OpFactory factory;
 
-    public IntMachine(List<IntCode> codes) {
+    public IntMachine(List<IntCode> codes, int input) {
         this.codes = codes;
         output = new ArrayList<>();
+        factory = new OpFactory(codes, output, input);
+    }
+
+    public IntMachine(List<IntCode> codes) {
+        this(codes, 0);
     }
 
     public void execute() {
@@ -21,12 +27,16 @@ public class IntMachine {
         printList(codes);
 
         while (true) {
-            Op op = OpFactory.buildOp(current, codes, output);
+            System.out.println("- update -");
+            System.out.println("current: " + current);
+            printList(codes);
+            System.out.println(codes.get(current));
+            Op op = factory.buildOp(current);
             if (op.isExit()) {
                 System.out.println("Found end at index: " + current);
                 break;
             }
-            current += op.execute(codes);
+            current = op.execute(current, codes);
         }
         System.out.println("-- Result");
         printList(codes);

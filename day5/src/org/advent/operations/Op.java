@@ -10,9 +10,9 @@ public abstract class Op {
     }
 
     /**
-     * Return amount of arguments used in list
+     * Return next op to run
      * @param operations
      * @return
      */
-    public abstract int execute(List<IntCode> operations);
+    public abstract int execute(int currentOp, List<IntCode> operations);
 }

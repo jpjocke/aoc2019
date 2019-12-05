@@ -11,7 +11,7 @@ public class OpExit extends Op {
     }
 
     @Override
-    public int execute(List<IntCode> operations) {
-        return 1;
+    public int execute(int currentOp, List<IntCode> operations) {
+        return currentOp + 1;
     }
 }

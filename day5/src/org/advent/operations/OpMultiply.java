@@ -16,11 +16,11 @@ public class OpMultiply extends Op {
     }
 
     @Override
-    public int execute(List<IntCode> operations) {
-        int val1  = arg1.getValue(operations);
-        int val2 = arg2.getValue(operations);
+    public int execute(int currentOp, List<IntCode> operations) {
+        int val1  = arg1.getRealValue(operations);
+        int val2 = arg2.getRealValue(operations);
         int total = val1 * val2;
-        operations.get(result.getValue(operations)).setValue(total);
-        return 4;
+        operations.get(result.getValue()).setValue(total);
+        return currentOp + 4;
     }
 }

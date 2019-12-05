@@ -5,17 +5,17 @@ import org.advent.IntCode;
 import java.util.List;
 
 public class OpInput extends Op {
-   // private Argument arg;
-    private int value;
+    private Argument arg;
+    private int input;
 
-    public OpInput(int value) {
-       // this.arg = new Argument(value, Argument.Mode.ACTUAL);
-        this.value = value;
+    public OpInput(Argument arg, int input) {
+        this.arg = arg;
+        this.input = input;
     }
 
     @Override
-    public int execute(List<IntCode> operations) {
-        operations.get(value).setValue(value);
-        return 2;
+    public int execute(int currentOp, List<IntCode> operations) {
+        operations.get(arg.getValue()).setValue(input);
+        return currentOp + 2;
     }
 }
