@@ -5,10 +5,12 @@ import java.util.List;
 
 public class SpaceObject {
     String id;
+    SpaceObject parent;
     List<SpaceObject> children;
 
-    public SpaceObject(String id) {
+    public SpaceObject(SpaceObject parent, String id) {
         this.id = id;
+        this.parent = parent;
         children = new ArrayList<>();
     }
 
@@ -22,5 +24,9 @@ public class SpaceObject {
 
     public List<SpaceObject> getChildren() {
         return children;
+    }
+
+    public SpaceObject getParent() {
+        return parent;
     }
 }

@@ -11,5 +11,7 @@ public class Main {
         int orbits = MapCalculator.calculateTotalOrbits(root);
 
         System.out.println("Orbits: " + orbits);
+        int jumps = MapCalculator.calculateJumps(root, "SAN", "YOU");
+        System.out.println("Jumps: " + jumps);
     }
 }

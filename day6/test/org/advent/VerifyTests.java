@@ -17,4 +17,12 @@ public class VerifyTests {
         Assert.assertEquals(42, orbits);
     }
 
+    @Test
+    public void verifyJumps() {
+        MapParser parser = new MapParser(MapParserTests.getHopData());
+        SpaceObject root = parser.parseMap();
+        int jumps = MapCalculator.calculateJumps(root, "SAN", "YOU");
+        Assert.assertEquals(4, jumps);
+    }
+
 }

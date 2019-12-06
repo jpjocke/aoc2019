@@ -27,7 +27,7 @@ public class MapParser {
             String[] split = split(map.get(i));
             if (split[0].equals(ROOT)) {
              //   found[i] = true;
-                return new SpaceObject(split[0]);
+                return new SpaceObject(null, split[0]);
             }
         }
         return null;
@@ -41,7 +41,7 @@ public class MapParser {
             String[] split = split(map.get(i));
             if (split[0].equals(parent.getId())) {
                 found[i] = true;
-                SpaceObject child  = new SpaceObject(split[1]);
+                SpaceObject child  = new SpaceObject(parent, split[1]);
                 parent.add(child);
                 resolveChildrenRecursive(child);
             }
