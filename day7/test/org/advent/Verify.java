@@ -44,4 +44,17 @@ public class Verify {
 
         Assert.assertEquals(expected, value);
     }
+
+    @Test
+    public void maxThrusterLoop1() {
+        int phase = 98765;
+        String input = "3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5";
+        int[] phaseInput = Util.toDigits(phase, 5);
+        int expected = 139629729;
+
+        ThrusterSeq ts = new ThrusterSeq(phaseInput, input);
+        int value = ts.runThrusters();
+
+        Assert.assertEquals(expected, value);
+    }
 }
