@@ -2,6 +2,7 @@ package org.advent.util;
 
 
 import org.advent.util.intmachine.IntCode;
+import org.advent.util.intmachine.IntMachine;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,5 +44,17 @@ public class Util {
         return Arrays.stream(split)
                 .map(s -> new IntCode(Integer.parseInt(s)))
                 .collect(Collectors.toList());
+    }
+
+    public static int runMachineWithSingleOutput(List<IntCode> ops, int input) {
+        return runMachineWithSingleOutput(ops, new int[]{input});
+    }
+
+    public static int runMachineWithSingleOutput(List<IntCode> ops, int[] input) {
+        IntMachine im = new IntMachine(ops, input);
+        im.execute();
+        List<Integer> output = im.getOutput();
+        output.stream().forEach(number -> System.out.println("Output: " + number));
+        return output.get(output.size() - 1);
     }
 }

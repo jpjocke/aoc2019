@@ -18,7 +18,7 @@ public class CounterTests {
 
 
     @Test
-    public void endTest() {
+    public void day4endTest() {
         List<CodeVerifier> verifiers = new ArrayList<>();
         verifiers.add(new DoubleDigitVerifier());
         verifiers.add(new RisingNumbersVerifier());
@@ -31,7 +31,7 @@ public class CounterTests {
     }
 
     @Test
-    public void endTestFalse() {
+    public void day4endTestFalse() {
         List<CodeVerifier> verifiers = new ArrayList<>();
         verifiers.add(new DoubleDigitVerifier());
         verifiers.add(new RisingNumbersVerifier());
@@ -44,7 +44,7 @@ public class CounterTests {
     }
 
     @Test
-    public void nextNumber1() {
+    public void day4nextNumber1() {
         List<CodeVerifier> verifiers = new ArrayList<>();
         verifiers.add(new DoubleDigitVerifier());
         verifiers.add(new RisingNumbersVerifier());
@@ -59,7 +59,7 @@ public class CounterTests {
     }
 
     @Test
-    public void nextNumber2() {
+    public void day4nextNumber2() {
         List<CodeVerifier> verifiers = new ArrayList<>();
         verifiers.add(new DoubleDigitVerifier());
         verifiers.add(new RisingNumbersVerifier());
@@ -74,7 +74,7 @@ public class CounterTests {
     }
 
     @Test
-    public void nextNumber3() {
+    public void day4nextNumber3() {
         List<CodeVerifier> verifiers = new ArrayList<>();
         verifiers.add(new DoubleDigitVerifier());
         verifiers.add(new RisingNumbersVerifier());
@@ -89,7 +89,7 @@ public class CounterTests {
     }
 
     @Test
-    public void nextNumber4() {
+    public void day4nextNumber4() {
         List<CodeVerifier> verifiers = new ArrayList<>();
         verifiers.add(new DoubleDigitVerifier());
         verifiers.add(new RisingNumbersVerifier());
@@ -104,7 +104,7 @@ public class CounterTests {
     }
 
     @Test
-    public void nextNumber5() {
+    public void day4nextNumber5() {
         List<CodeVerifier> verifiers = new ArrayList<>();
         verifiers.add(new DoubleDigitVerifier());
         verifiers.add(new RisingNumbersVerifier());
@@ -119,7 +119,7 @@ public class CounterTests {
     }
 
     @Test
-    public void nextNumber6() {
+    public void day4nextNumber6() {
         List<CodeVerifier> verifiers = new ArrayList<>();
         verifiers.add(new DoubleDigitVerifier());
         verifiers.add(new RisingNumbersVerifier());
@@ -136,7 +136,7 @@ public class CounterTests {
     }
 
     @Test
-    public void isNumberOk() {
+    public void day4isNumberOk() {
         List<CodeVerifier> verifiers = new ArrayList<>();
         verifiers.add(new DoubleDigitVerifier());
         verifiers.add(new RisingNumbersVerifier());
@@ -172,7 +172,7 @@ public class CounterTests {
     }
 
     @Test
-    public void notSameFalse() {
+    public void day7notSameFalse() {
         List<CodeVerifier> verifiers = new ArrayList<>();
         verifiers.add(new NoSameNumberVerifier());
         int[] numbers1 = new int[]{0,1,2,3,1};
@@ -185,7 +185,7 @@ public class CounterTests {
 
 
     @Test
-    public void notSameTrue() {
+    public void day7notSameTrue() {
         List<CodeVerifier> verifiers = new ArrayList<>();
         verifiers.add(new NoSameNumberVerifier());
         int[] numbers1 = new int[]{0,1,2,3,4};
