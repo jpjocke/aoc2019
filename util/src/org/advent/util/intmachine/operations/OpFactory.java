@@ -8,12 +8,18 @@ import java.util.List;
 public class OpFactory {
     private List<IntCode> codes;
     private List<Integer> output;
-    private int input;
+    private int[] input;
+    private int inputIndex;
 
-    public OpFactory(List<IntCode> codes, List<Integer> output, int input) {
+    public OpFactory(List<IntCode> codes, List<Integer> output, int[] input) {
         this.codes = codes;
         this.output = output;
         this.input = input;
+        inputIndex = 0;
+    }
+
+    public OpFactory(List<IntCode> codes, List<Integer> output, int input) {
+        this(codes, output, new int[]{input});
     }
 
     public Op buildOp(int index) {
@@ -38,7 +44,9 @@ public class OpFactory {
       //  parameters.add(new Argument(codes.get(index + arguments).getValue(), Argument.Mode.ACTUAL));
 
         if (opCode == 3) {
-            return new OpInput(parameters.get(0), input);
+            int inputToUse = input[inputIndex];
+            inputIndex++;
+            return new OpInput(parameters.get(0), inputToUse);
         }
         if (opCode == 4) {
             return new OpOutput(parameters.get(0), output);

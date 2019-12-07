@@ -12,14 +12,18 @@ public class IntMachine {
     private List<Integer> output;
     private OpFactory factory;
 
-    public IntMachine(List<IntCode> codes, int input) {
+    public IntMachine(List<IntCode> codes, int[] input) {
         this.codes = codes;
         output = new ArrayList<>();
         factory = new OpFactory(codes, output, input);
     }
 
+    public IntMachine(List<IntCode> codes, int input) {
+        this(codes, new int[]{input});
+    }
+
     public IntMachine(List<IntCode> codes) {
-        this(codes, 0);
+        this(codes, new int[]{0});
     }
 
     public void execute() {
