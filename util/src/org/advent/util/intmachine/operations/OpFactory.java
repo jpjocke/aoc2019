@@ -1,5 +1,6 @@
 package org.advent.util.intmachine.operations;
 
+import org.advent.util.Util;
 import org.advent.util.intmachine.IntCode;
 
 import java.util.ArrayList;
@@ -22,8 +23,14 @@ public class OpFactory {
         this(codes, output, new int[]{input});
     }
 
+    public void setInputAndReset(int[] input, List<Integer> output) {
+        this.input = input;
+        inputIndex = 0;
+        this.output = output;
+    }
+
     public Op buildOp(int index) {
-        int[] digits = toInts(codes.get(index).getValue());
+        int[] digits = Util.toDigits(codes.get(index).getValue(), 4);
         int opCode = getOpCode(digits);
         if (opCode == 99) {
             return new OpExit();
@@ -37,13 +44,15 @@ public class OpFactory {
             if (digits.length >= digitIndex) {
                 parameters.add(new Argument(codes.get(index + i + 1).getValue(), digits[digits.length - digitIndex] == 1 ? Argument.Mode.ACTUAL : Argument.Mode.REFERENCE));
             } else {
+                // Result last arg is always ref
                 parameters.add(new Argument(codes.get(index + i + 1).getValue(), Argument.Mode.REFERENCE));
             }
         }
-        // result is always ACTUAL
-      //  parameters.add(new Argument(codes.get(index + arguments).getValue(), Argument.Mode.ACTUAL));
 
         if (opCode == 3) {
+            if(inputIndex >= input.length) {
+                inputIndex = input.length -1;
+            }
             int inputToUse = input[inputIndex];
             inputIndex++;
             return new OpInput(parameters.get(0), inputToUse);
@@ -67,19 +76,9 @@ public class OpFactory {
     }
 
     private int getOpCode(int[] digits) {
-        int a = digits.length >= 2 ? digits[digits.length - 2] * 10 : 0;
+        int a =  digits[digits.length - 2] * 10;
         int opCode = a + digits[digits.length - 1];
         return opCode;
-    }
-
-    private int[] toInts(int larger) {
-        String number = String.valueOf(larger);
-        char[] digitsChar = number.toCharArray();
-        int[] digits = new int[digitsChar.length];
-        for (int i = 0; i < digitsChar.length; i++) {
-            digits[i] = Character.digit(digitsChar[i], 10);
-        }
-        return digits;
     }
 
     private int getArgumentsToUse(int opCode) {

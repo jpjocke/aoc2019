@@ -26,4 +26,13 @@ public class OpEquals extends Op {
         }
         return currentOp + 4;
     }
+
+    @Override
+    public String toString() {
+        return "OpEquals{" +
+                "arg1=" + arg1 +
+                ", arg2=" + arg2 +
+                ", result=" + result +
+                '}';
+    }
 }

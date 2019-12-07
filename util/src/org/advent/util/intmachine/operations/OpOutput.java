@@ -18,4 +18,13 @@ public class OpOutput extends Op {
         output.add(operations.get(arg.getValue()).getValue());
         return currentOp + 2;
     }
+
+
+    @Override
+    public String toString() {
+        return "OpOutput{" +
+                "arg=" + arg +
+                ", output=" + output +
+                '}';
+    }
 }

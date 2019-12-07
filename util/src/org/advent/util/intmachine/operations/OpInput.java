@@ -15,8 +15,16 @@ public class OpInput extends Op {
 
     @Override
     public int execute(int currentOp, List<IntCode> operations) {
-        System.out.println("Input value is: " + input + ", stored at index: " + arg.getValue());
+        System.out.println("  -> Input value is: " + input + ", stored at index: " + arg.getValue());
         operations.get(arg.getValue()).setValue(input);
         return currentOp + 2;
+    }
+
+    @Override
+    public String toString() {
+        return "OpInput{" +
+                "arg=" + arg +
+                ", input=" + input +
+                '}';
     }
 }

@@ -14,4 +14,9 @@ public class OpExit extends Op {
     public int execute(int currentOp, List<IntCode> operations) {
         return currentOp + 1;
     }
+
+    @Override
+    public String toString() {
+        return "OpExit{}";
+    }
 }

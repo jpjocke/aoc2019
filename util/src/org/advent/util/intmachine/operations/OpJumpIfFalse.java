@@ -20,4 +20,12 @@ public class OpJumpIfFalse extends Op {
         }
         return currentOp + 3;
     }
+
+    @Override
+    public String toString() {
+        return "OpJumpIfFalse{" +
+                "arg1=" + arg1 +
+                ", arg2=" + arg2 +
+                '}';
+    }
 }

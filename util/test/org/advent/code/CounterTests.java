@@ -4,6 +4,7 @@ import org.advent.util.code.Counter;
 import org.advent.util.code.verifier.CodeVerifier;
 import org.advent.util.code.verifier.DoubleDigitVerifier;
 import org.advent.util.code.verifier.MaxFourVerifier;
+import org.advent.util.code.verifier.MinFiveVerifier;
 import org.advent.util.code.verifier.NoSameNumberVerifier;
 import org.advent.util.code.verifier.OnlyDoubleDigitVerifier;
 import org.advent.util.code.verifier.RisingNumbersVerifier;
@@ -183,7 +184,6 @@ public class CounterTests {
 
     }
 
-
     @Test
     public void day7notSameTrue() {
         List<CodeVerifier> verifiers = new ArrayList<>();
@@ -194,5 +194,27 @@ public class CounterTests {
         Counter c = new Counter(numbers1, numbers2, verifiers);
         Assert.assertTrue(c.isCurrentNumberOk());
 
+    }
+
+    @Test
+    public void day7minFiveFalse() {
+        List<CodeVerifier> verifiers = new ArrayList<>();
+        verifiers.add(new MinFiveVerifier());
+        int[] numbers1 = new int[]{5,6,7,9,0};
+        int[] numbers2 = new int[]{1,1,1,1,0};
+
+        Counter c = new Counter(numbers1, numbers2, verifiers);
+        Assert.assertFalse(c.isCurrentNumberOk());
+    }
+    @Test
+
+    public void day7minFiveTrue() {
+        List<CodeVerifier> verifiers = new ArrayList<>();
+        verifiers.add(new MinFiveVerifier());
+        int[] numbers1 = new int[]{5,6,7,9,8};
+        int[] numbers2 = new int[]{1,1,1,1,0};
+
+        Counter c = new Counter(numbers1, numbers2, verifiers);
+        Assert.assertTrue(c.isCurrentNumberOk());
     }
 }

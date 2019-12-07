@@ -11,6 +11,8 @@ public class IntMachine {
     private List<IntCode> codes;
     private List<Integer> output;
     private OpFactory factory;
+    int currentPos = 0;
+    boolean isDone = false;
 
     public IntMachine(List<IntCode> codes, int[] input) {
         this.codes = codes;
@@ -26,22 +28,45 @@ public class IntMachine {
         this(codes, new int[]{0});
     }
 
+    public void setInputAndReset(int[] input) {
+        output = new ArrayList<>();
+        this.factory.setInputAndReset(input, output);
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
     public void execute() {
-        int current = 0;
+       execute(false);
+    }
+
+    public void execute(boolean stopOnFirstOutput) {
         System.out.println("-- Executing");
         printList(codes);
 
         while (true) {
-            System.out.println("- update -");
-            System.out.println("current: " + current);
+            Op op = factory.buildOp(currentPos);
+            System.out.println("- Run: " + currentPos + " -> " + codes.get(currentPos) + ", " + op);
             printList(codes);
-            System.out.println(codes.get(current));
-            Op op = factory.buildOp(current);
             if (op.isExit()) {
-                System.out.println("Found end at index: " + current);
+                System.out.println("Found end at index: " + currentPos);
+                currentPos = 0;
+                isDone = true;
                 break;
             }
-            current = op.execute(current, codes);
+            /*
+            if (stopOnFirstOutput && op instanceof OpOutput) {
+                currentPos = op.execute(currentPos, codes);
+                break;
+            }
+             */
+            int next = op.execute(currentPos, codes);
+            if (next > codes.size()) {
+                // if we dont find the exit
+                break;
+            }
+            currentPos = next;
         }
         System.out.println("-- Result");
         printList(codes);
@@ -61,6 +86,7 @@ public class IntMachine {
 
     private void printList(List<IntCode> operations) {
         StringBuilder sb = new StringBuilder();
+        sb.append("  ");
         operations.stream().forEach(op -> sb.append(op.toString() + ", "));
         System.out.println(sb.toString());
     }

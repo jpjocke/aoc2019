@@ -24,4 +24,13 @@ public class OpMultiply extends Op {
         operations.get(result.getValue()).setValue(total);
         return currentOp + 4;
     }
+
+    @Override
+    public String toString() {
+        return "OpMultiply{" +
+                "arg1=" + arg1 +
+                ", arg2=" + arg2 +
+                ", result=" + result +
+                '}';
+    }
 }

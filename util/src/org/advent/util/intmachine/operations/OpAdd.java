@@ -26,4 +26,13 @@ public class OpAdd extends Op {
         operations.get(result.getValue()).setValue(total);
         return currentOp + 4;
     }
+
+    @Override
+    public String toString() {
+        return "OpAdd{" +
+                "arg1=" + arg1 +
+                ", arg2=" + arg2 +
+                ", result=" + result +
+                '}';
+    }
 }
