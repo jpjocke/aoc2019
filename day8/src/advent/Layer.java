@@ -22,6 +22,13 @@ public class Layer {
         return counter;
     }
 
+    public int getDigitAt(int at) {
+        return pixels[at];
+    }
+
+    public int length() {
+        return pixels.length;
+    }
 
     @Override
     public String toString() {

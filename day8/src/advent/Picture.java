@@ -45,4 +45,42 @@ public class Picture {
         }
         return as * bs;
     }
+
+    public void print() {
+        int[][] pic = toImage();
+
+        for (int i = 0; i < pic.length; i++) {
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < pic[i].length; j++) {
+                int val = pic[i][j];
+                if (val == 0 || val == 1) {
+                    sb.append(val == 0 ? " " : "*");
+                }
+            }
+
+
+            System.out.println(sb);
+        }
+    }
+
+    private int[][] toImage() {
+        int[][] pic = new int[picture.get(0).size()][picture.get(0).get(0).length()];
+        for (int i = 0; i < pic.length; i++) {
+            for (int j = 0; j < pic[i].length; j++) {
+                pic[i][j] = 2;
+            }
+        }
+
+        for (int o = 0; o < picture.size(); o++) {
+            List<Layer> layer = picture.get(o);
+            for (int i = 0; i < layer.size(); i++) {
+                for (int j = 0; j < layer.get(i).length(); j++) {
+                    if (pic[i][j] == 2) {
+                        pic[i][j] = layer.get(i).getDigitAt(j);
+                    }
+                }
+            }
+        }
+        return pic;
+    }
 }

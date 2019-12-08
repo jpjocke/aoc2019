@@ -8,21 +8,18 @@ public class PixelParser {
 
         int pointer = 0;
         char[] raw = s.toCharArray();
-        int layerLength = raw.length / height;
 
         List<List<Layer>> picture = new ArrayList<>();
 
         List<Layer> currentRow = new ArrayList<>();
-        while (true) {
+        while (pointer < raw.length) {
             Layer p = toPixel(raw, pointer, width);
             currentRow.add(p);
             pointer += width;
-            if (pointer % layerLength == 0) {
+            if (currentRow.size() == height) {
                 picture.add(currentRow);
                 currentRow = new ArrayList<>();
-                if (picture.size() == height) {
-                    break;
-                }
+
             }
         }
 

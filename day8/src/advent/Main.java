@@ -17,6 +17,8 @@ public class Main {
 
         int result = picture.multipleNumberOfABonLayerC(1, 2, fewest);
         System.out.println("Result is: " + result);
+
+        picture.print();
     }
 
 }
