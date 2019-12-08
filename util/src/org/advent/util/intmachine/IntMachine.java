@@ -3,6 +3,7 @@ package org.advent.util.intmachine;
 
 import org.advent.util.intmachine.operations.Op;
 import org.advent.util.intmachine.operations.OpFactory;
+import org.advent.util.intmachine.operations.OpOutput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,8 @@ public class IntMachine {
     }
 
     public void setInputAndReset(int[] input) {
+       // currentPos = 0; //??
+        isDone = false;
         output = new ArrayList<>();
         this.factory.setInputAndReset(input, output);
     }
@@ -50,23 +53,23 @@ public class IntMachine {
             System.out.println("- Run: " + currentPos + " -> " + codes.get(currentPos) + ", " + op);
             printList(codes);
             if (op.isExit()) {
-                System.out.println("Found end at index: " + currentPos);
+                System.out.println("### Found end at index: " + currentPos);
                 currentPos = 0;
                 isDone = true;
                 break;
             }
-            /*
             if (stopOnFirstOutput && op instanceof OpOutput) {
                 currentPos = op.execute(currentPos, codes);
+                System.out.println("### Exiting from Output: " + currentPos + " isDone: " + isDone);
                 break;
             }
-             */
             int next = op.execute(currentPos, codes);
             if (next > codes.size()) {
                 // if we dont find the exit
                 break;
             }
             currentPos = next;
+            printList(codes);
         }
         System.out.println("-- Result");
         printList(codes);
