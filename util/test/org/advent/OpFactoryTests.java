@@ -2,6 +2,7 @@ package org.advent;
 
 import org.advent.util.Util;
 import org.advent.util.intmachine.IntCode;
+import org.advent.util.intmachine.NoMoreInputException;
 import org.advent.util.intmachine.operations.Op;
 import org.advent.util.intmachine.operations.OpAdd;
 import org.advent.util.intmachine.operations.OpEquals;
@@ -21,7 +22,7 @@ import java.util.List;
 public class OpFactoryTests {
 
     @Test
-    public void toExit() {
+    public void toExit() throws NoMoreInputException {
         String input = "99";
         List<IntCode> ops = Util.toOperations(input);
         OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
@@ -31,7 +32,7 @@ public class OpFactoryTests {
     }
 
     @Test
-    public void toAdd() {
+    public void toAdd() throws NoMoreInputException {
         String input = "1,1,1,1,1";
         List<IntCode> ops = Util.toOperations(input);
         OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
@@ -41,7 +42,7 @@ public class OpFactoryTests {
     }
 
     @Test
-    public void toMultiply() {
+    public void toMultiply() throws NoMoreInputException {
         String input = "2,1,1,1,1";
         List<IntCode> ops = Util.toOperations(input);
         OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
@@ -51,7 +52,7 @@ public class OpFactoryTests {
     }
 
     @Test
-    public void toInput() {
+    public void toInput() throws NoMoreInputException {
         String input = "3,50";
         List<IntCode> ops = Util.toOperations(input);
         OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
@@ -61,7 +62,7 @@ public class OpFactoryTests {
     }
 
     @Test
-    public void toOutput() {
+    public void toOutput() throws NoMoreInputException {
         String input = "4,50";
         List<IntCode> ops = Util.toOperations(input);
         OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
@@ -71,7 +72,7 @@ public class OpFactoryTests {
     }
 
     @Test
-    public void toJumpIfTrue() {
+    public void toJumpIfTrue() throws NoMoreInputException {
         String input = "5,1,0";
         List<IntCode> ops = Util.toOperations(input);
         OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
@@ -81,7 +82,7 @@ public class OpFactoryTests {
     }
 
     @Test
-    public void toJumpIfFalse() {
+    public void toJumpIfFalse() throws NoMoreInputException {
         String input = "6,1,0";
         List<IntCode> ops = Util.toOperations(input);
         OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
@@ -91,7 +92,7 @@ public class OpFactoryTests {
     }
 
     @Test
-    public void toLessThan() {
+    public void toLessThan() throws NoMoreInputException {
         String input = "7,1,0,3";
         List<IntCode> ops = Util.toOperations(input);
         OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
@@ -101,7 +102,7 @@ public class OpFactoryTests {
     }
 
     @Test
-    public void toEquals() {
+    public void toEquals() throws NoMoreInputException {
         String input = "8,1,0,3";
         List<IntCode> ops = Util.toOperations(input);
         OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);

@@ -51,10 +51,13 @@ public class Util {
     }
 
     public static int runMachineWithSingleOutput(List<IntCode> ops, int[] input) {
-        IntMachine im = new IntMachine(ops, input);
+        IntMachine im = new IntMachine(ops);
+        for (int i = 0; i < input.length; i++) {
+            im.addInput(input[i]);
+        }
         im.execute();
         List<Integer> output = im.getOutput();
         output.stream().forEach(number -> System.out.println("Output: " + number));
-        return output.get(output.size() - 1);
+        return im.getLastOutput();
     }
 }

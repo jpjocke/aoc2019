@@ -1,7 +1,9 @@
 package org.advent.util.intmachine.operations;
 
 import org.advent.util.Util;
+import org.advent.util.intmachine.Input;
 import org.advent.util.intmachine.IntCode;
+import org.advent.util.intmachine.NoMoreInputException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,27 +11,25 @@ import java.util.List;
 public class OpFactory {
     private List<IntCode> codes;
     private List<Integer> output;
-    private int[] input;
-    private int inputIndex;
+    private Input input;
 
-    public OpFactory(List<IntCode> codes, List<Integer> output, int[] input) {
-        this.codes = codes;
-        this.output = output;
-        this.input = input;
-        inputIndex = 0;
+    public OpFactory(List<IntCode> codes, List<Integer> output, Input input) {
+        setup(codes, output, input);
     }
 
     public OpFactory(List<IntCode> codes, List<Integer> output, int input) {
-        this(codes, output, new int[]{input});
+        Input i = new Input();
+        i.addInput(input);
+        setup(codes, output, i);
     }
 
-    public void setInputAndReset(int[] input, List<Integer> output) {
-        this.input = input;
-        inputIndex = 0;
+    private void setup(List<IntCode> codes, List<Integer> output, Input input) {
+        this.codes = codes;
         this.output = output;
+        this.input = input;
     }
 
-    public Op buildOp(int index) {
+    public Op buildOp(int index) throws NoMoreInputException {
         int[] digits = Util.toDigits(codes.get(index).getValue(), 4);
         int opCode = getOpCode(digits);
         if (opCode == 99) {
@@ -50,11 +50,7 @@ public class OpFactory {
         }
 
         if (opCode == 3) {
-            if(inputIndex >= input.length) {
-                inputIndex = input.length -1;
-            }
-            int inputToUse = input[inputIndex];
-            inputIndex++;
+            int inputToUse = input.getNextInput();
             return new OpInput(parameters.get(0), inputToUse);
         }
         if (opCode == 4) {

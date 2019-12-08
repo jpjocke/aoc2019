@@ -3,37 +3,45 @@ package org.advent.util.intmachine;
 
 import org.advent.util.intmachine.operations.Op;
 import org.advent.util.intmachine.operations.OpFactory;
-import org.advent.util.intmachine.operations.OpOutput;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class IntMachine {
+    int currentPos = 0;
+    boolean isDone = false;
+    Input input;
     private List<IntCode> codes;
     private List<Integer> output;
     private OpFactory factory;
-    int currentPos = 0;
-    boolean isDone = false;
 
-    public IntMachine(List<IntCode> codes, int[] input) {
+
+    public IntMachine(List<IntCode> codes) {
+        setup(codes, new Input());
+    }
+
+    public IntMachine(List<IntCode> codes, int input) {
+        Input i = new Input();
+        i.addInput(input);
+        setup(codes, i);
+    }
+
+    private void setup(List<IntCode> codes, Input input) {
         this.codes = codes;
+        this.input = input;
         output = new ArrayList<>();
         factory = new OpFactory(codes, output, input);
     }
 
-    public IntMachine(List<IntCode> codes, int input) {
-        this(codes, new int[]{input});
+    public void addInput(int input) {
+        this.input.addInput(input);
     }
 
-    public IntMachine(List<IntCode> codes) {
-        this(codes, new int[]{0});
-    }
-
-    public void setInputAndReset(int[] input) {
-       // currentPos = 0; //??
-        isDone = false;
-        output = new ArrayList<>();
-        this.factory.setInputAndReset(input, output);
+    public int getLastOutput() {
+        if (output.size() == 0) {
+            return -1;
+        }
+        return output.get(output.size() - 1);
     }
 
     public boolean isDone() {
@@ -41,26 +49,24 @@ public class IntMachine {
     }
 
     public void execute() {
-       execute(false);
-    }
-
-    public void execute(boolean stopOnFirstOutput) {
         System.out.println("-- Executing");
         printList(codes);
 
         while (true) {
-            Op op = factory.buildOp(currentPos);
+            Op op;
+            try {
+                op = factory.buildOp(currentPos);
+            } catch (NoMoreInputException e) {
+                // wait for next input
+                break;
+            }
             System.out.println("- Run: " + currentPos + " -> " + codes.get(currentPos) + ", " + op);
             printList(codes);
             if (op.isExit()) {
                 System.out.println("### Found end at index: " + currentPos);
                 currentPos = 0;
+                input.resetCounter();
                 isDone = true;
-                break;
-            }
-            if (stopOnFirstOutput && op instanceof OpOutput) {
-                currentPos = op.execute(currentPos, codes);
-                System.out.println("### Exiting from Output: " + currentPos + " isDone: " + isDone);
                 break;
             }
             int next = op.execute(currentPos, codes);

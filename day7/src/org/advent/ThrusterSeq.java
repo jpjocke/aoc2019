@@ -26,7 +26,6 @@ public class ThrusterSeq {
 
         boolean isDone = false;
         int index = 0;
-        int iteration = 0;
         while (!isDone) {
 
             ThrusterInfo thrusterInfo = thrusters[index];
@@ -40,15 +39,10 @@ public class ThrusterSeq {
             }
 
             index++;
-            iteration++;
             if (index >= sequence.length) {
                 index = 0;
             }
-            System.out.println("#### Iteration: " + iteration);
             System.out.println("#### Output: " + thrusterInputOutput + " for index: " + index);
-            if (iteration > 1000) {
-                break;
-            }
         }
 
         return thrusterInputOutput;
@@ -61,7 +55,9 @@ public class ThrusterSeq {
 
         public ThrusterInfo(List<IntCode> ops, int phase) {
             this.phase = phase;
-            machine = new IntMachine(ops, new int[]{phase, phase});
+            machine = new IntMachine(ops);
+            // behövs 2?
+            machine.addInput(phase);
             amplify();
             lastOutput = 0;
         }
@@ -77,16 +73,10 @@ public class ThrusterSeq {
 
         public void run(int input) {
             System.out.println("#### Run phase: " + phase + " input: " + input);
-          //  machine.setInputAndReset(new int[]{input, input}); // did not work
-            machine.setInputAndReset(new int[]{phase, input});
+            machine.addInput(input);
 
-            machine.execute(true);
-            List<Integer> output = machine.getOutput();
-            output.stream().forEach(number -> System.out.println("Output: " + number));
-            if (!output.isEmpty()) {
-
-                lastOutput = output.get(output.size() - 1);
-            }
+            machine.execute();
+            lastOutput = machine.getLastOutput();
         }
     }
 }

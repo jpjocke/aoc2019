@@ -1,4 +1,4 @@
-package advent;
+package org.advent;
 
 import java.util.ArrayList;
 import java.util.List;
