@@ -26,6 +26,7 @@ public class ThrusterSeq {
 
         boolean isDone = false;
         int index = 0;
+        int iteration = 0;
         while (!isDone) {
 
             ThrusterInfo thrusterInfo = thrusters[index];
@@ -35,14 +36,19 @@ public class ThrusterSeq {
 
             if (index == sequence.length - 1) {
                 // only exit if last is done
-                isDone = thrusterInfo.isDone;
+                isDone = thrusterInfo.isDone();
             }
 
             index++;
+            iteration++;
             if (index >= sequence.length) {
                 index = 0;
             }
+            System.out.println("#### Iteration: " + iteration);
             System.out.println("#### Output: " + thrusterInputOutput + " for index: " + index);
+            if (iteration > 1000) {
+                break;
+            }
         }
 
         return thrusterInputOutput;
@@ -51,14 +57,12 @@ public class ThrusterSeq {
     private class ThrusterInfo {
         int phase;
         IntMachine machine;
-        boolean isDone;
         int lastOutput;
 
         public ThrusterInfo(List<IntCode> ops, int phase) {
             this.phase = phase;
             machine = new IntMachine(ops, new int[]{phase, phase});
             amplify();
-            isDone = false;
             lastOutput = 0;
         }
 
@@ -67,12 +71,16 @@ public class ThrusterSeq {
             machine.execute();
         }
 
+        public boolean isDone() {
+            return machine.isDone();
+        }
+
         public void run(int input) {
             System.out.println("#### Run phase: " + phase + " input: " + input);
+          //  machine.setInputAndReset(new int[]{input, input}); // did not work
             machine.setInputAndReset(new int[]{phase, input});
 
             machine.execute(true);
-            isDone = machine.isDone();
             List<Integer> output = machine.getOutput();
             output.stream().forEach(number -> System.out.println("Output: " + number));
             if (!output.isEmpty()) {
