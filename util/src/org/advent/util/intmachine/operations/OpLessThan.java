@@ -7,13 +7,12 @@ import java.util.List;
 public class OpLessThan extends Op {
     private Argument arg1;
     private Argument arg2;
-    // result is always ref
-    private Argument result;
+    private int resultIndex;
 
-    public OpLessThan(List<Argument> arguments) {
+    public OpLessThan(List<Argument> arguments, int resultIndex) {
         this.arg1 = arguments.get(0);
         this.arg2 = arguments.get(1);
-        this.result = arguments.get(2);
+        this.resultIndex = resultIndex;
     }
 
     @Override
@@ -21,9 +20,9 @@ public class OpLessThan extends Op {
         long val1 = arg1.getRealValue(operations, relativeBase.getValue());
         long val2 = arg2.getRealValue(operations, relativeBase.getValue());
         if (val1 < val2) {
-            operations.get((int)result.getValue()).setValue(1);
+            operations.get(resultIndex).setValue(1);
         } else {
-            operations.get((int)result.getValue()).setValue(0);
+            operations.get(resultIndex).setValue(0);
         }
         return currentOp + 4;
     }
@@ -33,7 +32,7 @@ public class OpLessThan extends Op {
         return "OpLessThan{" +
                 "arg1=" + arg1 +
                 ", arg2=" + arg2 +
-                ", result=" + result +
+                ", resultIndex=" + resultIndex +
                 '}';
     }
 }

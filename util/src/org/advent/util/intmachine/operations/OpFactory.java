@@ -56,17 +56,17 @@ public class OpFactory {
         if (opCode == 4) {
             return new OpOutput(parameters.get(0), output);
         } else if (opCode == 1) {
-            return new OpAdd(parameters);
-        } else if (opCode == 2 || opCode == 0) { // 0???? seems to work but is probably a bug somewhere
-            return new OpMultiply(parameters);
+            return new OpAdd(parameters, (int)codes.get(index + arguments + 1).getValue());
+        } else if (opCode == 2) {
+            return new OpMultiply(parameters, (int)codes.get(index + arguments + 1).getValue());
         } else if (opCode == 5) {
             return new OpJumpIfTrue(parameters);
         } else if (opCode == 6) {
             return new OpJumpIfFalse(parameters);
         } else if (opCode == 7) {
-            return new OpLessThan(parameters);
+            return new OpLessThan(parameters, (int)codes.get(index + arguments + 1).getValue());
         } else if (opCode == 8) {
-            return new OpEquals(parameters);
+            return new OpEquals(parameters, (int)codes.get(index + arguments + 1).getValue());
         } else if (opCode == 9) {
             return new OpRelativeBaseChange(parameters.get(0));
         }
@@ -88,10 +88,10 @@ public class OpFactory {
             return 2;
         }
         if (opCode == 1 ||
-            opCode == 2 || opCode == 0 || //0???
+            opCode == 2 ||
             opCode == 7 ||
             opCode == 8) {
-            return 3;
+            return 2;
         }
         return 0;
     }

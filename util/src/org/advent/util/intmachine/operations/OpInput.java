@@ -5,7 +5,7 @@ import org.advent.util.intmachine.IntCode;
 import java.util.List;
 
 public class OpInput extends Op {
-    // this arg is always reference
+    // this arg is always reference ????
     private Argument arg;
     private int input;
 
@@ -16,8 +16,12 @@ public class OpInput extends Op {
 
     @Override
     public int execute(int currentOp, List<IntCode> operations, IntCode relativeBase) {
-        System.out.println("  -> Input value is: " + input + ", stored at index: " + arg.getValue());
-        operations.get((int)arg.getValue()).setValue(input);
+        long val = arg.getValue();
+        if (arg.getMode() == Argument.Mode.RELATIVE) {
+            val = arg.getRealValue(operations, relativeBase.getValue());
+        }
+        System.out.println("  -> Input value is: " + input + ", stored at index: " + val);
+        operations.get((int)val).setValue(input);
         return currentOp + 2;
     }
 

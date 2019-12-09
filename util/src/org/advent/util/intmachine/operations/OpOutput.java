@@ -5,7 +5,6 @@ import org.advent.util.intmachine.IntCode;
 import java.util.List;
 
 public class OpOutput extends Op {
-    // This is always reference
     private Argument arg;
     private List<Long> output;
 

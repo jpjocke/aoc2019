@@ -8,13 +8,12 @@ import java.util.List;
 public class OpMultiply extends Op {
     private Argument arg1;
     private Argument arg2;
-    // result is always ref
-    private Argument result;
+    private int resultIndex;
 
-    public OpMultiply(List<Argument> arguments) {
+    public OpMultiply(List<Argument> arguments, int resultIndex) {
         this.arg1 = arguments.get(0);
         this.arg2 = arguments.get(1);
-        this.result = arguments.get(2);
+        this.resultIndex = resultIndex;
     }
 
     @Override
@@ -22,7 +21,7 @@ public class OpMultiply extends Op {
         long val1  = arg1.getRealValue(operations, relativeBase.getValue());
         long val2 = arg2.getRealValue(operations, relativeBase.getValue());
         long total = val1 * val2;
-        operations.get((int)result.getValue()).setValue(total);
+        operations.get(resultIndex).setValue(total);
         return currentOp + 4;
     }
 
@@ -31,7 +30,7 @@ public class OpMultiply extends Op {
         return "OpMultiply{" +
                 "arg1=" + arg1 +
                 ", arg2=" + arg2 +
-                ", result=" + result +
+                ", resultIndex=" + resultIndex +
                 '}';
     }
 }
