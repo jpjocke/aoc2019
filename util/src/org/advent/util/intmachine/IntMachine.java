@@ -12,9 +12,9 @@ public class IntMachine {
     boolean isDone = false;
     Input input;
     private List<IntCode> codes;
-    private List<Integer> output;
+    private List<Long> output;
     private OpFactory factory;
-
+    private IntCode relativeBase;
 
     public IntMachine(List<IntCode> codes) {
         setup(codes, new Input());
@@ -31,13 +31,14 @@ public class IntMachine {
         this.input = input;
         output = new ArrayList<>();
         factory = new OpFactory(codes, output, input);
+        relativeBase = new IntCode(0);
     }
 
     public void addInput(int input) {
         this.input.addInput(input);
     }
 
-    public int getLastOutput() {
+    public long getLastOutput() {
         if (output.size() == 0) {
             return -1;
         }
@@ -60,7 +61,7 @@ public class IntMachine {
                 // wait for next input
                 break;
             }
-            System.out.println("- Run: " + currentPos + " -> " + codes.get(currentPos) + ", " + op);
+            System.out.println("- Run: " + currentPos + " -> " + codes.get(currentPos) + ", " + op + ", " + relativeBase);
             printList(codes);
             if (op.isExit()) {
                 System.out.println("### Found end at index: " + currentPos);
@@ -69,7 +70,7 @@ public class IntMachine {
                 isDone = true;
                 break;
             }
-            int next = op.execute(currentPos, codes);
+            int next = op.execute(currentPos, codes, relativeBase);
             if (next > codes.size()) {
                 // if we dont find the exit
                 break;
@@ -81,7 +82,7 @@ public class IntMachine {
         printList(codes);
     }
 
-    public int getResult() {
+    public long getResult() {
         return codes.get(0).getValue();
     }
 
@@ -89,7 +90,7 @@ public class IntMachine {
         return codes;
     }
 
-    public List<Integer> getOutput() {
+    public List<Long> getOutput() {
         return output;
     }
 

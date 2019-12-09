@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 
 public class Util {
 
-    public static int[] toDigits(int larger) {
+    public static int[] toDigits(long larger) {
         return toDigits(larger, String.valueOf(larger).length());
     }
 
-    public static int[] toDigits(int larger, int length) {
+    public static int[] toDigits(long larger, int length) {
         String number = String.valueOf(larger);
         char[] digitsChar = number.toCharArray();
         int[] digits = new int[digitsChar.length];
@@ -40,23 +40,31 @@ public class Util {
     }
 
     public static List<IntCode> toOperations(String string) {
-        String[] split = string.split(",");
-        return Arrays.stream(split)
-                .map(s -> new IntCode(Integer.parseInt(s)))
-                .collect(Collectors.toList());
+        return toOperations(string, 1000);
     }
 
-    public static int runMachineWithSingleOutput(List<IntCode> ops, int input) {
+    public static List<IntCode> toOperations(String string, int size) {
+        String[] split = string.split(",");
+        List<IntCode> ops =  Arrays.stream(split)
+                .map(s -> new IntCode(Long.parseLong(s)))
+                .collect(Collectors.toList());
+        for(int i = ops.size(); i< size; i++) {
+            ops.add(new IntCode(0));
+        }
+        return ops;
+    }
+
+    public static long runMachineWithSingleOutput(List<IntCode> ops, int input) {
         return runMachineWithSingleOutput(ops, new int[]{input});
     }
 
-    public static int runMachineWithSingleOutput(List<IntCode> ops, int[] input) {
+    public static long runMachineWithSingleOutput(List<IntCode> ops, int[] input) {
         IntMachine im = new IntMachine(ops);
         for (int i = 0; i < input.length; i++) {
             im.addInput(input[i]);
         }
         im.execute();
-        List<Integer> output = im.getOutput();
+        List<Long> output = im.getOutput();
         output.stream().forEach(number -> System.out.println("Output: " + number));
         return im.getLastOutput();
     }

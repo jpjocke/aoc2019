@@ -1,17 +1,17 @@
 package org.advent.util.intmachine;
 
 public class IntCode {
-    private int value;
+    private long value;
 
-    public IntCode(int value) {
+    public IntCode(long value) {
         this.value = value;
     }
 
-    public void setValue(int value) {
+    public void setValue(long value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 

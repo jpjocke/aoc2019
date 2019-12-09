@@ -5,17 +5,20 @@ import org.advent.util.intmachine.IntCode;
 import java.util.List;
 
 public class OpOutput extends Op {
+    // This is always reference
     private Argument arg;
-    private List<Integer> output;
+    private List<Long> output;
 
-    public OpOutput(Argument arg, List<Integer> output) {
+    public OpOutput(Argument arg, List<Long> output) {
         this.arg = arg;
         this.output = output;
     }
 
     @Override
-    public int execute(int currentOp, List<IntCode> operations) {
-        output.add(operations.get(arg.getValue()).getValue());
+    public int execute(int currentOp, List<IntCode> operations, IntCode relativeBase) {
+        long val = arg.getRealValue(operations, relativeBase.getValue());
+        output.add(val);
+        output.stream().forEach(o -> System.out.println("    o: " + o));
         return currentOp + 2;
     }
 

@@ -85,7 +85,7 @@ public class IntMachineOldDaysTests {
 
         String string = "3,9,8,9,10,9,4,9,99,-1,8";
         List<IntCode> ops = Util.toOperations(string);
-        int output = Util.runMachineWithSingleOutput(ops, input);
+        long output = Util.runMachineWithSingleOutput(ops, input);
         Assert.assertEquals(1, output);
     }
 
@@ -95,7 +95,7 @@ public class IntMachineOldDaysTests {
 
         String string = "3,9,8,9,10,9,4,9,99,-1,8";
         List<IntCode> ops = Util.toOperations(string);
-        int output = Util.runMachineWithSingleOutput(ops, input);
+        long output = Util.runMachineWithSingleOutput(ops, input);
         Assert.assertEquals(0, output);
     }
 
@@ -105,7 +105,7 @@ public class IntMachineOldDaysTests {
 
         String string = "3,9,7,9,10,9,4,9,99,-1,8";
         List<IntCode> ops = Util.toOperations(string);
-        int output = Util.runMachineWithSingleOutput(ops, input);
+        long output = Util.runMachineWithSingleOutput(ops, input);
         Assert.assertEquals(1, output);
     }
 
@@ -115,7 +115,7 @@ public class IntMachineOldDaysTests {
 
         String string = "3,9,7,9,10,9,4,9,99,-1,8";
         List<IntCode> ops = Util.toOperations(string);
-        int output = Util.runMachineWithSingleOutput(ops, input);
+        long output = Util.runMachineWithSingleOutput(ops, input);
         Assert.assertEquals(0, output);
     }
 
@@ -125,7 +125,7 @@ public class IntMachineOldDaysTests {
 
         String string = "3,3,1108,-1,8,3,4,3,99";
         List<IntCode> ops = Util.toOperations(string);
-        int output = Util.runMachineWithSingleOutput(ops, input);
+        long output = Util.runMachineWithSingleOutput(ops, input);
         Assert.assertEquals(1, output);
     }
 
@@ -135,7 +135,7 @@ public class IntMachineOldDaysTests {
 
         String string = "3,3,1108,-1,8,3,4,3,99";
         List<IntCode> ops = Util.toOperations(string);
-        int output = Util.runMachineWithSingleOutput(ops, input);
+        long output = Util.runMachineWithSingleOutput(ops, input);
         Assert.assertEquals(0, output);
     }
 
@@ -145,7 +145,7 @@ public class IntMachineOldDaysTests {
 
         String string = "3,3,1107,-1,8,3,4,3,99";
         List<IntCode> ops = Util.toOperations(string);
-        int output = Util.runMachineWithSingleOutput(ops, input);
+        long output = Util.runMachineWithSingleOutput(ops, input);
         Assert.assertEquals(1, output);
     }
 
@@ -155,7 +155,7 @@ public class IntMachineOldDaysTests {
 
         String string = "3,3,1107,-1,8,3,4,3,99";
         List<IntCode> ops = Util.toOperations(string);
-        int output = Util.runMachineWithSingleOutput(ops, input);
+        long output = Util.runMachineWithSingleOutput(ops, input);
         Assert.assertEquals(0, output);
     }
 
@@ -165,7 +165,7 @@ public class IntMachineOldDaysTests {
 
         String string = "3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9";
         List<IntCode> ops = Util.toOperations(string);
-        int output = Util.runMachineWithSingleOutput(ops, input);
+        long output = Util.runMachineWithSingleOutput(ops, input);
         Assert.assertEquals(1, output);
     }
 
@@ -175,7 +175,7 @@ public class IntMachineOldDaysTests {
 
         String string = "3,3,1105,-1,9,1101,0,0,12,4,12,99,1";
         List<IntCode> ops = Util.toOperations(string);
-        int output = Util.runMachineWithSingleOutput(ops, input);
+        long output = Util.runMachineWithSingleOutput(ops, input);
         Assert.assertEquals(0, output);
     }
 
@@ -185,7 +185,7 @@ public class IntMachineOldDaysTests {
 
         String string = "3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99";
         List<IntCode> ops = Util.toOperations(string);
-        int output = Util.runMachineWithSingleOutput(ops, input);
+        long output = Util.runMachineWithSingleOutput(ops, input);
         Assert.assertEquals(1001, output);
     }
 
@@ -195,7 +195,7 @@ public class IntMachineOldDaysTests {
 
         String string = "3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99";
         List<IntCode> ops = Util.toOperations(string);
-        int output = Util.runMachineWithSingleOutput(ops, input);
+        long output = Util.runMachineWithSingleOutput(ops, input);
         Assert.assertEquals(1000, output);
     }
 
@@ -210,5 +210,46 @@ public class IntMachineOldDaysTests {
 //        im.execute();
      //   List<Integer> output = im.getOutput();
       //  Assert.assertEquals(999, output.get(0).intValue());
+    }
+
+    @Test
+    public void day9_relative_1() {
+
+        String string = "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99";
+        List<IntCode> ops = Util.toOperations(string);
+        for (int i = 0; i < 200; i++) {
+            ops.add(new IntCode(0));
+        }
+        IntMachine im = new IntMachine(ops);
+        im.execute();
+        List<Long> out = im.getOutput();
+        Assert.assertEquals(109, out.get(0).intValue());
+        Assert.assertEquals(1, out.get(1).intValue());
+        Assert.assertEquals(204, out.get(2).intValue());
+
+    }
+
+    @Test
+    public void day9_large() {
+
+        String string = "1102,34915192,34915192,7,4,7,99,0";
+        List<IntCode> ops = Util.toOperations(string);
+        IntMachine im = new IntMachine(ops);
+        im.execute();
+        List<Long> out = im.getOutput();
+       Assert.assertEquals(1219070632396864L, out.get(0).longValue());
+
+    }
+
+    @Test
+    public void day9_large2() {
+
+        String string = "104,1125899906842624,99";
+        List<IntCode> ops = Util.toOperations(string);
+        IntMachine im = new IntMachine(ops);
+        im.execute();
+        List<Long> out = im.getOutput();
+        Assert.assertEquals(1125899906842624L, out.get(0).longValue());
+
     }
 }

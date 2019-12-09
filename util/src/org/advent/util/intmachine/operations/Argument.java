@@ -6,27 +6,43 @@ import org.advent.util.intmachine.IntCode;
 import java.util.List;
 
 public class Argument {
-    public enum Mode{ACTUAL, REFERENCE};
-    int value;
+    public enum Mode{ACTUAL, REFERENCE, RELATIVE};
+    long value;
     Mode mode;
 
-    public Argument(int value, Mode mode) {
+    public Argument(long value, int mode) {
         this.value = value;
-        this.mode = mode;
+        switch (mode) {
+            case 2:
+                this.mode = Mode.RELATIVE;
+                break;
+            case 1:
+                this.mode = Mode.ACTUAL;
+                break;
+            case 0:
+            default:
+                this.mode = Mode.REFERENCE;
+        }
     }
 
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 
-    public int getRealValue(List<IntCode> intCodes) {
+    public long getRealValue(List<IntCode> intCodes, long relativeBase) {
         switch (mode) {
             case REFERENCE:
-                return intCodes.get(value).getValue();
+                return intCodes.get((int)value).getValue();
+            case RELATIVE:
+                return intCodes.get((int)(value + relativeBase)).getValue();
             case ACTUAL:
             default:
                 return value;
         }
+    }
+
+    public Mode getMode() {
+        return mode;
     }
 
     @Override

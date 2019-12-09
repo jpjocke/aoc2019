@@ -4,28 +4,26 @@ import org.advent.util.intmachine.IntCode;
 
 import java.util.List;
 
-public class OpInput extends Op {
-    // this arg is always reference
+public class OpRelativeBaseChange extends Op {
     private Argument arg;
-    private int input;
 
-    public OpInput(Argument arg, int input) {
+    public OpRelativeBaseChange(Argument arg) {
         this.arg = arg;
-        this.input = input;
     }
 
     @Override
     public int execute(int currentOp, List<IntCode> operations, IntCode relativeBase) {
-        System.out.println("  -> Input value is: " + input + ", stored at index: " + arg.getValue());
-        operations.get((int)arg.getValue()).setValue(input);
+        long now = relativeBase.getValue();
+        long result = now + arg.getRealValue(operations, relativeBase.getValue());
+        relativeBase.setValue(result);
         return currentOp + 2;
     }
 
+
     @Override
     public String toString() {
-        return "OpInput{" +
+        return "OpRelativeBaseChange{" +
                 "arg=" + arg +
-                ", input=" + input +
                 '}';
     }
 }

@@ -10,20 +10,20 @@ import java.util.List;
 
 public class OpFactory {
     private List<IntCode> codes;
-    private List<Integer> output;
+    private List<Long> output;
     private Input input;
 
-    public OpFactory(List<IntCode> codes, List<Integer> output, Input input) {
+    public OpFactory(List<IntCode> codes, List<Long> output, Input input) {
         setup(codes, output, input);
     }
 
-    public OpFactory(List<IntCode> codes, List<Integer> output, int input) {
+    public OpFactory(List<IntCode> codes, List<Long> output, int input) {
         Input i = new Input();
         i.addInput(input);
         setup(codes, output, i);
     }
 
-    private void setup(List<IntCode> codes, List<Integer> output, Input input) {
+    private void setup(List<IntCode> codes, List<Long> output, Input input) {
         this.codes = codes;
         this.output = output;
         this.input = input;
@@ -42,10 +42,10 @@ public class OpFactory {
         for (int i = 0; i < arguments; i++) {
             int digitIndex = 2 + i + 1;
             if (digits.length >= digitIndex) {
-                parameters.add(new Argument(codes.get(index + i + 1).getValue(), digits[digits.length - digitIndex] == 1 ? Argument.Mode.ACTUAL : Argument.Mode.REFERENCE));
+                parameters.add(new Argument(codes.get(index + i + 1).getValue(), digits[digits.length - digitIndex]));
             } else {
                 // Result last arg is always ref
-                parameters.add(new Argument(codes.get(index + i + 1).getValue(), Argument.Mode.REFERENCE));
+                parameters.add(new Argument(codes.get(index + i + 1).getValue(), 0));
             }
         }
 
@@ -67,6 +67,8 @@ public class OpFactory {
             return new OpLessThan(parameters);
         } else if (opCode == 8) {
             return new OpEquals(parameters);
+        } else if (opCode == 9) {
+            return new OpRelativeBaseChange(parameters.get(0));
         }
         return new OpExit();
     }
@@ -78,7 +80,7 @@ public class OpFactory {
     }
 
     private int getArgumentsToUse(int opCode) {
-        if (opCode == 3 || opCode == 4) {
+        if (opCode == 3 || opCode == 4 || opCode == 9) {
             return 1;
         }
         if (opCode == 5 ||

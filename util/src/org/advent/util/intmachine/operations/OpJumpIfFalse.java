@@ -14,9 +14,9 @@ public class OpJumpIfFalse extends Op {
     }
 
     @Override
-    public int execute(int currentOp, List<IntCode> operations) {
-        if (arg1.getRealValue(operations) == 0) {
-            return arg2.getRealValue(operations);
+    public int execute(int currentOp, List<IntCode> operations, IntCode relativeBase) {
+        if (arg1.getRealValue(operations, relativeBase.getValue()) == 0) {
+            return (int)arg2.getRealValue(operations, relativeBase.getValue());
         }
         return currentOp + 3;
     }

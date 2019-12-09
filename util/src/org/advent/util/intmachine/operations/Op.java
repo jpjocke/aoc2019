@@ -15,5 +15,5 @@ public abstract class Op {
      * @param operations
      * @return
      */
-    public abstract int execute(int currentOp, List<IntCode> operations);
+    public abstract int execute(int currentOp, List<IntCode> operations, IntCode relativeBase);
 }

@@ -7,6 +7,7 @@ import java.util.List;
 public class OpLessThan extends Op {
     private Argument arg1;
     private Argument arg2;
+    // result is always ref
     private Argument result;
 
     public OpLessThan(List<Argument> arguments) {
@@ -16,13 +17,13 @@ public class OpLessThan extends Op {
     }
 
     @Override
-    public int execute(int currentOp, List<IntCode> operations) {
-        int val1 = arg1.getRealValue(operations);
-        int val2 = arg2.getRealValue(operations);
+    public int execute(int currentOp, List<IntCode> operations, IntCode relativeBase) {
+        long val1 = arg1.getRealValue(operations, relativeBase.getValue());
+        long val2 = arg2.getRealValue(operations, relativeBase.getValue());
         if (val1 < val2) {
-            operations.get(result.getValue()).setValue(1);
+            operations.get((int)result.getValue()).setValue(1);
         } else {
-            operations.get(result.getValue()).setValue(0);
+            operations.get((int)result.getValue()).setValue(0);
         }
         return currentOp + 4;
     }
