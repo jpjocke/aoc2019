@@ -6,7 +6,7 @@ import org.advent.util.intmachine.IntCode;
 import java.util.List;
 
 public class Argument {
-    public enum Mode{ACTUAL, REFERENCE, RELATIVE};
+    public enum Mode{IMMEDIATE, POSITION, RELATIVE};
     long value;
     Mode mode;
 
@@ -17,11 +17,11 @@ public class Argument {
                 this.mode = Mode.RELATIVE;
                 break;
             case 1:
-                this.mode = Mode.ACTUAL;
+                this.mode = Mode.IMMEDIATE;
                 break;
             case 0:
             default:
-                this.mode = Mode.REFERENCE;
+                this.mode = Mode.POSITION;
         }
     }
 
@@ -31,11 +31,11 @@ public class Argument {
 
     public long getRealValue(List<IntCode> intCodes, long relativeBase) {
         switch (mode) {
-            case REFERENCE:
+            case POSITION:
                 return intCodes.get((int)value).getValue();
             case RELATIVE:
                 return intCodes.get((int)(value + relativeBase)).getValue();
-            case ACTUAL:
+            case IMMEDIATE:
             default:
                 return value;
         }

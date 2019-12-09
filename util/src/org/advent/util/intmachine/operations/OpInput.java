@@ -18,7 +18,10 @@ public class OpInput extends Op {
     public int execute(int currentOp, List<IntCode> operations, IntCode relativeBase) {
         long val = arg.getValue();
         if (arg.getMode() == Argument.Mode.RELATIVE) {
-            val = arg.getRealValue(operations, relativeBase.getValue());
+        //    val = arg.getRealValue(operations, relativeBase.getValue());
+         //   val = operations.get((int)val).getValue();
+// hmmmm
+            val = arg.getValue() + relativeBase.getValue();
         }
         System.out.println("  -> Input value is: " + input + ", stored at index: " + val);
         operations.get((int)val).setValue(input);

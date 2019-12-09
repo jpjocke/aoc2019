@@ -8,12 +8,12 @@ import java.util.List;
 public class OpAdd extends Op {
     private Argument arg1;
     private Argument arg2;
-    private int resultIndex;
+    private Argument result;
 
-    public OpAdd(List<Argument> arguments, int resultIndex) {
+    public OpAdd(List<Argument> arguments) {
         this.arg1 = arguments.get(0);
         this.arg2 = arguments.get(1);
-        this.resultIndex = resultIndex;
+        this.result = arguments.get(2);
     }
 
     @Override
@@ -23,7 +23,11 @@ public class OpAdd extends Op {
         long total = val1 + val2;
 
         // result is always real
-        operations.get(resultIndex).setValue(total);
+        long index = result.getValue();
+        if (result.getMode() == Argument.Mode.RELATIVE) {
+            index = result.getValue() + relativeBase.getValue();
+        }
+        operations.get((int)index).setValue(total);
         return currentOp + 4;
     }
 
@@ -32,7 +36,7 @@ public class OpAdd extends Op {
         return "OpAdd{" +
                 "arg1=" + arg1 +
                 ", arg2=" + arg2 +
-                ", resultIndex=" + resultIndex +
+                ", result=" + result +
                 '}';
     }
 }

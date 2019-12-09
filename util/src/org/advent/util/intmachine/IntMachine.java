@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IntMachine {
+    public static boolean DEBUG = false;
     int currentPos = 0;
     boolean isDone = false;
     Input input;
@@ -61,10 +62,15 @@ public class IntMachine {
                 // wait for next input
                 break;
             }
-            System.out.println("- Run: " + currentPos + " -> " + codes.get(currentPos) + ", " + op + ", " + relativeBase);
-            printList(codes);
+            if (DEBUG) {
+                System.out.println("- Run: " + currentPos + " -> " + codes.get(currentPos) + ", " + op + ", RelativeBase: " + relativeBase);
+                printList(codes);
+            }
             if (op.isExit()) {
-                System.out.println("### Found end at index: " + currentPos);
+
+                if (DEBUG) {
+                    System.out.println("### Found end at index: " + currentPos);
+                }
                 currentPos = 0;
                 input.resetCounter();
                 isDone = true;
@@ -76,10 +82,16 @@ public class IntMachine {
                 break;
             }
             currentPos = next;
+
+            if (DEBUG) {
+                printList(codes);
+            }
+        }
+
+        if (DEBUG) {
+            System.out.println("-- Result");
             printList(codes);
         }
-        System.out.println("-- Result");
-        printList(codes);
     }
 
     public long getResult() {
@@ -95,9 +107,11 @@ public class IntMachine {
     }
 
     private void printList(List<IntCode> operations) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("  ");
-        operations.stream().forEach(op -> sb.append(op.toString() + ", "));
-        System.out.println(sb.toString());
+        if (DEBUG) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("  ");
+            operations.stream().forEach(op -> sb.append(op.toString() + ", "));
+            System.out.println(sb.toString());
+        }
     }
 }

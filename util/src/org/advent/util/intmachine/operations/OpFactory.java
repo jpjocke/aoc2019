@@ -30,7 +30,7 @@ public class OpFactory {
     }
 
     public Op buildOp(int index) throws NoMoreInputException {
-        int[] digits = Util.toDigits(codes.get(index).getValue(), 4);
+        int[] digits = Util.toDigits(codes.get(index).getValue(), 5);
         int opCode = getOpCode(digits);
         if (opCode == 99) {
             return new OpExit();
@@ -41,12 +41,12 @@ public class OpFactory {
         List<Argument> parameters = new ArrayList<>();
         for (int i = 0; i < arguments; i++) {
             int digitIndex = 2 + i + 1;
-            if (digits.length >= digitIndex) {
+        //    if (digits.length >= digitIndex) {
                 parameters.add(new Argument(codes.get(index + i + 1).getValue(), digits[digits.length - digitIndex]));
-            } else {
+         //   } else {
                 // Result last arg is always ref
-                parameters.add(new Argument(codes.get(index + i + 1).getValue(), 0));
-            }
+          //      parameters.add(new Argument(codes.get(index + i + 1).getValue(), 0));
+           // }
         }
 
         if (opCode == 3) {
@@ -56,17 +56,17 @@ public class OpFactory {
         if (opCode == 4) {
             return new OpOutput(parameters.get(0), output);
         } else if (opCode == 1) {
-            return new OpAdd(parameters, (int)codes.get(index + arguments + 1).getValue());
+            return new OpAdd(parameters);
         } else if (opCode == 2) {
-            return new OpMultiply(parameters, (int)codes.get(index + arguments + 1).getValue());
+            return new OpMultiply(parameters);
         } else if (opCode == 5) {
             return new OpJumpIfTrue(parameters);
         } else if (opCode == 6) {
             return new OpJumpIfFalse(parameters);
         } else if (opCode == 7) {
-            return new OpLessThan(parameters, (int)codes.get(index + arguments + 1).getValue());
+            return new OpLessThan(parameters);
         } else if (opCode == 8) {
-            return new OpEquals(parameters, (int)codes.get(index + arguments + 1).getValue());
+            return new OpEquals(parameters);
         } else if (opCode == 9) {
             return new OpRelativeBaseChange(parameters.get(0));
         }
@@ -91,7 +91,7 @@ public class OpFactory {
             opCode == 2 ||
             opCode == 7 ||
             opCode == 8) {
-            return 2;
+            return 3;
         }
         return 0;
     }
