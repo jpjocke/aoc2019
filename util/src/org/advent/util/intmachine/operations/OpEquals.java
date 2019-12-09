@@ -1,6 +1,6 @@
 package org.advent.util.intmachine.operations;
 
-import org.advent.util.intmachine.IntCode;
+import org.advent.util.intmachine.IntCodes;
 
 import java.util.List;
 
@@ -16,19 +16,19 @@ public class OpEquals extends Op {
     }
 
     @Override
-    public int execute(int currentOp, List<IntCode> operations, IntCode relativeBase) {
-        long val1 = arg1.getRealValue(operations, relativeBase.getValue());
-        long val2 = arg2.getRealValue(operations, relativeBase.getValue());
+    public int execute(int currentOp, IntCodes intCodes) {
+        long val1 = arg1.getRealValue(intCodes);
+        long val2 = arg2.getRealValue(intCodes);
 
         long index = result.getValue();
         if (result.getMode() == Argument.Mode.RELATIVE) {
-            index = result.getValue() + relativeBase.getValue();
+            index = result.getValue() + intCodes.getRelativeBase();
         }
 
         if (val1 == val2) {
-            operations.get((int)index).setValue(1);
+            intCodes.setValueAtIndex(index, 1);
         } else {
-            operations.get((int)index).setValue(0);
+            intCodes.setValueAtIndex(index, 0);
         }
         return currentOp + 4;
     }

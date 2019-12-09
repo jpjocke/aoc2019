@@ -19,7 +19,7 @@ public class Main {
     }
 
     private static void step1() {
-        int max = 0;
+        long max = 0;
 
         int[] start = Util.toDigits(0, 5);
         int[] end = Util.toDigits(44444, 5);
@@ -34,7 +34,7 @@ public class Main {
                 int[] thrusterSeq = c.getCurrent();
 
                 ThrusterSeq seq = new ThrusterSeq(thrusterSeq, in);
-                int value = seq.runThrusters();
+                long value = seq.runThrusters();
                 if (value > max) {
                     max = value;
                 }
@@ -46,7 +46,7 @@ public class Main {
     }
 
     private static void step2() {
-        int max = 0;
+        long max = 0;
 
         int[] start = Util.toDigits(55555, 5);
         int[] end = Util.toDigits(99999, 5);
@@ -61,7 +61,7 @@ public class Main {
                 int[] thrusterSeq = c.getCurrent();
 
                 ThrusterSeq seq = new ThrusterSeq(thrusterSeq, in);
-                int value = seq.runThrusters();
+                long value = seq.runThrusters();
                 if (value > max) {
                     max = value;
                 }

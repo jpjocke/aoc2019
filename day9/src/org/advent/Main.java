@@ -1,8 +1,7 @@
 package org.advent;
 
 
-import org.advent.util.Util;
-import org.advent.util.intmachine.IntCode;
+import org.advent.util.intmachine.IntCodes;
 import org.advent.util.intmachine.IntMachine;
 
 import java.util.List;
@@ -12,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         long tick = System.currentTimeMillis();
 
-        List<IntCode> ops = Util.toOperations(in, 2000);
+        IntCodes ops = new IntCodes(in);
         IntMachine im = new IntMachine(ops, 2);
         im.execute();
         List<Long> output = im.getOutput();
@@ -21,6 +20,7 @@ public class Main {
         System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
         // unoptimized with printouts: 91491 ms
         // unoptimized no printouts: 153 ms
+        // optimized no printouts: 144 ms
     }
 
 }

@@ -1,8 +1,6 @@
 package org.advent.util.intmachine.operations;
 
-import org.advent.util.intmachine.IntCode;
-
-import java.util.List;
+import org.advent.util.intmachine.IntCodes;
 
 public class OpRelativeBaseChange extends Op {
     private Argument arg;
@@ -12,10 +10,10 @@ public class OpRelativeBaseChange extends Op {
     }
 
     @Override
-    public int execute(int currentOp, List<IntCode> operations, IntCode relativeBase) {
-        long now = relativeBase.getValue();
-        long result = now + arg.getRealValue(operations, relativeBase.getValue());
-        relativeBase.setValue(result);
+    public int execute(int currentOp, IntCodes intCodes) {
+        long now = intCodes.getRelativeBase();
+        long result = now + arg.getRealValue(intCodes);
+        intCodes.setRelativeBase((int) result);
         return currentOp + 2;
     }
 

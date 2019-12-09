@@ -1,7 +1,7 @@
 package org.advent.util;
 
 
-import org.advent.util.intmachine.IntCode;
+import org.advent.util.intmachine.IntCodes;
 import org.advent.util.intmachine.IntMachine;
 
 import java.util.Arrays;
@@ -39,26 +39,19 @@ public class Util {
         return digits;
     }
 
-    public static List<IntCode> toOperations(String string) {
-        return toOperations(string, 1000);
-    }
-
-    public static List<IntCode> toOperations(String string, int size) {
+    public static List<Long> toOperations(String string) {
         String[] split = string.split(",");
-        List<IntCode> ops =  Arrays.stream(split)
-                .map(s -> new IntCode(Long.parseLong(s)))
+        List<Long> ops =  Arrays.stream(split)
+                .map(s -> Long.parseLong(s))
                 .collect(Collectors.toList());
-        for(int i = ops.size(); i< size; i++) {
-            ops.add(new IntCode(0));
-        }
         return ops;
     }
 
-    public static long runMachineWithSingleOutput(List<IntCode> ops, int input) {
+    public static long runMachineWithSingleOutput(IntCodes ops, int input) {
         return runMachineWithSingleOutput(ops, new int[]{input});
     }
 
-    public static long runMachineWithSingleOutput(List<IntCode> ops, int[] input) {
+    public static long runMachineWithSingleOutput(IntCodes ops, int[] input) {
         IntMachine im = new IntMachine(ops);
         for (int i = 0; i < input.length; i++) {
             im.addInput(input[i]);

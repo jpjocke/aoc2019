@@ -12,27 +12,25 @@ public class IntMachine {
     int currentPos = 0;
     boolean isDone = false;
     Input input;
-    private List<IntCode> codes;
+    private IntCodes intCodes;
     private List<Long> output;
     private OpFactory factory;
-    private IntCode relativeBase;
 
-    public IntMachine(List<IntCode> codes) {
-        setup(codes, new Input());
+    public IntMachine(IntCodes intCodes) {
+        setup(intCodes, new Input());
     }
 
-    public IntMachine(List<IntCode> codes, int input) {
+    public IntMachine(IntCodes intCodes, int input) {
         Input i = new Input();
         i.addInput(input);
-        setup(codes, i);
+        setup(intCodes, i);
     }
 
-    private void setup(List<IntCode> codes, Input input) {
-        this.codes = codes;
+    private void setup(IntCodes intCodes, Input input) {
+        this.intCodes = intCodes;
         this.input = input;
         output = new ArrayList<>();
-        factory = new OpFactory(codes, output, input);
-        relativeBase = new IntCode(0);
+        factory = new OpFactory(intCodes, output, input);
     }
 
     public void addInput(int input) {
@@ -52,7 +50,7 @@ public class IntMachine {
 
     public void execute() {
         System.out.println("-- Executing");
-        printList(codes);
+        System.out.println("  " + intCodes);
 
         while (true) {
             Op op;
@@ -63,8 +61,8 @@ public class IntMachine {
                 break;
             }
             if (DEBUG) {
-                System.out.println("- Run: " + currentPos + " -> " + codes.get(currentPos) + ", " + op + ", RelativeBase: " + relativeBase);
-                printList(codes);
+                System.out.println("- Run: " + currentPos + " -> " + intCodes.get(currentPos) + ", " + op + ", RelativeBase: " + intCodes.getRelativeBase());
+                System.out.println("  " + intCodes);
             }
             if (op.isExit()) {
 
@@ -76,42 +74,30 @@ public class IntMachine {
                 isDone = true;
                 break;
             }
-            int next = op.execute(currentPos, codes, relativeBase);
-            if (next > codes.size()) {
-                // if we dont find the exit
-                break;
-            }
+            int next = op.execute(currentPos, intCodes);
             currentPos = next;
 
             if (DEBUG) {
-                printList(codes);
+                System.out.println("  " + intCodes);
             }
         }
 
         if (DEBUG) {
             System.out.println("-- Result");
-            printList(codes);
+            System.out.println("  " + intCodes);
         }
     }
 
     public long getResult() {
-        return codes.get(0).getValue();
+        return intCodes.get(0);
     }
 
-    public List<IntCode> getCodes() {
-        return codes;
+    public IntCodes getCodes() {
+        return intCodes;
     }
 
     public List<Long> getOutput() {
         return output;
     }
 
-    private void printList(List<IntCode> operations) {
-        if (DEBUG) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("  ");
-            operations.stream().forEach(op -> sb.append(op.toString() + ", "));
-            System.out.println(sb.toString());
-        }
-    }
 }

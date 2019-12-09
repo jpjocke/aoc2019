@@ -1,19 +1,12 @@
 package org.advent.util.intmachine.operations;
 
 
-import org.advent.util.intmachine.IntCode;
-
-import java.util.List;
+import org.advent.util.intmachine.IntCodes;
 
 public abstract class Op {
     public boolean isExit() {
         return false;
     }
 
-    /**
-     * Return next op to run
-     * @param operations
-     * @return
-     */
-    public abstract int execute(int currentOp, List<IntCode> operations, IntCode relativeBase);
+    public abstract int execute(int currentOp, IntCodes intCodes);
 }

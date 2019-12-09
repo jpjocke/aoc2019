@@ -1,13 +1,10 @@
 package org.advent.util.intmachine.operations;
 
-
-import org.advent.util.intmachine.IntCode;
-
-import java.util.List;
+import org.advent.util.intmachine.IntCodes;
 
 public class Argument {
-    public enum Mode{IMMEDIATE, POSITION, RELATIVE};
     long value;
+
     Mode mode;
 
     public Argument(long value, int mode) {
@@ -29,12 +26,12 @@ public class Argument {
         return value;
     }
 
-    public long getRealValue(List<IntCode> intCodes, long relativeBase) {
+    public long getRealValue(IntCodes intCodes) {
         switch (mode) {
             case POSITION:
-                return intCodes.get((int)value).getValue();
+                return intCodes.get((int) value);
             case RELATIVE:
-                return intCodes.get((int)(value + relativeBase)).getValue();
+                return intCodes.get((int) (value + intCodes.getRelativeBase()));
             case IMMEDIATE:
             default:
                 return value;
@@ -52,4 +49,6 @@ public class Argument {
                 ", mode=" + mode +
                 '}';
     }
+
+    public enum Mode {IMMEDIATE, POSITION, RELATIVE}
 }

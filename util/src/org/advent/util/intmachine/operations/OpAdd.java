@@ -1,7 +1,7 @@
 package org.advent.util.intmachine.operations;
 
 
-import org.advent.util.intmachine.IntCode;
+import org.advent.util.intmachine.IntCodes;
 
 import java.util.List;
 
@@ -17,17 +17,17 @@ public class OpAdd extends Op {
     }
 
     @Override
-    public int execute(int currentOp, List<IntCode> operations, IntCode relativeBase) {
-        long val1  = arg1.getRealValue(operations, relativeBase.getValue());
-        long val2 = arg2.getRealValue(operations, relativeBase.getValue());
+    public int execute(int currentOp, IntCodes intCodes) {
+        long val1 = arg1.getRealValue(intCodes);
+        long val2 = arg2.getRealValue(intCodes);
         long total = val1 + val2;
 
         // result is always real
         long index = result.getValue();
         if (result.getMode() == Argument.Mode.RELATIVE) {
-            index = result.getValue() + relativeBase.getValue();
+            index = result.getValue() + intCodes.getRelativeBase();
         }
-        operations.get((int)index).setValue(total);
+        intCodes.setValueAtIndex(index, total);
         return currentOp + 4;
     }
 

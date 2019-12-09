@@ -1,6 +1,6 @@
 package org.advent.util.intmachine.operations;
 
-import org.advent.util.intmachine.IntCode;
+import org.advent.util.intmachine.IntCodes;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ public class OpJumpIfTrue extends Op {
     }
 
     @Override
-    public int execute(int currentOp, List<IntCode> operations, IntCode relativeBase) {
-        if (arg1.getRealValue(operations, relativeBase.getValue()) != 0) {
-            return (int)arg2.getRealValue(operations, relativeBase.getValue());
+    public int execute(int currentOp, IntCodes intCodes) {
+        if (arg1.getRealValue(intCodes) != 0) {
+            return (int) arg2.getRealValue(intCodes);
         }
         return currentOp + 3;
     }

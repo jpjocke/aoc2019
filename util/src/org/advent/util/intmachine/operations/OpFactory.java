@@ -2,35 +2,35 @@ package org.advent.util.intmachine.operations;
 
 import org.advent.util.Util;
 import org.advent.util.intmachine.Input;
-import org.advent.util.intmachine.IntCode;
+import org.advent.util.intmachine.IntCodes;
 import org.advent.util.intmachine.NoMoreInputException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OpFactory {
-    private List<IntCode> codes;
+    private IntCodes intCodes;
     private List<Long> output;
     private Input input;
 
-    public OpFactory(List<IntCode> codes, List<Long> output, Input input) {
-        setup(codes, output, input);
+    public OpFactory(IntCodes intCodes, List<Long> output, Input input) {
+        setup(intCodes, output, input);
     }
 
-    public OpFactory(List<IntCode> codes, List<Long> output, int input) {
+    public OpFactory(IntCodes intCodes, List<Long> output, int input) {
         Input i = new Input();
         i.addInput(input);
-        setup(codes, output, i);
+        setup(intCodes, output, i);
     }
 
-    private void setup(List<IntCode> codes, List<Long> output, Input input) {
-        this.codes = codes;
+    private void setup(IntCodes intCodes, List<Long> output, Input input) {
+        this.intCodes = intCodes;
         this.output = output;
         this.input = input;
     }
 
     public Op buildOp(int index) throws NoMoreInputException {
-        int[] digits = Util.toDigits(codes.get(index).getValue(), 5);
+        int[] digits = Util.toDigits(intCodes.get(index), 5);
         int opCode = getOpCode(digits);
         if (opCode == 99) {
             return new OpExit();
@@ -41,12 +41,7 @@ public class OpFactory {
         List<Argument> parameters = new ArrayList<>();
         for (int i = 0; i < arguments; i++) {
             int digitIndex = 2 + i + 1;
-        //    if (digits.length >= digitIndex) {
-                parameters.add(new Argument(codes.get(index + i + 1).getValue(), digits[digits.length - digitIndex]));
-         //   } else {
-                // Result last arg is always ref
-          //      parameters.add(new Argument(codes.get(index + i + 1).getValue(), 0));
-           // }
+            parameters.add(new Argument(intCodes.get(index + i + 1), digits[digits.length - digitIndex]));
         }
 
         if (opCode == 3) {
@@ -74,7 +69,7 @@ public class OpFactory {
     }
 
     private int getOpCode(int[] digits) {
-        int a =  digits[digits.length - 2] * 10;
+        int a = digits[digits.length - 2] * 10;
         int opCode = a + digits[digits.length - 1];
         return opCode;
     }
@@ -84,13 +79,13 @@ public class OpFactory {
             return 1;
         }
         if (opCode == 5 ||
-            opCode == 6) {
+                opCode == 6) {
             return 2;
         }
         if (opCode == 1 ||
-            opCode == 2 ||
-            opCode == 7 ||
-            opCode == 8) {
+                opCode == 2 ||
+                opCode == 7 ||
+                opCode == 8) {
             return 3;
         }
         return 0;

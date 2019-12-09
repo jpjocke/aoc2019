@@ -1,6 +1,6 @@
 package org.advent.util.intmachine.operations;
 
-import org.advent.util.intmachine.IntCode;
+import org.advent.util.intmachine.IntCodes;
 
 import java.util.List;
 
@@ -14,8 +14,8 @@ public class OpOutput extends Op {
     }
 
     @Override
-    public int execute(int currentOp, List<IntCode> operations, IntCode relativeBase) {
-        long val = arg.getRealValue(operations, relativeBase.getValue());
+    public int execute(int currentOp, IntCodes intCodes) {
+        long val = arg.getRealValue(intCodes);
         output.add(val);
         output.stream().forEach(o -> System.out.println("    o: " + o));
         return currentOp + 2;

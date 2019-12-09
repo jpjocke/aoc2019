@@ -1,10 +1,7 @@
 package org.advent;
 
-import org.advent.util.Util;
-import org.advent.util.intmachine.IntCode;
+import org.advent.util.intmachine.IntCodes;
 import org.advent.util.intmachine.IntMachine;
-
-import java.util.List;
 
 public class ThrusterSeq {
     String input;
@@ -16,13 +13,13 @@ public class ThrusterSeq {
         this.sequence = sequence;
         thrusters = new ThrusterInfo[sequence.length];
         for (int i = 0; i < sequence.length; i++) {
-            List<IntCode> ops = Util.toOperations(input);
+            IntCodes ops = new IntCodes(input);
             thrusters[i] = new ThrusterInfo(ops, sequence[i]);
         }
     }
 
-    public int runThrusters() {
-        int thrusterInputOutput = 0;
+    public long runThrusters() {
+        long thrusterInputOutput = 0;
 
         boolean isDone = false;
         int index = 0;
@@ -51,9 +48,9 @@ public class ThrusterSeq {
     private class ThrusterInfo {
         int phase;
         IntMachine machine;
-        int lastOutput;
+        long lastOutput;
 
-        public ThrusterInfo(List<IntCode> ops, int phase) {
+        public ThrusterInfo(IntCodes ops, int phase) {
             this.phase = phase;
             machine = new IntMachine(ops);
             // behövs 2?
@@ -71,9 +68,9 @@ public class ThrusterSeq {
             return machine.isDone();
         }
 
-        public void run(int input) {
+        public void run(long input) {
             System.out.println("#### Run phase: " + phase + " input: " + input);
-            machine.addInput(input);
+            machine.addInput((int) input);
 
             machine.execute();
             lastOutput = machine.getLastOutput();

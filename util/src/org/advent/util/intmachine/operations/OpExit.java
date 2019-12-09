@@ -1,8 +1,6 @@
 package org.advent.util.intmachine.operations;
 
-import org.advent.util.intmachine.IntCode;
-
-import java.util.List;
+import org.advent.util.intmachine.IntCodes;
 
 public class OpExit extends Op {
     @Override
@@ -11,7 +9,7 @@ public class OpExit extends Op {
     }
 
     @Override
-    public int execute(int currentOp, List<IntCode> operations, IntCode relativeBase) {
+    public int execute(int currentOp, IntCodes intCodes) {
         return currentOp + 1;
     }
 
