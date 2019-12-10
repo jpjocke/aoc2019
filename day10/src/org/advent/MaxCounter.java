@@ -6,11 +6,15 @@ import java.util.List;
 public class MaxCounter {
     List<Asteroid> asteroids;
 
+    Asteroid center;
+    List<AngleDistance> ads;
+    int maxCount;
+
     public MaxCounter(List<Asteroid> asteroids) {
         this.asteroids = asteroids;
     }
 
-    public int findMaxVisible() {
+    public void calculateCenterAndMax() {
         int max = 0;
 
         for (int i = 0; i < asteroids.size(); i++) {
@@ -25,8 +29,22 @@ public class MaxCounter {
             int visible = Util.countVisible(ads);
             if (visible > max) {
                 max = visible;
+                center = asteroids.get(i);
+                this.ads = ads;
             }
         }
-        return max;
+        maxCount = max;
+    }
+
+    public Asteroid getCenter() {
+        return center;
+    }
+
+    public List<AngleDistance> getAngleDistances() {
+        return ads;
+    }
+
+    public int getMaxCount() {
+        return maxCount;
     }
 }

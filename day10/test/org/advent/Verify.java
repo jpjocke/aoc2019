@@ -44,7 +44,8 @@ public class Verify {
         char[][] map = Util.toMap(input);
         List<Asteroid> asteroids = Util.asteroids(map);
         MaxCounter mc = new MaxCounter(asteroids);
-        Assert.assertEquals(8, mc.findMaxVisible());
+        mc.calculateCenterAndMax();
+        Assert.assertEquals(8, mc.getMaxCount());
     }
 
     @Test
@@ -63,7 +64,11 @@ public class Verify {
         char[][] map = Util.toMap(input);
         List<Asteroid> asteroids = Util.asteroids(map);
         MaxCounter mc = new MaxCounter(asteroids);
-        Assert.assertEquals(33, mc.findMaxVisible());
+        mc.calculateCenterAndMax();
+        Assert.assertEquals(33, mc.getMaxCount());
+
+        System.out.println(mc.getCenter());
+        mc.getAngleDistances().stream().forEach(a -> System.out.println(a));
     }
 
     @Test
@@ -82,7 +87,8 @@ public class Verify {
         char[][] map = Util.toMap(input);
         List<Asteroid> asteroids = Util.asteroids(map);
         MaxCounter mc = new MaxCounter(asteroids);
-        Assert.assertEquals(35, mc.findMaxVisible());
+        mc.calculateCenterAndMax();
+        Assert.assertEquals(35, mc.getMaxCount());
     }
 
     @Test
@@ -101,7 +107,8 @@ public class Verify {
         char[][] map = Util.toMap(input);
         List<Asteroid> asteroids = Util.asteroids(map);
         MaxCounter mc = new MaxCounter(asteroids);
-        Assert.assertEquals(41, mc.findMaxVisible());
+        mc.calculateCenterAndMax();
+        Assert.assertEquals(41, mc.getMaxCount());
     }
 
     @Test
@@ -129,8 +136,19 @@ public class Verify {
 
         char[][] map = Util.toMap(input);
         List<Asteroid> asteroids = Util.asteroids(map);
+        Util.printMap(20, 20, asteroids);
         MaxCounter mc = new MaxCounter(asteroids);
-        Assert.assertEquals(210, mc.findMaxVisible());
+        mc.calculateCenterAndMax();
+        Assert.assertEquals(210, mc.getMaxCount());
+
+        Util.printMapAngles(20,20, mc.getAngleDistances(), mc.getCenter());
+
+        Laser lzr = new Laser(mc.getCenter(), mc.getAngleDistances(), 179);
+       List<Asteroid> hitList = lzr.getOrderedHitList();
+       Assert.assertEquals(11, hitList.get(0).x);
+        Assert.assertEquals(12, hitList.get(0).y);
+        Assert.assertEquals(12, hitList.get(1).x);
+        Assert.assertEquals(1, hitList.get(1).y);
     }
 
     @Test
@@ -175,9 +193,17 @@ public class Verify {
         char[][] map = Util.toMap(input);
         List<Asteroid> asteroids = Util.asteroids(map);
         MaxCounter mc = new MaxCounter(asteroids);
-        int max = mc.findMaxVisible();
-        System.out.println("mac: " + max);
-        // 251 fel too low
-        Assert.assertEquals(276, max);
+        mc.calculateCenterAndMax();
+        Assert.assertEquals(276, mc.getMaxCount());
+        System.out.println("mac: " + mc.getMaxCount());
+
+
+        Laser lzr = new Laser(mc.getCenter(), mc.getAngleDistances(), 179);
+        lzr.width = 37;
+        lzr.height = 37;
+        List<Asteroid> hitList = lzr.getOrderedHitList();
+        System.out.println(hitList.get(199));
+        // 3414 fel index 200
+        // 3215 fel index 199
     }
 }

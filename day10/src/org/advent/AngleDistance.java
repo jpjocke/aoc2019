@@ -3,33 +3,43 @@ package org.advent;
 public class AngleDistance {
     private final double angle;
     private final double distance;
+    private final Asteroid asteroid;
 
-    public AngleDistance(Asteroid a, Asteroid b) {
-        double katetA = katet(a.x, b.x);
-        double katetB = katet(a.y, b.y);
-        distance = hypotenusa(a, b);
+    public AngleDistance(Asteroid a, Asteroid asteroid) {
+        double katetA = katet(a.x, asteroid.x);
+        this.asteroid = asteroid;
+        distance = hypotenusa(a, asteroid);
         double an;
-       // if (a.x > b.x) {
-            an = Math.acos(katetA / distance);
-      //  } else {
-       //     an = Math.asin(katetB / distance);
-      //  }
+       // an = Math.acos(katetA / distance);
 
-        int test = 0;
-        if(a.y < b.y) {
-            if(a.x < b.x) {
-                test = 180;
+        double endAngle;
+       // double aa = (Math.toDegrees(Math.round(an * 10000.0) / 10000.0));
+        if (a.y < asteroid.y) {
+            if (a.x < asteroid.x) {
+                // 0 - 90
+                // fixed?
+                an = Math.asin(katet(asteroid.x, a.x) / distance);
+                endAngle =  Math.toDegrees(an);
             } else {
-                test = -90;
+                // 270 - 360
+                // fixed?
+                an = Math.asin(katet(asteroid.y, a.y) / distance);
+                endAngle = 270 + Math.toDegrees(an);
             }
         } else {
-            if(a.x < b.x) {
-                test = 90;
+            if (a.x < asteroid.x) {
+                // 90 - 180
+                // fixed?
+                an = Math.asin(katet(a.y, asteroid.y) / distance);
+                endAngle = 90 + Math.toDegrees(an);
             } else {
-                test = 0;
+                // 180 - 270
+                // fixed?
+                an = Math.asin(katet(a.x, asteroid.x) / distance);
+                endAngle = 180 + Math.toDegrees(an);
             }
         }
-        angle = (Math.toDegrees(Math.round(an * 10000.0) / 10000.0)) + test;
+        angle =  Math.round(endAngle * 10000.0) / 10000.0;
 
     }
 
@@ -40,13 +50,7 @@ public class AngleDistance {
     }
 
     private double katet(int a, int b) {
-        double x;
-      //  if (a > b) {
-            x = a - b;
-     //   } else {
-        //    x = b - a;
-      //  }
-        return x;
+        return a - b;
     }
 
     public double getAngle() {
@@ -57,11 +61,16 @@ public class AngleDistance {
         return distance;
     }
 
+    public Asteroid getAsteroid() {
+        return asteroid;
+    }
+
     @Override
     public String toString() {
         return "AngleDistance{" +
                 "angle=" + angle +
                 ", distance=" + distance +
+                ", asteroid=" + asteroid +
                 '}';
     }
 }
