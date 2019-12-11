@@ -1,4 +1,4 @@
-package advent;
+package org.advent;
 
 import org.advent.util.IntPoint;
 import org.advent.util.intmachine.IntCodes;
