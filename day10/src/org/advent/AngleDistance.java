@@ -6,14 +6,11 @@ public class AngleDistance {
     private final Asteroid asteroid;
 
     public AngleDistance(Asteroid a, Asteroid asteroid) {
-        double katetA = katet(a.x, asteroid.x);
         this.asteroid = asteroid;
         distance = hypotenusa(a, asteroid);
         double an;
-       // an = Math.acos(katetA / distance);
 
         double endAngle;
-       // double aa = (Math.toDegrees(Math.round(an * 10000.0) / 10000.0));
         if (a.y < asteroid.y) {
             if (a.x < asteroid.x) {
                 // 0 - 90
@@ -39,7 +36,7 @@ public class AngleDistance {
                 endAngle = 180 + Math.toDegrees(an);
             }
         }
-        angle =  Math.round(endAngle * 10000.0) / 10000.0;
+        angle =  Math.round(endAngle * 100.0) / 100.0;
 
     }
 

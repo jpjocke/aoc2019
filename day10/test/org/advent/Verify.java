@@ -143,7 +143,7 @@ public class Verify {
 
         Util.printMapAngles(20,20, mc.getAngleDistances(), mc.getCenter());
 
-        Laser lzr = new Laser(mc.getCenter(), mc.getAngleDistances(), 179);
+        Laser lzr = new Laser(mc.getCenter(), mc.getAngleDistances(), 180.000000001);
        List<Asteroid> hitList = lzr.getOrderedHitList();
        Assert.assertEquals(11, hitList.get(0).x);
         Assert.assertEquals(12, hitList.get(0).y);
@@ -198,7 +198,7 @@ public class Verify {
         System.out.println("mac: " + mc.getMaxCount());
 
 
-        Laser lzr = new Laser(mc.getCenter(), mc.getAngleDistances(), 179);
+        Laser lzr = new Laser(mc.getCenter(), mc.getAngleDistances(), 180.000000001);
         lzr.width = 37;
         lzr.height = 37;
         List<Asteroid> hitList = lzr.getOrderedHitList();

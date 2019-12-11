@@ -26,17 +26,16 @@ public class Laser {
         double nextAngle = angle;
         System.out.println(station);
         System.out.println("Shooting " + ads.size() + " asteroids");
+        System.out.println("nextAngle: " + nextAngle);
         for (int i = 0; i < ads.size(); i++) {
-         //   System.out.println("Shoot " + i + "/" + ads.size());
+            System.out.println("Shoot " + i + "/" + ads.size());
             nextAngle = nextAngle(nextAngle);
-         //   System.out.println("nextAngle: " + nextAngle);
+            System.out.println("nextAngle: " + nextAngle);
             AngleDistance closest = asteroidOnAngle(nextAngle);
-        //    System.out.println("Shooting: " + closest);
+            System.out.println("Shooting: " + closest);
             closest.getAsteroid().setHit(true);
             hitList.add(closest.getAsteroid());
 
-           // System.out.println(" ");
-          //  ads.stream().forEach(ad -> System.out.print(ad.getAsteroid().isHit() ? "1" : "0"));
 
            System.out.println("-------------------------------------------------------------------------------------");
 
@@ -46,23 +45,25 @@ public class Laser {
     }
 
     private double nextAngle(double angle) {
+        // my coordinates is wrong compansate by going counter-clockwise
         Optional<Double> next = ads.stream()
                 .filter(ad -> !ad.getAsteroid().isHit())
-                .filter(ad -> ad.getAngle() > angle)
+                .filter(ad -> ad.getAngle() < angle)
                 .map(ad -> ad.getAngle())
-                .min(Comparator.comparingDouble(Double::valueOf));
+                .max(Comparator.comparingDouble(Double::valueOf));
 
         if (!next.isPresent()) {
+            /*
             System.out.println(station);
             ads.stream()
                     .filter(ad -> !ad.getAsteroid().isHit())
                     .forEach(ad -> System.out.println("im left: " + ad));
-
+*/
             Double next2 = ads.stream()
                     .filter(ad -> !ad.getAsteroid().isHit())
-                    .filter(ad -> ad.getAngle() > 0)
+                    .filter(ad -> ad.getAngle() < 361)
                     .map(ad -> ad.getAngle())
-                    .min(Comparator.comparingDouble(Double::valueOf))
+                    .max(Comparator.comparingDouble(Double::valueOf))
                     .orElseThrow(() -> new RuntimeException("Found no more angles"));
             return next2;
         }
