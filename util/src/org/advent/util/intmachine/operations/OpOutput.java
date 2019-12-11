@@ -17,7 +17,7 @@ public class OpOutput extends Op {
     public int execute(int currentOp, IntCodes intCodes) {
         long val = arg.getRealValue(intCodes);
         output.add(val);
-        output.stream().forEach(o -> System.out.println("    o: " + o));
+     //   output.stream().forEach(o -> System.out.println("    o: " + o));
         return currentOp + 2;
     }
 
