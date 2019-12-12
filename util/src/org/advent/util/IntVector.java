@@ -1,5 +1,7 @@
 package org.advent.util;
 
+import java.util.Objects;
+
 public class IntVector {
     public int x;
     public int y;
@@ -16,5 +18,20 @@ public class IntVector {
         return "x=" + x +
                 ", y=" + y +
                 ", z=" + z;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IntVector intVector = (IntVector) o;
+        return x == intVector.x &&
+                y == intVector.y &&
+                z == intVector.z;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
     }
 }

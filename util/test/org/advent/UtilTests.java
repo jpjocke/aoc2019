@@ -1,5 +1,6 @@
 package org.advent;
 
+import org.advent.util.Util;
 import org.advent.util.intmachine.IntCodes;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,5 +28,10 @@ public class UtilTests {
         Assert.assertEquals(0, ops.get(2));
         Assert.assertEquals(3, ops.get(3));
         Assert.assertEquals(99, ops.get(4));
+    }
+
+    @Test
+    public void testLCM() {
+        Assert.assertEquals(36, Util.lcm(12, 18));
     }
 }

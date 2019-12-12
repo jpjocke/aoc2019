@@ -13,13 +13,25 @@ public class Main {
 
         List<Moon> moons = MoonParser.parse(input);
         Simulator sim = new Simulator(moons);
+      //  step1(sim);
+        step2(sim);
 
+
+        System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
+    }
+
+    private static void step1(Simulator sim) {
         for(int i = 0; i < 1000; i++) {
 
             sim.simulateOnce();
         }
 
-        System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
+    }
+
+    private static void step2(Simulator sim) {
+
+        long simulations = sim.simulateUntilStateReached(false);
+        System.out.println("simulations: " + simulations);
     }
 
 }

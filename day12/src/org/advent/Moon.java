@@ -2,6 +2,8 @@ package org.advent;
 
 import org.advent.util.IntVector;
 
+import java.util.Objects;
+
 public class Moon {
     IntVector position;
     IntVector velocity;
@@ -54,5 +56,19 @@ public class Moon {
                 "position=" + position +
                 ", velocity=" + velocity +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Moon moon = (Moon) o;
+        return Objects.equals(position, moon.position) &&
+                Objects.equals(velocity, moon.velocity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(position, velocity);
     }
 }
