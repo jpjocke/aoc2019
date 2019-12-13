@@ -1,11 +1,8 @@
 package org.advent;
 
-import org.advent.util.IntVector;
 import org.advent.util.Util;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Simulator {
@@ -30,34 +27,6 @@ public class Simulator {
         return simulations;
     }
 
-    private byte[] posAll() {
-        byte[] pos = new byte[moons.size() * 6];
-        for (int i = 0; i < moons.size(); i++) {
-            int index = i * 6;
-            pos[index] = (byte) moons.get(i).position.x;
-            pos[index + 1] = (byte) moons.get(i).position.y;
-            pos[index + 2] = (byte) moons.get(i).position.z;
-
-            pos[index + 3] = (byte) moons.get(i).velocity.x;
-            pos[index + 4] = (byte) moons.get(i).velocity.y;
-            pos[index + 5] = (byte) moons.get(i).velocity.z;
-        }
-
-        return pos;
-    }
-
-    private void reset(byte[] start) {
-        for (int i = 0; i < 4; i++) {
-            int index = i * 6;
-            Moon m = moons.get(i);
-            m.position.x = start[index];
-            m.position.y = start[index + 1];
-            m.position.z = start[index + 2];
-            m.velocity.x = 0;
-            m.velocity.y = 0;
-            m.velocity.z = 0;
-        }
-    }
 
     public void simulateOnce() {
         if (DEBUG) {
@@ -139,103 +108,75 @@ public class Simulator {
             }
             return false;
         }
+
+        private byte[] posAll() {
+            byte[] pos = new byte[moons.size() * 6];
+            for (int i = 0; i < moons.size(); i++) {
+                int index = i * 6;
+                pos[index] = (byte) moons.get(i).position.x;
+                pos[index + 1] = (byte) moons.get(i).position.y;
+                pos[index + 2] = (byte) moons.get(i).position.z;
+
+                pos[index + 3] = (byte) moons.get(i).velocity.x;
+                pos[index + 4] = (byte) moons.get(i).velocity.y;
+                pos[index + 5] = (byte) moons.get(i).velocity.z;
+            }
+
+            return pos;
+        }
     }
 
     class LcmCalc {
-        List<History> h;
+        MoonHistory mX;
+        MoonHistory mY;
+        MoonHistory mZ;
 
-        private void setup(Moon m) {
-            h = new ArrayList<>();
-            h.add(new History(1, m));
-            h.add(new History(2, m));
-            h.add(new History(3, m));
+        private void setup() {
+            mX = new MoonHistory(1);
+            mY = new MoonHistory(2);
+            mZ = new MoonHistory(3);
         }
 
         public BigInteger doLcm() {
-            byte[] startAll = posAll();
-            BigInteger[] moonCyclesTotal = new BigInteger[4];
+            setup();
 
-            for (int i = 0; i < moons.size(); i++) {
-                Moon m = moons.get(i);
-                setup(m);
-                System.out.println("running moon: " + i);
-                moons.stream().forEach(mo -> System.out.println(mo));
-                long simulations = 0;
-                while (!beenHere(simulations, m)) {
-                    simulateOnce();
-                    simulations++;
+            long simulations = 0;
+
+            while (true) {
+                if (!mX.found) {
+                    mX.haveWeBeenHereBefore(simulations, moons);
                 }
-                moonCyclesTotal[i] = lcmInMoon();
-                reset(startAll);
+                if (!mY.found) {
+                    mY.haveWeBeenHereBefore(simulations, moons);
+                }
+                if (!mZ.found) {
+                    mZ.haveWeBeenHereBefore(simulations, moons);
+                }
+
+                if (mX.found && mY.found && mZ.found) {
+                    break;
+                }
+
+                simulateOnce();
+                simulations++;
+                if (simulations % 1000 == 0) {
+                    System.out.println("simulations: " + simulations);
+                }
             }
-            System.out.println("Gathered--------------");
-            Arrays.stream(moonCyclesTotal).forEach(l -> System.out.println(l));
-            BigInteger r = findLcm(moonCyclesTotal);
+            BigInteger r = lcmHistory(mX.cycles, mY.cycles, mZ.cycles);
             System.out.println(r);
             return r;
         }
 
-        private boolean beenHere(long simulations, Moon m) {
-            h.stream()
-                    .filter(hs -> !hs.found)
-                    .forEach(hs -> hs.haveWeBeenHereBeforeSingle(simulations, m));
-            return h.stream().allMatch(hs -> hs.found);
-        }
-
-        private BigInteger lcmInMoon() {
+        private BigInteger lcmHistory(long x, long y, long z) {
             System.out.println("Moonz--------------");
-            h.stream().forEach(h -> System.out.println(h.cycles));
+            System.out.println("x: " + x + ", y: " + y + ", z: " + z);
 
-            BigInteger lcm1 = Util.lcm2(h.get(0).cycles, h.get(1).cycles);
+            BigInteger lcm1 = Util.lcm2(x, y);
             System.out.println("lcm1: " + lcm1);
-            BigInteger lcm2 = Util.lcm3(lcm1, BigInteger.valueOf(h.get(2).cycles));
+            BigInteger lcm2 = Util.lcm3(lcm1, BigInteger.valueOf(z));
             System.out.println("lcm2: " + lcm2);
             return lcm2;
-        }
-
-        private BigInteger findLcm(BigInteger[] cycles) {
-            BigInteger lcm1 = Util.lcm3(cycles[0], cycles[1]);
-            BigInteger lcm2 = Util.lcm3(cycles[2], cycles[3]);
-            return Util.lcm3(lcm1, lcm2);
-        }
-
-        class History {
-            int[] start;
-            boolean found = false;
-            long cycles = -1;
-            int mode;
-
-            public History(int mode, Moon m) {
-                this.mode = mode;
-                start = toPos(m);
-            }
-
-            private void haveWeBeenHereBeforeSingle(long simulations, Moon m) {
-                if (simulations == 0) {
-                    start = toPos(m);
-                    return;
-                }
-
-                int[] now = toPos(m);
-
-                if (now[0] == start[0] && now[1] == start[1]) {
-                    found = true;
-                    System.out.println("mode: " + mode + ", sim: " + simulations + ", val: " + start[0] + "," + start[1]);
-                    cycles = simulations;
-                }
-            }
-
-            int[] toPos(Moon m) {
-                int[] pos;
-                if (mode == 1) {
-                    pos = new int[]{ m.position.x, m.velocity.x};
-                } else if (mode == 2) {
-                    pos = new int[]{ m.position.y, m.velocity.y};
-                } else {
-                    pos = new int[]{m.position.z, m.velocity.z};
-                }
-                return pos;
-            }
         }
     }
 }
