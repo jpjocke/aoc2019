@@ -34,4 +34,9 @@ public class UtilTests {
     public void testLCM() {
         Assert.assertEquals(36, Util.lcm(12, 18));
     }
+
+    @Test
+    public void testLCM2() {
+        Assert.assertEquals(36, Util.lcm2(12, 18));
+    }
 }

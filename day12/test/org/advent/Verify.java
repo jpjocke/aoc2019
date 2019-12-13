@@ -3,6 +3,7 @@ package org.advent;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigInteger;
 import java.util.List;
 
 
@@ -46,9 +47,9 @@ public class Verify {
         Simulator sim = new Simulator(moons);
 
       //  long simulations = sim.simulateUntilStateReached(true);
-        long simulations = sim.simulateUntilStateReached(false);
+        BigInteger simulations = sim.simulateUntilStateReached(false);
 
-        Assert.assertEquals(2772, simulations);
+        Assert.assertEquals(BigInteger.valueOf(2772), simulations);
     }
 
     @Test
@@ -62,8 +63,34 @@ public class Verify {
 
         Simulator sim = new Simulator(moons);
 
-        long simulations = sim.simulateUntilStateReached(false);
+        BigInteger simulations = sim.simulateUntilStateReached(false);
 
-        Assert.assertEquals(4686774924L, simulations);
+        Assert.assertEquals(BigInteger.valueOf(4686774924L), simulations);
+    }
+
+    @Test
+    public void moonParser() {
+        String input = "<x=-8, y=-10, z=0>\n" +
+                "<x=5, y=5, z=10>\n" +
+                "<x=2, y=-7, z=3>\n" +
+                "<x=9, y=-8, z=-3>";
+
+        List<Moon> moons = MoonParser.parse(input);
+
+        Assert.assertEquals(-8, moons.get(0).position.x);
+        Assert.assertEquals(-10, moons.get(0).position.y);
+        Assert.assertEquals(0, moons.get(0).position.z);
+
+        Assert.assertEquals(5, moons.get(1).position.x);
+        Assert.assertEquals(5, moons.get(1).position.y);
+        Assert.assertEquals(10, moons.get(1).position.z);
+
+        Assert.assertEquals(2, moons.get(2).position.x);
+        Assert.assertEquals(-7, moons.get(2).position.y);
+        Assert.assertEquals(3, moons.get(2).position.z);
+
+        Assert.assertEquals(9, moons.get(3).position.x);
+        Assert.assertEquals(-8, moons.get(3).position.y);
+        Assert.assertEquals(-3, moons.get(3).position.z);
     }
 }

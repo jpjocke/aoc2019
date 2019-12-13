@@ -1,5 +1,6 @@
 package org.advent;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public class Main {
@@ -30,8 +31,11 @@ public class Main {
 
     private static void step2(Simulator sim) {
 
-        long simulations = sim.simulateUntilStateReached(false);
+        BigInteger simulations = sim.simulateUntilStateReached(false);
         System.out.println("simulations: " + simulations);
+        // 8482595013102893415949853418600 too high
+        // 3238446226353494574600 too high
+        // 3786061230652550826857400 too high
     }
 
 }

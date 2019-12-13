@@ -4,8 +4,13 @@ package org.advent.util;
 import org.advent.util.intmachine.IntCodes;
 import org.advent.util.intmachine.IntMachine;
 
+import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Util {
@@ -75,5 +80,34 @@ public class Util {
             lcm += absHigherNumber;
         }
         return lcm;
+    }
+
+    public static Map<Integer, Integer> getPrimeFactors(long number) {
+        long absNumber = Math.abs(number);
+
+        Map<Integer, Integer> primeFactorsMap = new HashMap<Integer, Integer>();
+
+        for (int factor = 2; factor <= absNumber; factor++) {
+            while (absNumber % factor == 0) {
+                Integer power = primeFactorsMap.get(factor);
+                if (power == null) {
+                    power = 0;
+                }
+                primeFactorsMap.put(factor, power + 1);
+                absNumber /= factor;
+            }
+        }
+
+        return primeFactorsMap;
+    }
+
+    public static BigInteger lcm2(long number1, long number2) {
+        return lcm3(BigInteger.valueOf(number1), BigInteger.valueOf(number2));
+    }
+
+    public static BigInteger lcm3(BigInteger number1, BigInteger number2) {
+        BigInteger gcd = number1.gcd(number2);
+        BigInteger absProduct = number1.multiply(number2).abs();
+        return absProduct.divide(gcd);
     }
 }
