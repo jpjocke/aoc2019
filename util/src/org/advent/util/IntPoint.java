@@ -1,5 +1,7 @@
 package org.advent.util;
 
+import java.util.Objects;
+
 public class IntPoint {
     public int x;
     public int y;
@@ -22,6 +24,20 @@ public class IntPoint {
             dist += other.y - y;
         }
         return dist;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IntPoint intPoint = (IntPoint) o;
+        return x == intPoint.x &&
+                y == intPoint.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 
     public String toString() {

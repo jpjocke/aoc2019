@@ -2,6 +2,7 @@ package org.advent;
 
 import org.advent.util.arcade.DrawInstruction;
 import org.advent.util.arcade.DrawParser;
+import org.advent.util.arcade.Printer;
 import org.advent.util.intmachine.IntCodes;
 import org.advent.util.intmachine.IntMachine;
 
@@ -17,24 +18,52 @@ public class Main {
 
         IntCodes ops = new IntCodes(inputFree);
         IntMachine im = new IntMachine(ops);
-        im.execute();
+        Printer p = new Printer();
+        int input = 0;
+        while (!im.isDone()) {
+            im.addInput(input);
+            im.execute();
 
-        im.getOutput().stream().forEach(o -> System.out.println(o));
 
-        List<DrawInstruction> draws = DrawParser.parse(im.getOutput());
+            List<Long> output = im.getOutput();
+            System.out.println("out size: " + output.size());
 
+            List<DrawInstruction> draws = DrawParser.parse(output);
+            im.resetOutput();
+            p.update(draws);
 
-        draws.stream().forEach(o -> System.out.println(o));
+            p.print();
+            System.out.println("------------------------------------------------- ");
+            input = getInput(p.getInstructions());
+        }
 
-        int countBlocks = 0;
-        for(int i = 0; i < draws.size(); i++) {
-            if(draws.get(i).isBlock()) {
-                countBlocks++;
+        System.out.println("Score should be 11641");
+        System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
+    }
+
+    private static int getInput(List<DrawInstruction> instructions) {
+        int xBall = 0;
+        int xPaddle = 0;
+        int blocks = 0;
+        for (int i = 0; i < instructions.size(); i++) {
+            if (instructions.get(i).isBall()) {
+                xBall = instructions.get(i).position.x;
+                continue;
+            }
+            if (instructions.get(i).isPaddle()) {
+                xPaddle = instructions.get(i).position.x;
+            }
+            if(instructions.get(i).isBlock()) {
+                blocks++;
             }
         }
-        System.out.println("blocks: " + countBlocks);
-
-        System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
+        if(blocks == 0) {
+            return 0;
+        }
+        if(xBall > xPaddle) {
+            return 1;
+        }
+        return -1;
     }
 
 }

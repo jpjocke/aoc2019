@@ -26,6 +26,10 @@ public class IntMachine {
         setup(intCodes, i);
     }
 
+    public void resetOutput() {
+        output.clear();
+    }
+
     private void setup(IntCodes intCodes, Input input) {
         this.intCodes = intCodes;
         this.input = input;
@@ -57,6 +61,9 @@ public class IntMachine {
             try {
                 op = factory.buildOp(currentPos);
             } catch (NoMoreInputException e) {
+                if (DEBUG) {
+                    System.out.println("-- Waiting for input");
+                }
                 // wait for next input
                 break;
             }

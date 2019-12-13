@@ -3,7 +3,7 @@ package org.advent.util.arcade;
 import org.advent.util.IntPoint;
 
 public class DrawInstruction {
-    IntPoint position;
+    public IntPoint position;
     int instruction;
 
     public DrawInstruction(int x, int y, int instruction) {
@@ -13,6 +13,15 @@ public class DrawInstruction {
 
     public boolean isBlock() {
         return instruction == 2;
+    }
+
+    public boolean isBall() {
+        return instruction == 4;
+    }
+
+
+    public boolean isPaddle() {
+        return instruction == 3;
     }
 
     public String getSymbol() {
@@ -30,6 +39,10 @@ public class DrawInstruction {
             return "-";
         }
         return "O";
+    }
+
+    public boolean isScore() {
+        return  position.x == -1 && position.y == 0;
     }
 
     @Override

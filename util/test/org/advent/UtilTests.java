@@ -5,6 +5,8 @@ import org.advent.util.intmachine.IntCodes;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigInteger;
+
 
 public class UtilTests {
 
@@ -37,6 +39,6 @@ public class UtilTests {
 
     @Test
     public void testLCM2() {
-        Assert.assertEquals(36, Util.lcm2(12, 18));
+        Assert.assertEquals(BigInteger.valueOf(36), Util.lcm2(12, 18));
     }
 }
