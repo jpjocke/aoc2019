@@ -145,7 +145,7 @@ public class Verify {
 
         List<Reaction> reactions = ReactionParser.parse(input);
         MaterialCalculator calc = new MaterialCalculator(reactions);
-        int needed = calc.oreNeededForOneFuel();
+        int needed = calc.oreNeededForOneFuelTwo();
 
         Assert.assertEquals(2210736, needed);
     }
@@ -156,12 +156,14 @@ public class Verify {
 
         List<Reaction> reactions = ReactionParser.parse(lines);
         MaterialCalculator calc = new MaterialCalculator(reactions);
-        int needed = calc.oreNeededForOneFuel();
+        int needed = calc.oreNeededForOneFuelTwo();
 
         System.out.println("Needed ORE: " + needed);
 
         Assert.assertNotEquals(187371, needed); // too high - no excess
         Assert.assertNotEquals(178943, needed); // too high - excess result
-
+        Assert.assertNotEquals(200275, needed); // too high - excess  + solve for one
+        Assert.assertNotEquals(166209, needed); // wrong - excess  + solve for one
+        Assert.assertEquals(178154, needed);
     }
 }
