@@ -1,10 +1,10 @@
 package org.advent;
 
 public class Material {
-    private int amount;
+    private long amount;
     private String name;
 
-    public Material(int amount, String name) {
+    public Material(long amount, String name) {
         this.amount = amount;
         this.name = name;
     }
@@ -13,7 +13,7 @@ public class Material {
         return new Material(times * amount, name);
     }
 
-    public int getAmount() {
+    public long getAmount() {
         return amount;
     }
 
@@ -21,8 +21,8 @@ public class Material {
         return name;
     }
 
-    public int take(int take) {
-        int orig = amount;
+    public long take(long take) {
+        long orig = amount;
         amount = Math.max(amount - take, 0);
         if (amount == 0){
             return orig;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Excess {
+    public static boolean DEBUG = false;
     private List<Material> excess;
 
     public Excess() {
@@ -11,25 +12,31 @@ public class Excess {
     }
 
     public void add(Material m) {
-        System.out.println("// Adding excess:" + m);
+        if (DEBUG) {
+            System.out.println("// Adding excess:" + m);
+
+        }
         boolean added = false;
-        for(int i  = 0; i < excess.size(); i++) {
-            if(excess.get(i).add(m)) {
+        for (int i = 0; i < excess.size(); i++) {
+            if (excess.get(i).add(m)) {
                 added = true;
                 break;
             }
         }
-        if(!added) {
+        if (!added) {
             excess.add(m);
         }
     }
 
-    public int takeExcess(int needed, String name) {
-        int taken = 0;
+    public long takeExcess(long needed, String name) {
+        long taken = 0;
         for (int j = excess.size() - 1; j >= 0; j--) {
             if (excess.get(j).getName().equals(name)) {
                 taken = excess.get(j).take(needed);
-                System.out.println("// Found " + excess.get(j) + " now need: " + needed);
+                if (DEBUG) {
+
+                    System.out.println("// Found " + excess.get(j) + " now need: " + needed);
+                }
 
                 if (excess.get(j).getAmount() == 0) {
                     excess.remove(j);

@@ -58,7 +58,7 @@ public class Verify {
 
         List<Reaction> reactions = ReactionParser.parse(input);
         MaterialCalculator calc = new MaterialCalculator(reactions);
-        int needed = calc.oreNeededForOneFuel();
+        long needed = calc.oreNeededForOneFuelTwo();
 
         Assert.assertEquals(31, needed);
 
@@ -76,7 +76,7 @@ public class Verify {
 
         List<Reaction> reactions = ReactionParser.parse(input);
         MaterialCalculator calc = new MaterialCalculator(reactions);
-        int needed = calc.oreNeededForOneFuel();
+        long needed = calc.oreNeededForOneFuelTwo();
 
         Assert.assertEquals(165, needed);
 
@@ -96,7 +96,7 @@ public class Verify {
 
         List<Reaction> reactions = ReactionParser.parse(input);
         MaterialCalculator calc = new MaterialCalculator(reactions);
-        int needed = calc.oreNeededForOneFuel();
+        long needed = calc.oreNeededForOneFuelTwo();
 
         Assert.assertEquals(13312, needed);
     }
@@ -118,7 +118,7 @@ public class Verify {
 
         List<Reaction> reactions = ReactionParser.parse(input);
         MaterialCalculator calc = new MaterialCalculator(reactions);
-        int needed = calc.oreNeededForOneFuel();
+        long needed = calc.oreNeededForOneFuelTwo();
 
         Assert.assertEquals(180697, needed);
     }
@@ -145,7 +145,7 @@ public class Verify {
 
         List<Reaction> reactions = ReactionParser.parse(input);
         MaterialCalculator calc = new MaterialCalculator(reactions);
-        int needed = calc.oreNeededForOneFuelTwo();
+        long needed = calc.oreNeededForOneFuelTwo();
 
         Assert.assertEquals(2210736, needed);
     }
@@ -156,7 +156,7 @@ public class Verify {
 
         List<Reaction> reactions = ReactionParser.parse(lines);
         MaterialCalculator calc = new MaterialCalculator(reactions);
-        int needed = calc.oreNeededForOneFuelTwo();
+        long needed = calc.oreNeededForOneFuelTwo();
 
         System.out.println("Needed ORE: " + needed);
 
