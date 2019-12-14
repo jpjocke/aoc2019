@@ -5,11 +5,13 @@ import java.util.List;
 
 public class MaterialCalculator {
     // excess???
+    private List<Material> excess;
     private List<Material> materials;
     private List<Reaction> reactions;
 
     public MaterialCalculator(List<Reaction> reactions) {
         materials = new ArrayList<>();
+        excess = new ArrayList<>();
         this.reactions = reactions;
     }
 
@@ -20,6 +22,7 @@ public class MaterialCalculator {
         while (!convertOneStep()) {
             iterations++;
             System.out.println("-- Materials: " + materials);
+            System.out.println("-- Excess: " + excess);
             System.out.println("--------------- iterations: " + iterations);
         }
 
@@ -81,20 +84,34 @@ public class MaterialCalculator {
             Reaction r = reactions.get(i);
             Material out = r.getOutput();
             if (out.isSameMaterial(m)) {
+                // TODO -> ta ur excess först
+                int needed = m.getAmount();
+                System.out.println("Need " + needed);
+                for (int j = excess.size() -1; j >= 0 ; j--) {
+                    if (excess.get(j).isSameMaterial(m)) {
+                        needed -= excess.get(j).take(needed);
+                        System.out.println("### Found " + excess.get(j) + " now need: " + needed);
+
+                        if(excess.get(j).getAmount() == 0) {
+                            excess.remove(j);
+                        }
+                    }
+                }
                 int it = 1;
-                while (out.getAmount() * it < m.getAmount()) {
+                while (out.getAmount() * it < needed) {
                     it++;
                 }
                 System.out.println("Using " + it + "x reaction: " + r);
                 int created = out.getAmount() * it;
-                int needed = m.getAmount();
 
                 if (created > needed) {
                     System.out.println("### EXCESS: " + created + " created but " + needed + " " + m.getName() + " needed!");
+                    excess.add(new Material(created - needed, m.getName()));
                 }
 
                 int finalIt = it;
                 r.getInput().stream().forEach(ma -> materials.add(ma.copy(finalIt)));
+                System.out.println("-- Materials: " + materials);
             }
         }
     }

@@ -158,8 +158,10 @@ public class Verify {
         MaterialCalculator calc = new MaterialCalculator(reactions);
         int needed = calc.oreNeededForOneFuel();
 
-        // 187371 too high
-        Assert.assertNotEquals(187371, needed);
+        System.out.println("Needed ORE: " + needed);
+
+        Assert.assertNotEquals(187371, needed); // too high - no excess
+        Assert.assertNotEquals(178943, needed); // too high - excess result
 
     }
 }

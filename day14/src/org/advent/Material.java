@@ -21,6 +21,15 @@ public class Material {
         return name;
     }
 
+    public int take(int take) {
+        int orig = amount;
+        amount = Math.max(amount - take, 0);
+        if (amount == 0){
+            return orig;
+        }
+        return take;
+    }
+
     public boolean add(Material m) {
         if (isSameMaterial(m)) {
             amount += m.getAmount();
