@@ -26,6 +26,10 @@ public class IntPoint {
         return dist;
     }
 
+    public IntPoint copy() {
+        return new IntPoint(x, y);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
