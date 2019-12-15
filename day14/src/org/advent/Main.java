@@ -13,16 +13,18 @@ public class Main {
 
         List<Reaction> reactions = ReactionParser.parse(lines);
         long max = 1000000000000L;
-        long fuel = 5500000000L;
+        long fuel = 6130320;
         long found = 0;
         while (found < max) {
             MaterialCalculator calc = new MaterialCalculator(reactions);
-            calc.DEBUG = true;
+       //     calc.DEBUG = true;
             found = calc.oreNeededForOneFuelTwo(fuel);
             System.out.println("fuel: " + fuel + " = " + found);
             fuel++;
 
         }
+
+        // 6226152
 
         System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
     }

@@ -53,15 +53,15 @@ public class MaterialCalculator {
             // TODO effektivisera denna!! annras tar det för lång tid att hitta stora tal
             long t = r.getOutput().getAmount();
             long times = needed / t;
-            if(times != needed * t) {
+            if(needed != times * t) {
                 times++;
             }
-
+/*
             times = 1;
             while (r.getOutput().getAmount() * times < needed) {
                 times++;
             }
-
+*/
             if (DEBUG) {
 
                 System.out.println("Using " + times + "x reaction: " + r);
