@@ -4,7 +4,7 @@ import org.advent.util.IntPoint;
 
 import java.util.Arrays;
 
-public class DroidExploreMode {
+public class DroidExploreMode implements DroidMode {
     Labyrinth labyrinth;
     Droid d;
 
@@ -13,18 +13,7 @@ public class DroidExploreMode {
         this.d = d;
     }
 
-    public void explore() {
-        int report = 0;
-        int nextDir = 1;
-        while (report != 2) {
-            report = d.runAndReport(nextDir);
-            nextDir = getNextDir();
-
-
-        }
-    }
-
-    private int getNextDir() {
+    public int getNextDir() {
         int[] around = buildAround();
         System.out.println("Around: " + Arrays.toString(around));
 
@@ -118,10 +107,10 @@ public class DroidExploreMode {
         int v = labyrinth.getValueAt(fakePos);
 
         while (true) {
+            value += getValueScore(v);
             if (v == 0 || v == -1) {
                 break;
             }
-            value += getValueScore(v);
 
             v = labyrinth.getValueAt(fakePos.x, fakePos.y - 1);
             value += getValueScore(v);
@@ -138,13 +127,10 @@ public class DroidExploreMode {
 
     private int getValueScore(int value) {
         if (value == -1) {
-            return 10;
+            return 100;
         }
         if (value == 0) {
             return 0;
-        }
-        if (value == 1) {
-            return 1;
         }
         return 1;
     }

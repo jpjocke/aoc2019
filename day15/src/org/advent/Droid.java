@@ -19,8 +19,6 @@ public class Droid {
         System.out.println("---------------------------------");
         machine.addInput(direction);
         machine.execute();
-        //  List<Long> output = machine.getOutput();
-        //  output.stream().forEach(o -> System.out.println(o));
 
         int report = (int) machine.getLastOutput();
 

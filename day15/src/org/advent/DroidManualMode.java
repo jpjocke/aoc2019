@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class DroidManualMode {
+public class DroidManualMode implements DroidMode {
     Labyrinth labyrinth;
     Droid d;
     BufferedReader br;
@@ -15,22 +15,9 @@ public class DroidManualMode {
         br = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    public void goManual() throws IOException {
-        while (true) {
-            int dir = getDirection();
-            if(dir == -1) {
-                break;
-            }
-            if(dir == 5) {
-                continue;
-            }
-            d.runAndReport(dir);
-        }
-    }
-
     private int getDirection() throws IOException {
-        System.out.println("w=UP, s=DOWN, a=LEFT, d=RIGHT p=QUIT ");
-        System.out.print("Dir: w ");
+        System.out.println("w=UP, s=DOWN, a=LEFT, d=RIGHT p=QUIT o=Automate 10 steps");
+        System.out.print("Dir: ");
         String s = br.readLine();
 
         if (s.equals("p")) {
@@ -45,10 +32,18 @@ public class DroidManualMode {
         if (s.equals("a")) {
             return 3;
         }
-
         if (s.equals("d")) {
             return 4;
         }
+
+        if (s.equals("o")) {
+            return 50;
+        }
         return 5;
+    }
+
+    @Override
+    public int getNextDir() throws IOException {
+        return getDirection();
     }
 }

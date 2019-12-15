@@ -17,14 +17,11 @@ public class Main {
         IntCodes codes = new IntCodes(input);
 
         Droid p = new Droid(position, labyrinth, codes);
-     //   DroidExploreMode explore = new DroidExploreMode(labyrinth, p);
-     //   explore.explore();
+        Droider droider= new Droider(labyrinth, p);
+        droider.run();
 
-      //  DroidManualMode manual = new DroidManualMode(labyrinth, p);
-      //  manual.goManual();
-
-        DroidRiggedMode rigged = new DroidRiggedMode(labyrinth, p);
-        rigged.goRigged();
+    //    DroidRiggedMode rigged = new DroidRiggedMode(labyrinth, p);
+    //    rigged.goRigged();
 
         System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
     }
