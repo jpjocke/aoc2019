@@ -5,91 +5,63 @@ import org.advent.util.Util;
 import java.util.Arrays;
 
 public class FFT {
-    private static final int[] BASE = new int[]{0, 1, 0, -1};
+    private static final byte[] BASE = new byte[]{0, 1, 0, -1};
     public static boolean DEBUG = false;
-    int[] start;
-    int[] current;
-    long msgOffset;
+    byte[] codes;
 
-    public FFT(int[] start, long offset) {
-        // start ska vara (start) repeterat 10000 gånger eller offset + 8
-        this.start = start;
-        current = start;
-        this.msgOffset = offset;
+    public FFT(byte[] start) {
+        codes = start;
     }
 
-    public static long getMsgOffset(int[] input) {
-        String offset = "";
-        for (int i = 0; i < 7; i++) {
-            offset = offset + input[i];
-        }
-
-        return Long.parseLong(offset);
-    }
-/*
-    private int[] repeatToFindOffset() {
-        long actualPointer = 0;
-        outerloop:
-        for (int i = 0; i < 10000; i++) {
-
-            if (actualPointer > msgOffset + 8) {
-                break outerloop;
-            }
-        }
-    }
-*/
     public void phase() {
-        if (DEBUG) {
-            System.out.println("Current: " + Arrays.toString(current));
-        }
-        int[] next = new int[start.length];
+     //   if (DEBUG) {
+            System.out.println("Current: " + Arrays.toString(codes));
+     //   }
+        byte[] next = new byte[codes.length];
         for (int i = 0; i < next.length; i++) {
-            next[i] = calculateAtIndex(i, current);
-            if (DEBUG) {
-                System.out.println("-----------------------");
-            }
+            next[i] = calculateAtIndex(i, codes);
         }
         if (DEBUG) {
 
+            System.out.println("-----------------------");
             System.out.println("Result: " + Arrays.toString(next));
         }
-        current = next;
+        codes = next;
     }
 
-    public int[] getMessageFromOffset() {
-        long start = msgOffset % current.length;
-        int[] msg = new int[8];
-        for (int i = 0; i < msg.length; i++) {
-            msg[i] = current[(int) start];
-            start++;
-            if (start >= current.length) {
-                start = 0;
-            }
+
+    private byte calculateAtIndex(int index, byte[] array) {
+        byte[] indexBase = null;
+        boolean onlyAdd = false;
+        if (index < array.length / 2) {
+            indexBase = calculateBaseForIndex(index);
+        } else {
+            onlyAdd = true;
         }
-        return msg;
-    }
-
-    private int calculateAtIndex(int index, int[] array) {
-        int[] indexBase = calculateBaseForIndex(index);
         if (DEBUG) {
-            System.out.println("-- Base: " + Arrays.toString(indexBase));
+            //   System.out.println("-- Base: " + Arrays.toString(indexBase));
         }
-        int val = 0;
+        byte val = 0;
 
 
         if (DEBUG) {
             System.out.print("-- : ");
         }
-        for (int i = 0; i < array.length; i++) {
+        for (int i = index; i < array.length; i++) {
 
             if (DEBUG) {
-                System.out.print(array[i] + "*" + indexBase[i] + " ");
+                System.out.print(array[i] + "*" + (onlyAdd ? "ADD" : indexBase[i]) + " ");
             }
-            val += array[i] * indexBase[i];
+            if(onlyAdd) {
+                val += array[i];
+            } else {
+                val += array[i] * indexBase[i];
+
+            }
         }
 
-        val = Math.abs(val);
-        int[] digits = Util.toDigits(val);
+        val = (byte) Math.abs(val);
+        byte[] digits = Util.toDigitsByte(String.valueOf(val));
 
         val = digits[digits.length - 1];
         if (DEBUG) {
@@ -99,8 +71,8 @@ public class FFT {
         return val;
     }
 
-    private int[] calculateBaseForIndex(int index) {
-        int[] tmp = new int[(index + 1) * BASE.length];
+    private byte[] calculateBaseForIndex(int index) {
+        byte[] tmp = new byte[(index + 1) * BASE.length];
         int bIndex = 0;
         int omgPointer = 0;
         for (int i = 0; i < BASE.length; i++) {
@@ -113,11 +85,11 @@ public class FFT {
 
         shiftOnce(tmp);
 
-        return repeat(tmp);
+        return repeatBase(tmp);
     }
 
-    private int[] repeat(int[] tmp) {
-        int[] repeated = new int[start.length];
+    private byte[] repeatBase(byte[] tmp) {
+        byte[] repeated = new byte[codes.length];
         int index = 0;
         for (int i = 0; i < repeated.length; i++) {
             repeated[i] = tmp[index];
@@ -129,7 +101,7 @@ public class FFT {
         return repeated;
     }
 
-    private void shiftOnce(int[] tmp) {
+    private void shiftOnce(byte[] tmp) {
         for (int i = 0; i < tmp.length; i++) {
             if (i == tmp.length - 1) {
                 tmp[tmp.length - 1] = 0;
@@ -139,8 +111,8 @@ public class FFT {
         }
     }
 
-    public int[] getCurrent() {
-        return current;
+    public byte[] getCurrent() {
+        return codes;
     }
 
 }
