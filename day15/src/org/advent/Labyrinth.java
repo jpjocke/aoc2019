@@ -46,12 +46,65 @@ public class Labyrinth {
                         sb.append(" ");
                     } else if (board[y][x] == 2) {
                         sb.append("O");
-                    }else if (board[y][x] == 10) {
+                    } else if (board[y][x] == 10) {
                         sb.append("S");
                     }
                 }
             }
             System.out.println(sb.toString());
         }
+    }
+
+    public void solidify() {
+        for (int y = 0; y < board.length; y++) {
+            for (int x = 0; x < board[y].length; x++) {
+                if (board[y][x] == -1) {
+                    board[y][x] = 0;
+                }
+            }
+        }
+    }
+
+    public boolean spreadOxygen() {
+        boolean allOxygen = true;
+        int[][] copy = copy();
+        for (int y = 0; y < board.length; y++) {
+            for (int x = 0; x < board[y].length; x++) {
+                if (board[y][x] == 2) {
+                    // spread...
+                    if (y > 0 && board[y - 1][x] != 0 && board[y - 1][x] != 2) {
+                        copy[y - 1][x] = 2;
+                        allOxygen = false;
+                    }
+                    if (y < board.length && board[y + 1][x] != 0 && board[y + 1][x] != 2) {
+                        copy[y + 1][x] = 2;
+                        allOxygen = false;
+                    }
+
+                    if (x > 0 && board[y][x - 1] != 0 && board[y][x - 1] != 2) {
+                        copy[y][x - 1] = 2;
+                        allOxygen = false;
+                    }
+                    if (x < board[y].length && board[y][x + 1] != 0 && board[y][x + 1] != 2) {
+                        copy[y][x + 1] = 2;
+                        allOxygen = false;
+                    }
+                }
+            }
+        }
+        board = copy;
+        return allOxygen;
+    }
+
+    private int[][] copy() {
+        int[][] copy = new int[board.length][board[0].length];
+
+        for (int y = 0; y < board.length; y++) {
+            for (int x = 0; x < board[y].length; x++) {
+                copy[y][x] = board[y][x];
+
+            }
+        }
+        return copy;
     }
 }

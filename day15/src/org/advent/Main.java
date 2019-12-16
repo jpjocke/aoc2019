@@ -12,16 +12,40 @@ public class Main {
     public static void main(String[] args) throws IOException {
         long tick = System.currentTimeMillis();
 
-        IntPoint position = new IntPoint(30, 30);
-        Labyrinth labyrinth = new Labyrinth(50, 50, position);
+        IntPoint position = new IntPoint(21, 21);
+        Labyrinth labyrinth = new Labyrinth(41, 41, position);
         IntCodes codes = new IntCodes(input);
 
+        /*
+        // Explorer manual
         Droid p = new Droid(position, labyrinth, codes);
         Droider droider= new Droider(labyrinth, p);
         droider.run();
+         */
 
+        // Rigged
     //    DroidRiggedMode rigged = new DroidRiggedMode(labyrinth, p);
     //    rigged.goRigged();
+
+        // Always right
+        Droid p = new Droid(position, labyrinth, codes);
+        DroiderRight droider= new DroiderRight(labyrinth, p);
+        droider.run();
+
+        labyrinth.solidify();
+        labyrinth.print(p);
+
+        boolean allOxygen = false;
+        int counter = 0;
+        while (!allOxygen) {
+            allOxygen = labyrinth.spreadOxygen();
+            labyrinth.print(p);
+            counter++;
+        }
+        System.out.println("Oxygen spread: " + counter);
+
+        // 335 too high
+        // 334 correct
 
         System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
     }

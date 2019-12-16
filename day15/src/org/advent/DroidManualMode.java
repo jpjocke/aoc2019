@@ -16,7 +16,7 @@ public class DroidManualMode implements DroidMode {
     }
 
     private int getDirection() throws IOException {
-        System.out.println("w=UP, s=DOWN, a=LEFT, d=RIGHT p=QUIT o=Automate 10 steps");
+        System.out.println("w=UP, s=DOWN, a=LEFT, d=RIGHT p=QUIT o=Explore 10 steps r=right 10steps");
         System.out.print("Dir: ");
         String s = br.readLine();
 
@@ -38,6 +38,10 @@ public class DroidManualMode implements DroidMode {
 
         if (s.equals("o")) {
             return 50;
+        }
+
+        if (s.equals("r")) {
+            return 60;
         }
         return 5;
     }
