@@ -7,26 +7,31 @@ import org.advent.util.intmachine.IntMachine;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Util {
+
+    public static int[] toDigits(long larger, int length) {
+        String number = String.valueOf(larger);
+        while (number.length() != length) {
+            number = "0" + number;
+        }
+        return toDigits(number);
+    }
 
     public static int[] toDigits(long larger) {
         return toDigits(larger, String.valueOf(larger).length());
     }
 
-    public static int[] toDigits(long larger, int length) {
-        String number = String.valueOf(larger);
+    public static int[] toDigits(String number) {
         char[] digitsChar = number.toCharArray();
         int[] digits = new int[digitsChar.length];
         for (int i = 0; i < digitsChar.length; i++) {
             digits[i] = Character.digit(digitsChar[i], 10);
         }
-
+/*
         if (digits.length != length) {
             int[] filledDigits = new int[length];
             for (int i = 0; i < filledDigits.length; i++) {
@@ -40,13 +45,13 @@ public class Util {
             }
             digits = filledDigits;
         }
-
+*/
         return digits;
     }
 
     public static List<Long> toOperations(String string) {
         String[] split = string.split(",");
-        List<Long> ops =  Arrays.stream(split)
+        List<Long> ops = Arrays.stream(split)
                 .map(s -> Long.parseLong(s))
                 .collect(Collectors.toList());
         return ops;
