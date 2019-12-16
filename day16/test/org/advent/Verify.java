@@ -3,6 +3,7 @@ package org.advent;
 import org.advent.util.Util;
 import org.junit.Assert;
 import org.junit.Test;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,7 +76,6 @@ public class Verify {
 
     @Test
     public void step2_1() {
-        // tar alldelles för lång tid
         String input = "03036732577212944063491565474664";
         byte[] origInput = Util.toDigitsByte(input);
 
@@ -83,25 +83,81 @@ public class Verify {
         System.out.println("Offset: " + offset);
 
         byte[] inTeK = UtilFft.tenK(origInput);
-        FFT real = new FFT(inTeK);
-      //  real.DEBUG = true;
-        // phase 100
+        FFTOpt real = new FFTOpt(inTeK, offset);
+        real.DEBUG = true;
         for (int i = 0; i < 100; i++) {
+            System.out.println(i + "/100");
             real.phase();
         }
         byte[] result = real.getCurrent();
-        byte[] msg = UtilFft.getMessageFromOffset(offset, result);
 
         System.out.println("result: " + Arrays.toString(result));
-        System.out.println("msg: " + Arrays.toString(msg));
 
-        Assert.assertEquals(8, msg[0]);
-        Assert.assertEquals(4, msg[1]);
-        Assert.assertEquals(4, msg[2]);
-        Assert.assertEquals(6, msg[3]);
-        Assert.assertEquals(2, msg[4]);
-        Assert.assertEquals(0, msg[5]);
-        Assert.assertEquals(2, msg[6]);
-        Assert.assertEquals(6, msg[7]);
+        Assert.assertEquals(8, result[0]);
+        Assert.assertEquals(4, result[1]);
+        Assert.assertEquals(4, result[2]);
+        Assert.assertEquals(6, result[3]);
+        Assert.assertEquals(2, result[4]);
+        Assert.assertEquals(0, result[5]);
+        Assert.assertEquals(2, result[6]);
+        Assert.assertEquals(6, result[7]);
+    }
+
+    @Test
+    public void step2_2() {
+        String input = "02935109699940807407585447034323";
+        byte[] origInput = Util.toDigitsByte(input);
+
+        int offset =  UtilFft.getMsgOffset(origInput);
+        System.out.println("Offset: " + offset);
+
+        byte[] inTeK = UtilFft.tenK(origInput);
+        FFTOpt real = new FFTOpt(inTeK, offset);
+     //   real.DEBUG = true;
+        for (int i = 0; i < 100; i++) {
+            System.out.println(i + "/100");
+            real.phase();
+        }
+        byte[] result = real.getCurrent();
+
+        System.out.println("result: " + Arrays.toString(result));
+
+        Assert.assertEquals(7, result[0]);
+        Assert.assertEquals(8, result[1]);
+        Assert.assertEquals(7, result[2]);
+        Assert.assertEquals(2, result[3]);
+        Assert.assertEquals(5, result[4]);
+        Assert.assertEquals(2, result[5]);
+        Assert.assertEquals(7, result[6]);
+        Assert.assertEquals(0, result[7]);
+    }
+
+    @Test
+    public void step2_3() {
+        String input = "03081770884921959731165446850517";
+        byte[] origInput = Util.toDigitsByte(input);
+
+        int offset =  UtilFft.getMsgOffset(origInput);
+        System.out.println("Offset: " + offset);
+
+        byte[] inTeK = UtilFft.tenK(origInput);
+        FFTOpt real = new FFTOpt(inTeK, offset);
+        //   real.DEBUG = true;
+        for (int i = 0; i < 100; i++) {
+            System.out.println(i + "/100");
+            real.phase();
+        }
+        byte[] result = real.getCurrent();
+
+        System.out.println("result: " + Arrays.toString(result));
+
+        Assert.assertEquals(5, result[0]);
+        Assert.assertEquals(3, result[1]);
+        Assert.assertEquals(5, result[2]);
+        Assert.assertEquals(5, result[3]);
+        Assert.assertEquals(3, result[4]);
+        Assert.assertEquals(7, result[5]);
+        Assert.assertEquals(3, result[6]);
+        Assert.assertEquals(1, result[7]);
     }
 }

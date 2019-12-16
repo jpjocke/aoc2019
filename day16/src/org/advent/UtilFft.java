@@ -20,14 +20,4 @@ public class UtilFft {
 
         return tenK;
     }
-
-
-    public static byte[] getMessageFromOffset(int offset, byte[] codes) {
-        byte[] msg = new byte[8];
-        for (int i = 0; i < msg.length; i++) {
-            msg[i] = codes[offset];
-            offset++;
-        }
-        return msg;
-    }
 }

@@ -10,27 +10,38 @@ public class Main {
 
     public static void main(String[] args) {
         long tick = System.currentTimeMillis();
-        FFT fft = new FFT(Util.toDigits(input), 0);
+        //step1();
+        step2();
 
-        // get real input
-        for (int i = 0; i < 10000; i++) {
+        System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
+        // 87899007 -> too high
+    }
+
+    private static void step1() {
+        FFT fft = new FFT(Util.toDigitsByte(input));
+        for (int i = 0; i < 100; i++) {
             fft.phase();
         }
-        int[] realInput = fft.getCurrent();
-        System.out.println("real input: " + Arrays.toString(realInput));
+    }
 
+    private static void step2() {
+        byte[] origInput = Util.toDigitsByte(input);
+        int offset =  UtilFft.getMsgOffset(origInput);
 
-        FFT real = new FFT(realInput, 0);
+        byte[] inTeK = UtilFft.tenK(origInput);
+        FFTOpt real = new FFTOpt(inTeK, offset);
+        real.DEBUG = true;
         // phase 100
         for (int i = 0; i < 100; i++) {
             real.phase();
         }
-        int[] result = fft.getCurrent();
-        System.out.println("result: " + Arrays.toString(result));
-        System.out.println("msg: " + Arrays.toString(real.getMessageFromOffset()));
+        byte[] result = real.getCurrent();
 
-        System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
-        // 87899007 -> too high
+        for(int i = 0; i < 8; i++) {
+            System.out.println("result: " + result[i]);
+        }
+
+      //  System.out.println("result: " + Arrays.toString(result));
     }
 
 }
