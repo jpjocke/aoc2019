@@ -13,16 +13,16 @@ import java.util.stream.Collectors;
 
 public class Util {
 
-    public static int[] toDigits(long larger, int length) {
-        String number = String.valueOf(larger);
-        while (number.length() != length) {
-            number = "0" + number;
+    public static int[] toDigits(long number, int length) {
+        String numberS = String.valueOf(number);
+        while (numberS.length() != length) {
+            numberS = "0" + numberS;
         }
-        return toDigits(number);
+        return toDigits(numberS);
     }
 
-    public static int[] toDigits(long larger) {
-        return toDigits(larger, String.valueOf(larger).length());
+    public static int[] toDigits(long number) {
+        return toDigits(number, String.valueOf(number).length());
     }
 
     public static int[] toDigits(String number) {
@@ -31,21 +31,27 @@ public class Util {
         for (int i = 0; i < digitsChar.length; i++) {
             digits[i] = Character.digit(digitsChar[i], 10);
         }
-/*
-        if (digits.length != length) {
-            int[] filledDigits = new int[length];
-            for (int i = 0; i < filledDigits.length; i++) {
-                int digitIndex = digits.length - 1 - i;
-                int filledIndex = filledDigits.length - 1 - i;
-                if (digitIndex >= 0) {
-                    filledDigits[filledIndex] = digits[digitIndex];
-                } else {
-                    filledDigits[filledIndex] = 0;
-                }
-            }
-            digits = filledDigits;
+        return digits;
+    }
+
+    public static byte[] toDigitsByte(long number) {
+        return toDigitsByte(String.valueOf(number));
+    }
+
+    public static byte[] toDigitsByte(long number, int length) {
+        String numberS = String.valueOf(number);
+        while (numberS.length() != length) {
+            numberS = "0" + numberS;
         }
-*/
+        return toDigitsByte(numberS);
+    }
+
+    public static byte[] toDigitsByte(String number) {
+        char[] digitsChar = number.toCharArray();
+        byte[] digits = new byte[digitsChar.length];
+        for (int i = 0; i < digitsChar.length; i++) {
+            digits[i] = (byte)Character.digit(digitsChar[i], 10);
+        }
         return digits;
     }
 
