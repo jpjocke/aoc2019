@@ -18,9 +18,9 @@ public class ScaffoldsHull {
             width++;
         }
 
-        height = output.size() / width;
+        // height = output.size() / width;
 
-        board = new int[height][width];
+        board = new int[35][59];
 
         int y = 0;
         int x = 0;
@@ -30,6 +30,9 @@ public class ScaffoldsHull {
                 y++;
                 x = 0;
                 continue;
+            }
+            if (y > board.length) {
+                break;
             }
             board[y][x] = (int) val;
             x++;
@@ -43,7 +46,10 @@ public class ScaffoldsHull {
     public int countIntersections() {
         int val = 0;
         for (int y = 0; y < board.length; y++) {
+            StringBuilder sb = new StringBuilder();
             for (int x = 0; x < board[y].length; x++) {
+                char c = (char)board[y][x];
+                sb.append(c);
                 if (x == 0 || x == board[y].length - 1) {
                     continue;
                 }
@@ -73,7 +79,9 @@ public class ScaffoldsHull {
 
                 // intersection
                 val += y * x;
+                sb.replace(sb.length() - 1, sb.length() - 1, "O");
             }
+            System.out.println(sb);
         }
         return val;
     }
@@ -82,7 +90,8 @@ public class ScaffoldsHull {
         for (int y = 0; y < board.length; y++) {
             StringBuilder sb = new StringBuilder();
             for (int x = 0; x < board[y].length; x++) {
-                sb.append(board[y][x] == 35 ? "#" : ".");
+                char c = (char)board[y][x];
+                sb.append(c);
             }
             System.out.println(sb.toString());
         }
