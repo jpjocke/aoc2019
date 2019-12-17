@@ -5,14 +5,14 @@ import java.util.List;
 
 public class Input {
     int currentInput;
-    private List<Integer> input;
+    private List<Long> input;
 
     public Input() {
         this.input = new ArrayList<>();
         this.currentInput = 0;
     }
 
-    public void addInput(int next) {
+    public void addInput(long next) {
         input.add(next);
     }
 
@@ -20,11 +20,11 @@ public class Input {
         currentInput = 0;
     }
 
-    public int getNextInput() throws NoMoreInputException {
+    public long getNextInput() throws NoMoreInputException {
         if (currentInput >= input.size()) {
             throw new NoMoreInputException();
         }
-        int next = input.get(currentInput);
+        long next = input.get(currentInput);
         currentInput++;
         return next;
     }

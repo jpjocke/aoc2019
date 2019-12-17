@@ -38,6 +38,10 @@ public class IntMachine {
     }
 
     public void addInput(int input) {
+        this.addInput(Long.valueOf(input));
+    }
+
+    public void addInput(long input) {
         this.input.addInput(input);
     }
 

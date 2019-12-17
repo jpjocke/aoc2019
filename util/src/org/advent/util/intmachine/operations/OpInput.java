@@ -5,9 +5,9 @@ import org.advent.util.intmachine.IntCodes;
 public class OpInput extends Op {
     // this arg is always reference ????
     private Argument arg;
-    private int input;
+    private long input;
 
-    public OpInput(Argument arg, int input) {
+    public OpInput(Argument arg, long input) {
         this.arg = arg;
         this.input = input;
     }

@@ -45,7 +45,7 @@ public class OpFactory {
         }
 
         if (opCode == 3) {
-            int inputToUse = input.getNextInput();
+            long inputToUse = input.getNextInput();
             return new OpInput(parameters.get(0), inputToUse);
         }
         if (opCode == 4) {
