@@ -6,6 +6,7 @@ import java.util.Optional;
 
 
 public class DfsNode {
+    public static boolean DEBUG = false;
     private IntPoint pos;
     private int steps;
     private DfsNode parent;
@@ -13,15 +14,14 @@ public class DfsNode {
     private DfsNode down;
     private DfsNode left;
     private DfsNode right;
-  //  private boolean done;
-  //  private char key;
 
     public DfsNode(DfsNode parent, IntPoint pos, int steps) {
-        System.out.println("Created: " + pos + " steps: " + steps);
+        if (DEBUG) {
+            System.out.println("Created: " + pos + " steps: " + steps);
+        }
         this.pos = pos;
         this.steps = steps;
         this.parent = parent;
-   //     done = false;
     }
 
     public IntPoint getPos() {
@@ -29,7 +29,15 @@ public class DfsNode {
     }
 
     public void explore(DfsI dfsi) {
-        System.out.println("Exploring: " + pos + " steps: " + steps);
+        if (DEBUG) {
+            System.out.println("Exploring: " + pos + " steps: " + steps);
+        }
+        if (dfsi.keyAtPosition(pos).isPresent()) {
+            if (DEBUG) {
+                System.out.println("There is a key here, no need to explore more");
+            }
+            return;
+        }
         if (up == null) {
             IntPoint upP = pos.copy();
             upP.y--;
@@ -68,25 +76,6 @@ public class DfsNode {
         }
     }
 
-    public void setSteps(int steps) {
-        this.steps = steps;
-        int childSteps = steps + 1;
-
-        if (up != null) {
-            up.setSteps(childSteps);
-        }
-        if (down != null) {
-            down.setSteps(childSteps);
-        }
-        if (left != null) {
-            left.setSteps(childSteps);
-        }
-        if (right != null) {
-            right.setSteps(childSteps);
-        }
-
-    }
-
     public void removeFromParent() {
         if (parent.up != null && parent.up.getPos().equals(this.pos)) {
             parent.up = null;
@@ -111,10 +100,14 @@ public class DfsNode {
 
             if (optionalDfsNode.isPresent()) {
                 DfsNode node = optionalDfsNode.get();
-                System.out.println("Already explored: " + p + " had steps: " + node.getSteps());
+                if (DEBUG) {
+                    System.out.println("Already explored: " + p + " had steps: " + node.getSteps());
+                }
                 // check if it is closer this way
                 if (node.getSteps() > steps + 1) {
-                    System.out.println("Stealing dfs at: " + p);
+                    if (DEBUG) {
+                        System.out.println("Stealing dfs at: " + p);
+                    }
                     node.removeFromParent();
                     node.setSteps(steps + 1);
                     return node;
@@ -124,7 +117,9 @@ public class DfsNode {
                 }
             } else {
                 // we have not been here
-                System.out.println("Adding: " + p);
+                if (DEBUG) {
+                    System.out.println("Adding: " + p);
+                }
                 return new DfsNode(this, p, steps + 1);
             }
         }
@@ -155,4 +150,25 @@ public class DfsNode {
     public int getSteps() {
         return steps;
     }
+
+    public void setSteps(int steps) {
+        this.steps = steps;
+        int childSteps = steps + 1;
+
+        if (up != null) {
+            up.setSteps(childSteps);
+        }
+        if (down != null) {
+            down.setSteps(childSteps);
+        }
+        if (left != null) {
+            left.setSteps(childSteps);
+        }
+        if (right != null) {
+            right.setSteps(childSteps);
+        }
+
+    }
+
+
 }
