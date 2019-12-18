@@ -8,17 +8,20 @@ import java.util.Optional;
 public class DfsNode {
     private IntPoint pos;
     private int steps;
+    private DfsNode parent;
     private DfsNode up;
     private DfsNode down;
     private DfsNode left;
     private DfsNode right;
-    private boolean done;
-    private char key;
+  //  private boolean done;
+  //  private char key;
 
-    public DfsNode(IntPoint pos, int steps) {
+    public DfsNode(DfsNode parent, IntPoint pos, int steps) {
+        System.out.println("Created: " + pos + " steps: " + steps);
         this.pos = pos;
         this.steps = steps;
-        done = false;
+        this.parent = parent;
+   //     done = false;
     }
 
     public IntPoint getPos() {
@@ -26,31 +29,30 @@ public class DfsNode {
     }
 
     public void explore(DfsI dfsi) {
-        if(pos.x == 39 && pos.y == 35) {
-            System.out.println("CRASH: " + pos);
-
-        }
-        if (!done) {
-            System.out.println("Exploring: " + pos);
+        System.out.println("Exploring: " + pos + " steps: " + steps);
+        if (up == null) {
             IntPoint upP = pos.copy();
             upP.y--;
             up = exploreForPos(dfsi, upP);
+        }
 
-            upP = pos.copy();
+        if (down == null) {
+            IntPoint upP = pos.copy();
             upP.y++;
             down = exploreForPos(dfsi, upP);
+        }
 
-            upP = pos.copy();
+        if (left == null) {
+            IntPoint upP = pos.copy();
             upP.x--;
             left = exploreForPos(dfsi, upP);
+        }
 
-            upP = pos.copy();
+        if (right == null) {
+            IntPoint upP = pos.copy();
             upP.x++;
             right = exploreForPos(dfsi, upP);
         }
-
-
-        done = true;
 
         if (up != null) {
             up.explore(dfsi);
@@ -64,27 +66,6 @@ public class DfsNode {
         if (right != null) {
             right.explore(dfsi);
         }
-    }
-
-    public DfsNode takeChildAtPos(IntPoint p) {
-        DfsNode tmp = null;
-        if (up != null && up.getPos().equals(p)) {
-            tmp = up;
-            up = null;
-        }
-        if (down != null && down.getPos().equals(p)) {
-            tmp = down;
-            down = null;
-        }
-        if (left != null && left.getPos().equals(p)) {
-            tmp = left;
-            left = null;
-        }
-        if (right != null && right.getPos().equals(p)) {
-            tmp = right;
-            right = null;
-        }
-        return tmp;
     }
 
     public void setSteps(int steps) {
@@ -106,6 +87,21 @@ public class DfsNode {
 
     }
 
+    public void removeFromParent() {
+        if (parent.up != null && parent.up.getPos().equals(this.pos)) {
+            parent.up = null;
+        }
+        if (parent.down != null && parent.down.getPos().equals(this.pos)) {
+            parent.down = null;
+        }
+        if (parent.left != null && parent.left.getPos().equals(this.pos)) {
+            parent.left = null;
+        }
+        if (parent.right != null && parent.right.getPos().equals(this.pos)) {
+            parent.right = null;
+        }
+    }
+
     public DfsNode exploreForPos(DfsI dfsi, IntPoint p) {
         // check map if we can go here
         if (dfsi.isPositionViable(p)) {
@@ -114,14 +110,14 @@ public class DfsNode {
             Optional<DfsNode> optionalDfsNode = dfsi.findByPosition(p);
 
             if (optionalDfsNode.isPresent()) {
-                System.out.println("Already explored: " + p);
-                DfsNode parent = optionalDfsNode.get();
+                DfsNode node = optionalDfsNode.get();
+                System.out.println("Already explored: " + p + " had steps: " + node.getSteps());
                 // check if it is closer this way
-                if (steps < parent.steps) {
+                if (node.getSteps() > steps + 1) {
                     System.out.println("Stealing dfs at: " + p);
-                    DfsNode child = parent.takeChildAtPos(p);
-                    child.setSteps(steps + 1);
-                    return child;
+                    node.removeFromParent();
+                    node.setSteps(steps + 1);
+                    return node;
                 } else {
                     // old way was closer, skip this
                     return null;
@@ -129,51 +125,34 @@ public class DfsNode {
             } else {
                 // we have not been here
                 System.out.println("Adding: " + p);
-                return new DfsNode(p, steps + 1);
+                return new DfsNode(this, p, steps + 1);
             }
         }
         return null;
     }
 
-    public Optional<DfsNode> findParentByChildPosition(IntPoint p) {
-        if (up != null && up.getPos().equals(p)) {
+    public Optional<DfsNode> findByPosition(IntPoint p) {
+        if (pos.equals(p)) {
             return Optional.of(this);
         }
-        if (down != null && down.getPos().equals(p)) {
-            return Optional.of(this);
-        }
-        if (left != null && left.getPos().equals(p)) {
-            return Optional.of(this);
-        }
-        if (right != null && right.getPos().equals(p)) {
-            return Optional.of(this);
-        }
-
         Optional<DfsNode> child = Optional.empty();
         if (up != null) {
-            child = up.findParentByChildPosition(p);
+            child = up.findByPosition(p);
         }
-        if (down != null && child != null) {
-            child = down.findParentByChildPosition(p);
+        if (down != null && !child.isPresent()) {
+            child = down.findByPosition(p);
         }
-        if (left != null && child != null) {
-            child = left.findParentByChildPosition(p);
+        if (left != null && !child.isPresent()) {
+            child = left.findByPosition(p);
         }
-        if (right != null && child != null) {
-            child = right.findParentByChildPosition(p);
+        if (right != null && !child.isPresent()) {
+            child = right.findByPosition(p);
         }
+
         return child;
     }
 
-    /**
-     * Override for the startposition
-     *
-     * @param node
-     */
-    public void setAllChildrenAsOne(DfsNode node) {
-        up = node;
-        down = node;
-        left = node;
-        right = node;
+    public int getSteps() {
+        return steps;
     }
 }

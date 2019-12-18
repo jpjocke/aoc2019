@@ -19,22 +19,17 @@ public class DfsCalc implements DfsI {
         this.doors = doors;
         this.map = map;
         this.position = position;
-        top = new DfsNode(position, 0);
+        top = new DfsNode(null, position, 0);
     }
 
     public void explore() {
-        // todo testa härifrån, visualisera?
         top.explore(this);
+        map.print(position, keys, doors, top);
     }
 
     @Override
     public Optional<DfsNode> findByPosition(IntPoint p) {
-        if (position.equals(p)) {
-           DfsNode secretSauce = new DfsNode(position, 0);
-           secretSauce.setAllChildrenAsOne(secretSauce);
-           return Optional.of(secretSauce);
-        }
-        return top.findParentByChildPosition(p);
+        return top.findByPosition(p);
     }
 
     @Override

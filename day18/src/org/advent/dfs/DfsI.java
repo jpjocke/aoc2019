@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface DfsI {
     /**
-     * Finds the Node that has a child with the same position as the given
+     * Finds the Node that has the position
      * @param position
      * @return
      */
