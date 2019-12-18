@@ -10,7 +10,7 @@ public interface DfsI {
      * @param position
      * @return
      */
-    Optional<DfsNode> findByPosition(IntPoint position);
+    Optional<DfsNode> findByPosition(IntPoint startingPos, IntPoint searchedPos);
 
     /**
      * Chacks the dungeon and returns true if it is possible to go there.

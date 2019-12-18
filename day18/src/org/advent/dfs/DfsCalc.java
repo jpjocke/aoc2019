@@ -3,6 +3,7 @@ package org.advent.dfs;
 import org.advent.Dungeon;
 import org.advent.util.IntPoint;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,60 +12,92 @@ import java.util.Optional;
 public class DfsCalc implements DfsI {
     public static boolean DEBUG = false;
     private Map<IntPoint, Character> keys;
-    private Map<IntPoint, Character> doors;
+    private Map<IntPoint, DfsNode> mappedDfs;
     private Dungeon map;
     private IntPoint position;
-    private DfsNode top;
 
     public DfsCalc(Map<IntPoint, Character> keys, Map<IntPoint, Character> doors, Dungeon map, IntPoint position) {
         this.keys = keys;
-        this.doors = doors;
         this.map = map;
         this.position = position;
-        top = new DfsNode(null, position, 0);
+        mappedDfs = new HashMap<>();
+        mappedDfs.put(position, new DfsNode(null, position, 0));
+        for (IntPoint key : keys.keySet()) {
+            mappedDfs.put(key, new DfsNode(null, key, 0));
+        }
+
+        for (IntPoint pos : mappedDfs.keySet()) {
+            mappedDfs.get(pos).explore(this);
+            if (DEBUG) {
+                map.print(position, keys, doors, mappedDfs.get(pos));
+            }
+        }
     }
 
-    public int explore(int iteration) {
+    public int exploreForPos(Map<IntPoint, Character> keys, Map<IntPoint, Character> doors, IntPoint position) {
         if (keys.isEmpty()) {
             if (DEBUG) {
-                System.out.println("No more keys, iteration: " + iteration);
+                System.out.println("No more keys");
             }
             return 0;
         }
-        printKeysAndDoors(iteration);
-        top.explore(this);
-        //  map.print(position, keys, doors, top);
-        int lessSteps = Integer.MAX_VALUE;
+        printKeysAndDoors(keys, doors);
+
+        List<DfsNode> foundNodes = new ArrayList<>();
+        int smallestSTep = Integer.MAX_VALUE;
         for (IntPoint key : keys.keySet()) {
-            Optional<DfsNode> oNode = top.findByPosition(key);
+            Optional<DfsNode> oNode = mappedDfs.get(position).findPosStopAtDoors(key, keys, doors);
             if (oNode.isPresent()) {
                 DfsNode node = oNode.get();
-                IntPoint nextPos = node.getPos();
+                foundNodes.add(node);
                 if (DEBUG) {
-                    System.out.println("Found: " + keys.get(key) + " on p: " + nextPos + ", steps: " + node.getSteps() + ", iteration: " + iteration);
+                    System.out.println("Found: " + keys.get(node.getPos()) + " on p: " + position + ", steps: " + node.getSteps());
                 }
-
-                DfsCalc next = buildNextIteration(key);
-                int nextSteps = node.getSteps() + next.explore(iteration + 1);
-                if (nextSteps < lessSteps) {
-                    lessSteps = nextSteps;
-                    if (DEBUG) {
-                        System.out.println("Found shorter way: " + lessSteps);
-                    }
+                if(smallestSTep > node.getSteps()) {
+                    smallestSTep = node.getSteps();
                 }
-                if (DEBUG) {
-                    System.out.println("Shortest way: " + lessSteps + ", iteration: " + iteration);
-                }
-
             }
         }
 
+        int lessSteps = Integer.MAX_VALUE;
+        for (DfsNode node : foundNodes) {
+            if(node.getSteps() > smallestSTep * 2) {
+                if (DEBUG) {
+                    System.out.println("Skipping : " + node.getPos());
+                }
+            }
+
+
+            Map<IntPoint, Character> nextKeys = new HashMap<>(keys);
+            Map<IntPoint, Character> nextDoors = new HashMap<>(doors);
+            nextKeys.remove(node.getPos());
+            for (IntPoint door : nextDoors.keySet()) {
+                if (nextDoors.get(door) == keys.get(node.getPos()) - 32) {
+                    if (DEBUG) {
+                        System.out.println("Removing door: " + nextDoors.get(door));
+                    }
+                    nextDoors.remove(door);
+                    break;
+                }
+            }
+
+            int nextSteps = node.getSteps() + exploreForPos(nextKeys, nextDoors, node.getPos());
+            if (nextSteps < lessSteps) {
+                lessSteps = nextSteps;
+                if (DEBUG) {
+                    System.out.println("Found shorter way: " + lessSteps);
+                }
+            }
+            if (DEBUG) {
+                System.out.println("Shortest way: " + lessSteps);
+            }
+        }
         return lessSteps;
     }
 
-    private void printKeysAndDoors(int iteration) {
-        System.out.println("Exploring---------- iteration: " + iteration);
+    private void printKeysAndDoors(Map<IntPoint, Character> keys, Map<IntPoint, Character> doors) {
         if (DEBUG) {
+            System.out.println("Exploring---------- ");
             System.out.print("-- Keys: ");
             for (IntPoint key : keys.keySet()) {
                 System.out.print(keys.get(key) + " - ");
@@ -79,23 +112,16 @@ public class DfsCalc implements DfsI {
     }
 
     @Override
-    public Optional<DfsNode> findByPosition(IntPoint p) {
-        return top.findByPosition(p);
+    public Optional<DfsNode> findByPosition(IntPoint startingPos, IntPoint searchedPos) {
+        return mappedDfs.get(startingPos).findByPosition(searchedPos);
     }
 
     @Override
     public boolean isPositionViable(IntPoint p) {
-        if (doors.containsKey(p)) {
-            // Door is in the way
-            return false;
-        }
         char c = map.getCharAt(p);
-        if (c == '.') {
-            // open space
-            return true;
-        }
+        // open space
+        return c == '.';
         // wall
-        return false;
     }
 
     @Override
@@ -104,21 +130,5 @@ public class DfsCalc implements DfsI {
             return Optional.of(keys.get(p));
         }
         return Optional.empty();
-    }
-
-    private DfsCalc buildNextIteration(IntPoint key) {
-        Map<IntPoint, Character> nextKeys = new HashMap<>(keys);
-        Map<IntPoint, Character> nextDoors = new HashMap<>(doors);
-        nextKeys.remove(key);
-        for (IntPoint door : nextDoors.keySet()) {
-            if (nextDoors.get(door) == keys.get(key) - 32) {
-                if (DEBUG) {
-                    System.out.println("Removing door: " + nextDoors.get(door));
-                }
-                nextDoors.remove(door);
-                break;
-            }
-        }
-        return new DfsCalc(nextKeys, nextDoors, map, key);
     }
 }

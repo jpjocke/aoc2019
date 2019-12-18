@@ -2,6 +2,7 @@ package org.advent.dfs;
 
 import org.advent.util.IntPoint;
 
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -31,12 +32,6 @@ public class DfsNode {
     public void explore(DfsI dfsi) {
         if (DEBUG) {
             System.out.println("Exploring: " + pos + " steps: " + steps);
-        }
-        if (dfsi.keyAtPosition(pos).isPresent()) {
-            if (DEBUG) {
-                System.out.println("There is a key here, no need to explore more");
-            }
-            return;
         }
         if (up == null) {
             IntPoint upP = pos.copy();
@@ -91,12 +86,19 @@ public class DfsNode {
         }
     }
 
+    private IntPoint getStartPoint() {
+        if (steps == 0) {
+            return pos;
+        }
+        return parent.getStartPoint();
+    }
+
     public DfsNode exploreForPos(DfsI dfsi, IntPoint p) {
         // check map if we can go here
         if (dfsi.isPositionViable(p)) {
 
             // check if we already have been here
-            Optional<DfsNode> optionalDfsNode = dfsi.findByPosition(p);
+            Optional<DfsNode> optionalDfsNode = dfsi.findByPosition(getStartPoint(), p);
 
             if (optionalDfsNode.isPresent()) {
                 DfsNode node = optionalDfsNode.get();
@@ -167,8 +169,34 @@ public class DfsNode {
         if (right != null) {
             right.setSteps(childSteps);
         }
-
     }
 
+    public Optional<DfsNode> findPosStopAtDoors(IntPoint key, Map<IntPoint, Character> keys, Map<IntPoint, Character> doors) {
+        if (pos.equals(key)) {
+            return Optional.of(this);
+        }
+        if (doors.containsKey(pos)) {
+            return Optional.empty();
+        }
+        if (keys.containsKey(pos)) {
+            // this is another key, no need to find keys beyond this one.
+            return Optional.empty();
+        }
 
+        Optional<DfsNode> child = Optional.empty();
+        if (up != null) {
+            child = up.findPosStopAtDoors(key, keys, doors);
+        }
+        if (down != null && !child.isPresent()) {
+            child = down.findPosStopAtDoors(key, keys, doors);
+        }
+        if (left != null && !child.isPresent()) {
+            child = left.findPosStopAtDoors(key, keys, doors);
+        }
+        if (right != null && !child.isPresent()) {
+            child = right.findPosStopAtDoors(key, keys, doors);
+        }
+
+        return child;
+    }
 }
