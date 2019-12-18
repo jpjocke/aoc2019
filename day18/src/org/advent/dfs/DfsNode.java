@@ -199,4 +199,34 @@ public class DfsNode {
 
         return child;
     }
+
+    public void distanceToo(CachedDistance d, Map<IntPoint, Character> doors) {
+        if (pos.equals(d.getTo())) {
+            d.setSteps(steps);
+            return;
+        }
+
+        if (up != null && d.getSteps() == 0) {
+            up.distanceToo(d, doors);
+        }
+        if (down != null && d.getSteps() == 0) {
+            down.distanceToo(d, doors);
+        }
+        if (left != null && d.getSteps() == 0) {
+            left.distanceToo(d, doors);
+        }
+        if (right != null && d.getSteps() == 0) {
+            right.distanceToo(d, doors);
+        }
+
+        if (d.getSteps() > 0) {
+            // add blocking doors on the way up
+            if (doors.containsKey(pos)) {
+                d.addBlockingDoor(doors.get(pos));
+            }
+            // do not go down if we have found the end
+            return;
+        }
+
+    }
 }

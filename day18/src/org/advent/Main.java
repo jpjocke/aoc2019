@@ -17,7 +17,7 @@ public class Main {
         d.print(parser.getPosition(), parser.getDoors(), parser.getKeys());
 
         DfsCalc calc = new DfsCalc(parser.getKeys(), parser.getDoors(), d, parser.getPosition());
-        int steps = calc.exploreForPos(parser.getKeys(), parser.getDoors(), parser.getPosition());
+        int steps = calc.exploreForPos(parser.getKeys(), parser.getDoorsAsList(), parser.getPosition());
 
         System.out.println("Total steps: " + steps);
         System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");

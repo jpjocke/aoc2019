@@ -14,7 +14,7 @@ public class Verify {
         DungeonParser parser = new DungeonParser(input);
         Dungeon d = new Dungeon(parser.getMap());
         DfsCalc calc = new DfsCalc(parser.getKeys(), parser.getDoors(), d, parser.getPosition());
-        int steps = calc.exploreForPos(parser.getKeys(), parser.getDoors(), parser.getPosition());
+        int steps = calc.exploreForPos(parser.getKeys(), parser.getDoorsAsList(), parser.getPosition());
 
         Assert.assertEquals(8, steps);
     }
@@ -29,7 +29,7 @@ public class Verify {
         DungeonParser parser = new DungeonParser(input);
         Dungeon d = new Dungeon(parser.getMap());
         DfsCalc calc = new DfsCalc(parser.getKeys(), parser.getDoors(), d, parser.getPosition());
-        int steps = calc.exploreForPos(parser.getKeys(), parser.getDoors(), parser.getPosition());
+        int steps = calc.exploreForPos(parser.getKeys(), parser.getDoorsAsList(), parser.getPosition());
 
         Assert.assertEquals(86, steps);
     }
@@ -44,7 +44,7 @@ public class Verify {
         DungeonParser parser = new DungeonParser(input);
         Dungeon d = new Dungeon(parser.getMap());
         DfsCalc calc = new DfsCalc(parser.getKeys(), parser.getDoors(), d, parser.getPosition());
-        int steps = calc.exploreForPos(parser.getKeys(), parser.getDoors(), parser.getPosition());
+        int steps = calc.exploreForPos(parser.getKeys(), parser.getDoorsAsList(), parser.getPosition());
 
         Assert.assertEquals(132, steps);
     }
@@ -64,7 +64,8 @@ public class Verify {
         DungeonParser parser = new DungeonParser(input);
         Dungeon d = new Dungeon(parser.getMap());
         DfsCalc calc = new DfsCalc(parser.getKeys(), parser.getDoors(), d, parser.getPosition());
-        int steps = calc.exploreForPos(parser.getKeys(), parser.getDoors(), parser.getPosition());
+        //DfsCalc.DEBUG = true;
+        int steps = calc.exploreForPos(parser.getKeys(), parser.getDoorsAsList(), parser.getPosition());
 
         Assert.assertEquals(136, steps);
     }
@@ -80,8 +81,8 @@ public class Verify {
         DungeonParser parser = new DungeonParser(input);
         Dungeon d = new Dungeon(parser.getMap());
         DfsCalc calc = new DfsCalc(parser.getKeys(), parser.getDoors(), d, parser.getPosition());
-        calc.DEBUG = true;
-        int steps = calc.exploreForPos(parser.getKeys(), parser.getDoors(), parser.getPosition());
+        DfsCalc.DEBUG = true;
+        int steps = calc.exploreForPos(parser.getKeys(), parser.getDoorsAsList(), parser.getPosition());
 
         Assert.assertEquals(81, steps);
     }

@@ -2,6 +2,7 @@ package org.advent;
 
 import org.advent.util.IntPoint;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +54,14 @@ public class DungeonParser {
 
     public Map<IntPoint, Character> getDoors() {
         return doors;
+    }
+
+    public List<Character> getDoorsAsList() {
+        List<Character> doorsList = new ArrayList<>();
+        for (IntPoint p : doors.keySet()) {
+            doorsList.add(doors.get(p));
+        }
+        return doorsList;
     }
 
     public char[][] getMap() {
