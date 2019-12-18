@@ -15,6 +15,10 @@ public class Dungeon {
         return map[pos.y][pos.x];
     }
 
+    public char getCharAt(int x, int y) {
+        return map[y][x];
+    }
+
     public void print(IntPoint position, Map<IntPoint, Character> keys, Map<IntPoint, Character> doors) {
         IntPoint key = new IntPoint(0, 0);
         for (int y = 0; y < map.length; y++) {
