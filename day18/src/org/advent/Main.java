@@ -21,6 +21,7 @@ public class Main {
 
         System.out.println("Total steps: " + steps);
         System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
+        // 6286 correct
     }
 
 }

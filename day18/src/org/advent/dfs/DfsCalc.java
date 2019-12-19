@@ -11,34 +11,34 @@ import java.util.Optional;
 
 public class DfsCalc implements DfsI {
     public static boolean DEBUG = false;
-    private Map<IntPoint, Character> keys;
+    private Map<IntPoint, Character> masterKeys;
     private Map<IntPoint, DfsNode> mappedDfs;
     private Map<IntPoint, CachedDistanceList> distanceMap;
+    private Map<String, Integer> visitedMap;
     private Dungeon map;
-    private IntPoint position;
 
-    public DfsCalc(Map<IntPoint, Character> keys, Map<IntPoint, Character> doors, Dungeon map, IntPoint position) {
-        this.keys = keys;
+    public DfsCalc(Map<IntPoint, Character> masterKeys, Map<IntPoint, Character> doors, Dungeon map, IntPoint position) {
+        this.masterKeys = masterKeys;
         this.map = map;
-        this.position = position;
         distanceMap = new HashMap<>();
         mappedDfs = new HashMap<>();
+        visitedMap = new HashMap<>();
         mappedDfs.put(position, new DfsNode(null, position, 0));
-        for (IntPoint key : keys.keySet()) {
+        for (IntPoint key : masterKeys.keySet()) {
             mappedDfs.put(key, new DfsNode(null, key, 0));
         }
 
         for (IntPoint pos : mappedDfs.keySet()) {
             mappedDfs.get(pos).explore(this);
             CachedDistanceList cdl = new CachedDistanceList();
-            for (IntPoint key : keys.keySet()) {
-                CachedDistance d = new CachedDistance(pos, key, keys.get(key));
+            for (IntPoint key : masterKeys.keySet()) {
+                CachedDistance d = new CachedDistance(pos, key, masterKeys.get(key));
                 mappedDfs.get(pos).distanceToo(d, doors);
                 cdl.add(d);
             }
             distanceMap.put(pos, cdl);
             if (DEBUG) {
-                map.print(position, keys, doors, mappedDfs.get(pos));
+                map.print(position, masterKeys, doors, mappedDfs.get(pos));
             }
         }
     }
@@ -49,6 +49,16 @@ public class DfsCalc implements DfsI {
                 System.out.println("No more keys");
             }
             return 0;
+        }
+        String doorMemory = new String();
+        if (masterKeys.containsKey(position)) {
+            doorMemory = doorMemory + masterKeys.get(position);
+        }
+        for(int i = 0; i < doors.size(); i++) {
+            doorMemory = doorMemory + doors.get(i);
+        }
+        if (visitedMap.containsKey(doorMemory)) {
+            return visitedMap.get(doorMemory);
         }
         printKeysAndDoors(keys, doors);
 
@@ -105,6 +115,7 @@ public class DfsCalc implements DfsI {
             }
 
         }
+        visitedMap.put(doorMemory, lessSteps);
         return lessSteps;
     }
 
@@ -139,8 +150,8 @@ public class DfsCalc implements DfsI {
 
     @Override
     public Optional<Character> keyAtPosition(IntPoint p) {
-        if (keys.containsKey(p)) {
-            return Optional.of(keys.get(p));
+        if (masterKeys.containsKey(p)) {
+            return Optional.of(masterKeys.get(p));
         }
         return Optional.empty();
     }
