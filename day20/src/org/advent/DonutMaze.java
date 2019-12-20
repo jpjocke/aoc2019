@@ -15,6 +15,9 @@ public class DonutMaze {
     }
 
     public char getCharAt(IntPoint pos) {
+        if (pos.x < 0 || pos.y < 0 || pos.x >= map[0].length || pos.y >= map.length) {
+            return '#';
+        }
         return map[pos.y][pos.x];
     }
 
@@ -40,7 +43,7 @@ public class DonutMaze {
         }
     }
 
-    public void print(IntPoint position, DfsNodeDonut top) {
+    public void print(DfsNodeDonut top, IntPoint pos) {
         IntPoint key = new IntPoint(0, 0);
         for (int y = 0; y < map.length; y++) {
             StringBuilder sb = new StringBuilder();
@@ -48,10 +51,10 @@ public class DonutMaze {
                 key.x = x;
                 key.y = y;
                 Optional<DfsNodeDonut> steps = top.findByPosition(key);
-                if (key.equals(position)) {
-                    sb.append(toFourChar('@'));
-
-                } else if (steps.isPresent()) {
+                if(key.equals(pos)) {
+                    sb.append(" ^^ ");
+                }
+                else if (steps.isPresent()) {
                     sb.append(toFourInt(steps.get().getSteps()));
                 } else {
 
@@ -63,6 +66,9 @@ public class DonutMaze {
     }
 
     private String toFourChar(char c) {
+        if (c == '#') {
+            return "####";
+        }
         return "   " + c;
     }
 
