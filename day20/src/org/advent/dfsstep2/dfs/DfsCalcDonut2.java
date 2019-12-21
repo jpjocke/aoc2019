@@ -17,6 +17,7 @@ public class DfsCalcDonut2 implements DfsIDonut2 {
     private DfsNodeDonut2 top;
     private int levels;
     private List<HashMap<IntPoint, DfsNodeDonut2>> searchMap;
+    private List<DfsNodeDonut2> exploreList;
 
     public DfsCalcDonut2(Map<IntPoint, String> teleports, DonutMazeStep2 map, int levels) {
         this.teleports = teleports;
@@ -31,16 +32,25 @@ public class DfsCalcDonut2 implements DfsIDonut2 {
         for (int i = 0; i <= levels; i++) {
             searchMap.add(new HashMap<>());
         }
+        exploreList = new ArrayList<>();
 
         top = new DfsNodeDonut2(null, start, 0, 0);
         addNode(top);
         this.levels = levels;
-        top.DEBUG = true;
+      //  top.DEBUG = true;
     }
 
     public int exploreFromStart() {
-        top.explore(this, map);
-        map.printFull(this, start, levels);
+        int pos = 0;
+        while (true) {
+            exploreList.get(pos).explore(this, map);
+            pos++;
+            if(pos >= exploreList.size()) {
+                break;
+            }
+        }
+        // top.explore(this, map);
+      //  map.printFull(this, start, levels);
 
         Optional<DfsNodeDonut2> exit = findByPosition(findExitPos(), 0);
         if (exit.isPresent()) {
@@ -110,6 +120,7 @@ public class DfsCalcDonut2 implements DfsIDonut2 {
     public void addNode(DfsNodeDonut2 node) {
         HashMap<IntPoint, DfsNodeDonut2> map = searchMap.get(node.level);
         map.put(node.pos, node);
+        exploreList.add(node);
     }
 
 

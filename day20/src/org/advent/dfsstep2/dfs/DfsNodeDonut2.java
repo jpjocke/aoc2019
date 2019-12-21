@@ -61,7 +61,7 @@ public class DfsNodeDonut2 {
         if (DEBUG) {
             //       map.print(getTop(), pos, level);
         }
-
+/*
         if (around[0] != null && !around[0].deadEnd) {
             around[0].explore(dfsi, map);
         }
@@ -77,6 +77,8 @@ public class DfsNodeDonut2 {
         if (teleport != null) {
             teleport.explore(dfsi, map);
         }
+
+ */
         if (around[0] == null && around[1] == null && around[2] == null && around[3] == null && teleport == null) {
             deadEnd = true;
             parent.childIsDeadEnd();
