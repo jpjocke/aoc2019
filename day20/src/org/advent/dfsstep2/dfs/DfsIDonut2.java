@@ -18,6 +18,6 @@ public interface DfsIDonut2 {
     boolean isPositionViable(IntPoint p);
 
 
-    Optional<IntPoint> findTeleport(IntPoint pos, int level);
+    Optional<PortalResult> findTeleport(IntPoint pos, int level);
 
 }

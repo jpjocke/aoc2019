@@ -1,7 +1,8 @@
 package org.advent;
 
 import org.advent.dfs.DfsCalcDonut;
-import org.junit.Assert;
+import org.advent.dfsstep2.dfs.DfsCalcDonut2;
+import org.advent.dfsstep2.dfs.DonutMazeStep2;
 
 public class Main {
 
@@ -140,13 +141,25 @@ public class Main {
 
         DonutMaze dm = new DonutMaze(parser.getMap());
         // dm.print(parser.getTeleports());
+        // step1(parser, dm);
+        step2(parser);
 
+        System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
+    }
+
+    private static void step1(DonutMazeParser parser, DonutMaze dm) {
         DfsCalcDonut calc = new DfsCalcDonut(parser.getTeleports(), dm);
         int steps = calc.exploreFromStart();
 
         System.out.println("Steps: " + steps);
+    }
 
-        System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
+    private static void step2(DonutMazeParser parser) {
+        DonutMazeStep2 dm = new DonutMazeStep2(parser.getMap());
+        DfsCalcDonut2 calc = new DfsCalcDonut2(parser.getTeleports(), dm, 30);
+        int steps = calc.exploreFromStart();
+
+        System.out.println("Steps: " + steps);
     }
 
 }

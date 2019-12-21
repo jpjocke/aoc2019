@@ -26,12 +26,12 @@ public class DfsCalcDonut2 implements DfsIDonut2 {
         }
         top = new DfsNodeDonut2(null, start, 0, 0);
         this.levels = levels;
-        top.DEBUG = true;
+      //  top.DEBUG = true;
     }
 
     public int exploreFromStart() {
         top.explore(this, map);
-        map.printFull(top, start, levels);
+      //  map.printFull(top, start, levels);
 
         Optional<DfsNodeDonut2> exit = findByPosition(findExitPos(), 0);
         if (exit.isPresent()) {
@@ -56,10 +56,7 @@ public class DfsCalcDonut2 implements DfsIDonut2 {
     }
 
     @Override
-    public Optional<IntPoint> findTeleport(IntPoint pos, int level) {
-        if(level < 0 || level >= levels) {
-            return Optional.empty();
-        }
+    public Optional<PortalResult> findTeleport(IntPoint pos, int level) {
         String key = teleports.get(pos);
         if (key != null) {
             if (key.equals("AA") || key.equals("ZZ")) {
@@ -71,7 +68,24 @@ public class DfsCalcDonut2 implements DfsIDonut2 {
                     continue;
                 }
                 if (teleports.get(exit).equals(key)) {
-                    return Optional.of(exit);
+                    // kolla position och om den går ner / upp
+                    int nextLevel = level;
+                    if (pos.x == 0 ) {
+                        nextLevel--;
+                    } else if (pos.x == map.getWidth() - 1) {
+                        nextLevel--;
+                    } else if (pos.y == 0) {
+                        nextLevel--;
+                    } else if (pos.y == map.getHeight() - 1) {
+                        nextLevel--;
+                    } else {
+                        nextLevel++;
+                    }
+                    if (nextLevel < 0 || nextLevel >= levels) {
+                        return Optional.empty();
+                    }
+                    PortalResult r = new PortalResult(exit, nextLevel);
+                    return Optional.of(r);
                 }
             }
         }

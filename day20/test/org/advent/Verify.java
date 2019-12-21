@@ -174,7 +174,7 @@ public class Verify {
         DonutMazeStep2 dm = new DonutMazeStep2(parser.getMap());
         //   dm.print(parser.getTeleports());
 
-        DfsCalcDonut2 calc = new DfsCalcDonut2(parser.getTeleports(), dm, 3);
+        DfsCalcDonut2 calc = new DfsCalcDonut2(parser.getTeleports(), dm, 12);
         int steps = calc.exploreFromStart();
 
         // 26 now

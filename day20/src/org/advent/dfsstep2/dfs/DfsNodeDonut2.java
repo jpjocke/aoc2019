@@ -4,7 +4,7 @@ import org.advent.util.IntPoint;
 
 import java.util.Optional;
 
-
+// inner portals go down one level / outer goes up one level
 public class DfsNodeDonut2 {
     public static boolean DEBUG = false;
     protected IntPoint pos;
@@ -15,8 +15,7 @@ public class DfsNodeDonut2 {
     protected DfsNodeDonut2 down;
     protected DfsNodeDonut2 left;
     protected DfsNodeDonut2 right;
-    protected DfsNodeDonut2 teleportUp;
-    protected DfsNodeDonut2 teleportDown;
+    protected DfsNodeDonut2 teleport;
 
     public DfsNodeDonut2(DfsNodeDonut2 parent, IntPoint pos, int steps, int level) {
         this.pos = pos;
@@ -60,7 +59,7 @@ public class DfsNodeDonut2 {
             right = exploreForPos(dfsi, upP);
         }
         if (DEBUG) {
-       //     map.print(getTop(), pos, level);
+          //       map.print(getTop(), pos, level);
         }
 
         if (up != null) {
@@ -75,11 +74,8 @@ public class DfsNodeDonut2 {
         if (right != null) {
             right.explore(dfsi, map);
         }
-        if (teleportUp != null) {
-            teleportUp.explore(dfsi, map);
-        }
-        if (teleportDown != null) {
-            teleportDown.explore(dfsi, map);
+        if (teleport != null) {
+            teleport.explore(dfsi, map);
         }
     }
 
@@ -103,19 +99,12 @@ public class DfsNodeDonut2 {
         if (parent.right != null && parent.right.getPos().equals(this.pos)) {
             parent.right = null;
         }
-        if (parent.teleportUp != null && parent.teleportUp.getPos().equals(this.pos)) {
+        if (parent.teleport != null && parent.teleport.getPos().equals(this.pos)) {
             DfsNodeDonut2 tmp = parent;
-            DfsNodeDonut2 t = parent.teleportUp;
-            parent.teleportUp = null;
+            DfsNodeDonut2 t = parent.teleport;
+            parent.teleport = null;
             parent.removeFromParent();
-            t.teleportUp = tmp;
-        }
-        if (parent.teleportDown != null && parent.teleportDown.getPos().equals(this.pos)) {
-            DfsNodeDonut2 tmp = parent;
-            DfsNodeDonut2 t = parent.teleportDown;
-            parent.teleportDown = null;
-            parent.removeFromParent();
-            t.teleportDown = tmp;
+            t.teleport = tmp;
         }
 
         // also remove children!!
@@ -143,56 +132,27 @@ public class DfsNodeDonut2 {
                 return takeNodeIfCloser(p, optionalDfsNode.get());
             } else {
 
-                // up?
-                int levelUp = level + 1;
-                int levelDown = level - 1;
-                Optional<IntPoint> teleportUp = dfsi.findTeleport(p, levelUp);
-                Optional<IntPoint> teleportDown = dfsi.findTeleport(p, levelDown);
-                if (teleportUp.isPresent() || teleportDown.isPresent()) {
+                Optional<PortalResult> oPortalResult = dfsi.findTeleport(p, level);
+                if (oPortalResult.isPresent()) {
+                    PortalResult pr = oPortalResult.get();
                     DfsNodeDonut2 d = new DfsNodeDonut2(this, p, steps + 1, level);
 
-                    // up
-                    if (teleportUp.isPresent()) {
-                        IntPoint exitUp = teleportUp.get();
-                        if (DEBUG) {
-                            System.out.println("teleport to: " + exitUp + " level: " + levelUp);
-                        }
-                        // have we been at the teleport?
-                        Optional<DfsNodeDonut2> optionalExit = dfsi.findByPosition(exitUp, levelUp);
-                        if (optionalExit.isPresent()) {
-                            DfsNodeDonut2 node = takeNodeIfCloser(p, optionalExit.get());
-                            if (node != null) {
-                                d.teleportUp = node;
-                            }
-                        } else {
-                            if (DEBUG) {
-                                System.out.println("New teleport level: " + levelUp);
-                            }
-                            DfsNodeDonut2 t = new DfsNodeDonut2(d, exitUp, steps + 2, levelUp);
-                            d.teleportUp = t;
-                        }
+                    if (DEBUG) {
+                        System.out.println("teleport to: " + pr.pos + " level: " + pr.level);
                     }
-
-                    // up
-                    if (teleportDown.isPresent()) {
-                        IntPoint exitDown = teleportDown.get();
+                    // have we been at the teleport?
+                    Optional<DfsNodeDonut2> optionalExit = dfsi.findByPosition(pr.pos, pr.level);
+                    if (optionalExit.isPresent()) {
+                        DfsNodeDonut2 node = takeNodeIfCloser(p, optionalExit.get());
+                        if (node != null) {
+                            d.teleport = node;
+                        }
+                    } else {
                         if (DEBUG) {
-                            System.out.println("teleport to: " + exitDown + " level: " + levelDown);
+                            System.out.println("New teleport level: " + pr.level);
                         }
-                        // have we been at the teleport?
-                        Optional<DfsNodeDonut2> optionalExit = dfsi.findByPosition(exitDown, levelDown);
-                        if (optionalExit.isPresent()) {
-                            DfsNodeDonut2 node = takeNodeIfCloser(p, optionalExit.get());
-                            if (node != null) {
-                                d.teleportDown = node;
-                            }
-                        } else {
-                            if (DEBUG) {
-                                System.out.println("New teleport level: " + levelDown);
-                            }
-                            DfsNodeDonut2 t = new DfsNodeDonut2(d, exitDown, steps + 2, levelDown);
-                            d.teleportDown = t;
-                        }
+                        DfsNodeDonut2 t = new DfsNodeDonut2(d, pr.pos, steps + 2, pr.level);
+                        d.teleport = t;
                     }
 
 
@@ -242,11 +202,8 @@ public class DfsNodeDonut2 {
         if (right != null && !child.isPresent()) {
             child = right.findByPosition(p, level);
         }
-        if (teleportUp != null && !child.isPresent()) {
-            child = teleportUp.findByPosition(p, level);
-        }
-        if (teleportDown != null && !child.isPresent()) {
-            child = teleportDown.findByPosition(p, level);
+        if (teleport != null && !child.isPresent()) {
+            child = teleport.findByPosition(p, level);
         }
 
         return child;
@@ -272,11 +229,8 @@ public class DfsNodeDonut2 {
         if (right != null) {
             right.setSteps(childSteps);
         }
-        if (teleportUp != null) {
-            teleportUp.setSteps(childSteps);
-        }
-        if (teleportDown != null) {
-            teleportDown.setSteps(childSteps);
+        if (teleport != null) {
+            teleport.setSteps(childSteps);
         }
     }
 
@@ -291,8 +245,7 @@ public class DfsNodeDonut2 {
                 ", down=" + (down != null ? down.pos.toString() : "-") +
                 ", left=" + (left != null ? left.pos.toString() : "-") +
                 ", right=" + (right != null ? right.pos.toString() : "-") +
-                ", teleportUp=" + (teleportUp != null ? teleportUp.pos.toString() : "-") +
-                ", teleportDown=" + (teleportDown != null ? teleportDown.pos.toString() : "-") +
+                ", teleport=" + (teleport != null ? teleport.pos.toString() : "-") +
                 '}';
     }
 }

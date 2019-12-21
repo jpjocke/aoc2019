@@ -94,4 +94,12 @@ public class DonutMazeStep2 {
         sb.append("|");
         return sb.toString();
     }
+
+    public int getWidth() {
+        return map[0].length;
+    }
+
+    public int getHeight() {
+        return map.length;
+    }
 }
