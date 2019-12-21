@@ -20,4 +20,6 @@ public interface DfsIDonut2 {
 
     Optional<PortalResult> findTeleport(IntPoint pos, int level);
 
+    void addNode(DfsNodeDonut2 node);
+
 }

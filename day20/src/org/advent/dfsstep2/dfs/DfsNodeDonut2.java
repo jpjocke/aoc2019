@@ -62,16 +62,16 @@ public class DfsNodeDonut2 {
             //       map.print(getTop(), pos, level);
         }
 
-        if (around[0] != null) {
+        if (around[0] != null && !around[0].deadEnd) {
             around[0].explore(dfsi, map);
         }
-        if (around[1] != null) {
+        if (around[1] != null && !around[1].deadEnd) {
             around[1].explore(dfsi, map);
         }
-        if (around[2] != null) {
+        if (around[2] != null && !around[2].deadEnd) {
             around[2].explore(dfsi, map);
         }
-        if (around[3] != null) {
+        if (around[3] != null && !around[3].deadEnd) {
             around[3].explore(dfsi, map);
         }
         if (teleport != null) {
@@ -175,14 +175,17 @@ public class DfsNodeDonut2 {
                             System.out.println("New teleport level: " + pr.level);
                         }
                         DfsNodeDonut2 t = new DfsNodeDonut2(d, pr.pos, steps + 2, pr.level);
+                        dfsi.addNode(t);
                         d.teleport = t;
                     }
 
-
+                    dfsi.addNode(d);
                     return d;
                 } else {
                     // we have not been here
-                    return new DfsNodeDonut2(this, p, steps + 1, level);
+                    DfsNodeDonut2 node = new DfsNodeDonut2(this, p, steps + 1, level);
+                    dfsi.addNode(node);
+                    return node;
 
                 }
             }

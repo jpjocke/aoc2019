@@ -43,16 +43,16 @@ public class DonutMazeStep2 {
         }
     }
 
-    public void printFull(DfsNodeDonut2 top, IntPoint pos, int levels) {
+    public void printFull(DfsIDonut2 dfsi, IntPoint pos, int levels) {
 
         IntPoint key = new IntPoint(0, 0);
         for(int i = 0; i < levels; i++) {
-            print(top, pos, i);
+            print(dfsi, pos, i);
         }
 
     }
 
-    public void print(DfsNodeDonut2 top, IntPoint pos, int level) {
+    public void print(DfsIDonut2 dfsi, IntPoint pos, int level) {
 
         IntPoint key = new IntPoint(0, 0);
             System.out.println("----------- level " + level + " -----------------------");
@@ -62,7 +62,7 @@ public class DonutMazeStep2 {
                     key.x = x;
                     key.y = y;
                     // TODO: if print all levels?
-                    Optional<DfsNodeDonut2> steps = top.findByPosition(key, level);
+                    Optional<DfsNodeDonut2> steps = dfsi.findByPosition(key, level);
                     if(key.equals(pos)) {
                         sb.append(" ^^ ");
                     }

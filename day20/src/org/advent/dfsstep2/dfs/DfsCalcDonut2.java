@@ -1,8 +1,10 @@
 package org.advent.dfsstep2.dfs;
 
-import org.advent.DonutMaze;
 import org.advent.util.IntPoint;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -14,6 +16,7 @@ public class DfsCalcDonut2 implements DfsIDonut2 {
     private IntPoint start;
     private DfsNodeDonut2 top;
     private int levels;
+    private List<HashMap<IntPoint, DfsNodeDonut2>> searchMap;
 
     public DfsCalcDonut2(Map<IntPoint, String> teleports, DonutMazeStep2 map, int levels) {
         this.teleports = teleports;
@@ -24,14 +27,20 @@ public class DfsCalcDonut2 implements DfsIDonut2 {
                 break;
             }
         }
+        searchMap = new ArrayList<>();
+        for (int i = 0; i <= levels; i++) {
+            searchMap.add(new HashMap<>());
+        }
+
         top = new DfsNodeDonut2(null, start, 0, 0);
+        addNode(top);
         this.levels = levels;
         top.DEBUG = true;
     }
 
     public int exploreFromStart() {
         top.explore(this, map);
-        map.printFull(top, start, levels);
+        map.printFull(this, start, levels);
 
         Optional<DfsNodeDonut2> exit = findByPosition(findExitPos(), 0);
         if (exit.isPresent()) {
@@ -44,7 +53,12 @@ public class DfsCalcDonut2 implements DfsIDonut2 {
 
     @Override
     public Optional<DfsNodeDonut2> findByPosition(IntPoint searchedPos, int level) {
-        return top.findByPosition(searchedPos, level);
+        DfsNodeDonut2 node = searchMap.get(level).get(searchedPos);
+        if (node == null) {
+            return Optional.empty();
+        }
+        return Optional.of(node);
+        //  return top.findByPosition(searchedPos, level);
     }
 
     @Override
@@ -64,13 +78,13 @@ public class DfsCalcDonut2 implements DfsIDonut2 {
 
             }
             for (IntPoint exit : teleports.keySet()) {
-                if(exit.equals(pos)) {
+                if (exit.equals(pos)) {
                     continue;
                 }
                 if (teleports.get(exit).equals(key)) {
                     // kolla position och om den går ner / upp
                     int nextLevel = level;
-                    if (pos.x == 0 ) {
+                    if (pos.x == 0) {
                         nextLevel--;
                     } else if (pos.x == map.getWidth() - 1) {
                         nextLevel--;
@@ -90,6 +104,12 @@ public class DfsCalcDonut2 implements DfsIDonut2 {
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public void addNode(DfsNodeDonut2 node) {
+        HashMap<IntPoint, DfsNodeDonut2> map = searchMap.get(node.level);
+        map.put(node.pos, node);
     }
 
 
