@@ -11,17 +11,17 @@ public class DfsNodeDonut2 {
     protected int steps;
     protected int level;
     protected DfsNodeDonut2 parent;
-    protected DfsNodeDonut2 up;
-    protected DfsNodeDonut2 down;
-    protected DfsNodeDonut2 left;
-    protected DfsNodeDonut2 right;
     protected DfsNodeDonut2 teleport;
+    private DfsNodeDonut2[] around;
+    private boolean deadEnd;
 
     public DfsNodeDonut2(DfsNodeDonut2 parent, IntPoint pos, int steps, int level) {
         this.pos = pos;
         this.steps = steps;
         this.parent = parent;
         this.level = level;
+        around = new DfsNodeDonut2[4];
+        deadEnd = false;
         if (DEBUG) {
             System.out.println("Created: " + this);
         }
@@ -35,47 +35,74 @@ public class DfsNodeDonut2 {
         if (DEBUG) {
             System.out.println("Exploring: " + this);
         }
-        if (up == null) {
+        if (around[0] == null) {
             IntPoint upP = pos.copy();
             upP.y--;
-            up = exploreForPos(dfsi, upP);
+            around[0] = exploreForPos(dfsi, upP);
         }
 
-        if (down == null) {
+        if (around[1] == null) {
             IntPoint upP = pos.copy();
             upP.y++;
-            down = exploreForPos(dfsi, upP);
+            around[1] = exploreForPos(dfsi, upP);
         }
 
-        if (left == null) {
+        if (around[2] == null) {
             IntPoint upP = pos.copy();
             upP.x--;
-            left = exploreForPos(dfsi, upP);
+            around[2] = exploreForPos(dfsi, upP);
         }
 
-        if (right == null) {
+        if (around[3] == null) {
             IntPoint upP = pos.copy();
             upP.x++;
-            right = exploreForPos(dfsi, upP);
+            around[3] = exploreForPos(dfsi, upP);
         }
         if (DEBUG) {
-          //       map.print(getTop(), pos, level);
+            //       map.print(getTop(), pos, level);
         }
 
-        if (up != null) {
-            up.explore(dfsi, map);
+        if (around[0] != null) {
+            around[0].explore(dfsi, map);
         }
-        if (down != null) {
-            down.explore(dfsi, map);
+        if (around[1] != null) {
+            around[1].explore(dfsi, map);
         }
-        if (left != null) {
-            left.explore(dfsi, map);
+        if (around[2] != null) {
+            around[2].explore(dfsi, map);
         }
-        if (right != null) {
-            right.explore(dfsi, map);
+        if (around[3] != null) {
+            around[3].explore(dfsi, map);
         }
         if (teleport != null) {
             teleport.explore(dfsi, map);
+        }
+        if (around[0] == null && around[1] == null && around[2] == null && around[3] == null && teleport == null) {
+            deadEnd = true;
+            parent.childIsDeadEnd();
+        }
+    }
+
+    protected void childIsDeadEnd() {
+        int paths = 0;
+        if (around[0] != null) {
+            paths++;
+        }
+        if (around[1] != null) {
+            paths++;
+        }
+        if (around[2] != null) {
+            paths++;
+        }
+        if (around[3] != null) {
+            paths++;
+        }
+        if (teleport != null) {
+            paths++;
+        }
+        if (paths <= 1) {
+            deadEnd = true;
+            parent.childIsDeadEnd();
         }
     }
 
@@ -86,32 +113,28 @@ public class DfsNodeDonut2 {
         return parent.getTop();
     }
 
-    public void removeFromParent() {
-        if (parent.up != null && parent.up.getPos().equals(this.pos)) {
-            parent.up = null;
+    public void removeFromParent(DfsNodeDonut2 newParent) {
+        if (parent.around[0] != null && parent.around[0].getPos().equals(this.pos)) {
+            parent.around[0] = null;
         }
-        if (parent.down != null && parent.down.getPos().equals(this.pos)) {
-            parent.down = null;
+        if (parent.around[1] != null && parent.around[1].getPos().equals(this.pos)) {
+            parent.around[1] = null;
         }
-        if (parent.left != null && parent.left.getPos().equals(this.pos)) {
-            parent.left = null;
+        if (parent.around[2] != null && parent.around[2].getPos().equals(this.pos)) {
+            parent.around[2] = null;
         }
-        if (parent.right != null && parent.right.getPos().equals(this.pos)) {
-            parent.right = null;
+        if (parent.around[3] != null && parent.around[3].getPos().equals(this.pos)) {
+            parent.around[3] = null;
         }
         if (parent.teleport != null && parent.teleport.getPos().equals(this.pos)) {
             DfsNodeDonut2 tmp = parent;
             DfsNodeDonut2 t = parent.teleport;
             parent.teleport = null;
-            parent.removeFromParent();
+            parent.removeFromParent(t);
             t.teleport = tmp;
         }
 
-        // also remove children!!
-        up = null;
-        down = null;
-        left = null;
-        right = null;
+        parent = newParent;
     }
 
     protected IntPoint getStartPoint() {
@@ -176,7 +199,7 @@ public class DfsNodeDonut2 {
             if (DEBUG) {
                 System.out.println("Stealing dfs at: " + p);
             }
-            node.removeFromParent();
+            node.removeFromParent(this);
             node.setSteps(steps + 1);
             return node;
         } else {
@@ -189,18 +212,21 @@ public class DfsNodeDonut2 {
         if (pos.equals(p) && this.level == level) {
             return Optional.of(this);
         }
+        if (deadEnd) {
+            return Optional.empty();
+        }
         Optional<DfsNodeDonut2> child = Optional.empty();
-        if (up != null) {
-            child = up.findByPosition(p, level);
+        if (around[0] != null) {
+            child = around[0].findByPosition(p, level);
         }
-        if (down != null && !child.isPresent()) {
-            child = down.findByPosition(p, level);
+        if (around[1] != null && !child.isPresent()) {
+            child = around[1].findByPosition(p, level);
         }
-        if (left != null && !child.isPresent()) {
-            child = left.findByPosition(p, level);
+        if (around[2] != null && !child.isPresent()) {
+            child = around[2].findByPosition(p, level);
         }
-        if (right != null && !child.isPresent()) {
-            child = right.findByPosition(p, level);
+        if (around[3] != null && !child.isPresent()) {
+            child = around[3].findByPosition(p, level);
         }
         if (teleport != null && !child.isPresent()) {
             child = teleport.findByPosition(p, level);
@@ -217,17 +243,17 @@ public class DfsNodeDonut2 {
         this.steps = steps;
         int childSteps = steps + 1;
 
-        if (up != null) {
-            up.setSteps(childSteps);
+        if (around[0] != null) {
+            around[0].setSteps(childSteps);
         }
-        if (down != null) {
-            down.setSteps(childSteps);
+        if (around[1] != null) {
+            around[1].setSteps(childSteps);
         }
-        if (left != null) {
-            left.setSteps(childSteps);
+        if (around[2] != null) {
+            around[2].setSteps(childSteps);
         }
-        if (right != null) {
-            right.setSteps(childSteps);
+        if (around[3] != null) {
+            around[3].setSteps(childSteps);
         }
         if (teleport != null) {
             teleport.setSteps(childSteps);
@@ -241,10 +267,10 @@ public class DfsNodeDonut2 {
                 ", steps=" + steps +
                 ", level=" + level +
                 ", parent=" + (parent != null ? parent.pos.toString() : "-") +
-                ", up=" + (up != null ? up.pos.toString() : "-") +
-                ", down=" + (down != null ? down.pos.toString() : "-") +
-                ", left=" + (left != null ? left.pos.toString() : "-") +
-                ", right=" + (right != null ? right.pos.toString() : "-") +
+                ", up=" + (around[0] != null ? around[0].pos.toString() : "-") +
+                ", down=" + (around[1] != null ? around[1].pos.toString() : "-") +
+                ", left=" + (around[2] != null ? around[2].pos.toString() : "-") +
+                ", right=" + (around[3] != null ? around[3].pos.toString() : "-") +
                 ", teleport=" + (teleport != null ? teleport.pos.toString() : "-") +
                 '}';
     }

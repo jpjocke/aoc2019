@@ -26,12 +26,12 @@ public class DfsCalcDonut2 implements DfsIDonut2 {
         }
         top = new DfsNodeDonut2(null, start, 0, 0);
         this.levels = levels;
-      //  top.DEBUG = true;
+        top.DEBUG = true;
     }
 
     public int exploreFromStart() {
         top.explore(this, map);
-      //  map.printFull(top, start, levels);
+        map.printFull(top, start, levels);
 
         Optional<DfsNodeDonut2> exit = findByPosition(findExitPos(), 0);
         if (exit.isPresent()) {
