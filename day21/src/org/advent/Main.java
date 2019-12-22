@@ -36,24 +36,15 @@ public class Main {
     }
 
     private static void step2(IntMachine im) {
-        ASCIIUtil.not(im, ASCIIUtil.A, ASCIIUtil.T);
-        ASCIIUtil.not(im, ASCIIUtil.B, ASCIIUtil.J);
-        ASCIIUtil.or(im, ASCIIUtil.T, ASCIIUtil.J);
-        ASCIIUtil.not(im, ASCIIUtil.C, ASCIIUtil.T);
-        ASCIIUtil.or(im, ASCIIUtil.T, ASCIIUtil.J);
-        ASCIIUtil.not(im, ASCIIUtil.D, ASCIIUtil.T);
-        ASCIIUtil.or(im, ASCIIUtil.T, ASCIIUtil.J);
-        ASCIIUtil.not(im, ASCIIUtil.E, ASCIIUtil.T);
-        ASCIIUtil.or(im, ASCIIUtil.T, ASCIIUtil.J);
-        ASCIIUtil.not(im, ASCIIUtil.F, ASCIIUtil.T);
-        ASCIIUtil.or(im, ASCIIUtil.T, ASCIIUtil.J);
-        ASCIIUtil.not(im, ASCIIUtil.G, ASCIIUtil.T);
-        ASCIIUtil.or(im, ASCIIUtil.T, ASCIIUtil.J);
-       // ASCIIUtil.not(im, ASCIIUtil.H, ASCIIUtil.T);
-      //  ASCIIUtil.or(im, ASCIIUtil.T, ASCIIUtil.J);
 
+        ASCIIUtil.not(im, ASCIIUtil.B, ASCIIUtil.T);
+        ASCIIUtil.not(im, ASCIIUtil.C, ASCIIUtil.J);
+        ASCIIUtil.or(im, ASCIIUtil.T, ASCIIUtil.J);
+        ASCIIUtil.and(im, ASCIIUtil.D, ASCIIUtil.J);
         ASCIIUtil.and(im, ASCIIUtil.H, ASCIIUtil.J);
-      //  ASCIIUtil.and(im, ASCIIUtil.I, ASCIIUtil.J);
+        ASCIIUtil.not(im, ASCIIUtil.A, ASCIIUtil.T);
+        ASCIIUtil.or(im, ASCIIUtil.T, ASCIIUtil.J);
+
         ASCIIUtil.run(im);
         im.execute();
 
@@ -72,7 +63,7 @@ public class Main {
                 continue;
             }
             sb.append(c + "");
-           // sb.append(c + "(" + output.get(i).intValue() + ")");
+            sb.append(c + "(" + output.get(i).intValue() + ")");
             // System.out.println("i: " + i + ", val: " + output.get(i) + ", " + c);
         }
         System.out.println(sb.toString());
