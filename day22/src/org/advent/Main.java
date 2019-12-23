@@ -110,19 +110,48 @@ public class Main {
         long tick = System.currentTimeMillis();
 
         List<Action> actions = ActionParser.parse(input);
+       // step1(actions);
+        step2(actions);
+
+        System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
+    }
+
+    private static void step1(List<Action> actions) {
         Deck d = new Deck(10007);
         d.runActions(actions);
 
         int[] result = d.getDeck();
-        // 2075 wrong -> was index 2019
         for(int i = 0; i < result.length; i++) {
             if(result[i] == 2019) {
                 System.out.println("Card 2019 is at index: " + i);
             }
         }
-        System.out.println("Position 2019: " + result[2019]);
+    }
 
-        System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
+
+    private static void step2(List<Action> actions) {
+        long result = 2020;
+        for (int a = 0; a < 101741582076661L; a++) {
+          //  System.out.println(result);
+            for (int i = actions.size() - 1; i >= 0; i--) {
+                result = actions.get(i).reverseIndex(result, 101741582076661L);
+            }
+/*
+            if(a > 1000) {
+                break;
+            }
+*/
+
+            if ( result == 2020) {
+                System.out.println(a + "/" + 101741582076661L);
+                break;
+            }
+            if(a % 10000000 == 0) {
+                System.out.println(a + "/" + 101741582076661L);
+            }
+        }
+        System.out.println("Starting: " + result);
+        // 10825292759511 too low -> denna var en gång
     }
 
 }

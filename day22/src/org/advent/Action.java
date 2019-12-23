@@ -5,7 +5,6 @@ import java.util.Arrays;
 public class Action {
     private Type type;
 
-    ;
     private int amount;
 
     public Action(Type type, int amount) {
@@ -39,6 +38,7 @@ public class Action {
             shuffledIndex++;
         }
 
+        System.out.println(this + ". NewStack : " + Arrays.toString(newStack));
         return newStack;
     }
 
@@ -64,8 +64,7 @@ public class Action {
                 cutStack[absolute + i] = deck[i];
             }
         }
-
-        // TODO
+        System.out.println(this + ". Cut : " + Arrays.toString(cutStack));
         return cutStack;
     }
 
@@ -79,7 +78,90 @@ public class Action {
             shufflePointer = shufflePointer % deck.length;
             deckPointer++;
         }
+        System.out.println(this + ". Increment : " + Arrays.toString(increment));
         return increment;
+    }
+
+    public long reverseIndex(long index, long size) {
+        switch (type) {
+            case NEW_STACK:
+                return reverseIndexStack(index, size);
+            case CUT:
+                return reverseCut(index, size);
+
+            case DEAL_INCREMENT:
+            default:
+                return reverseIncrement(index, size);
+        }
+    }
+
+    private long reverseIndexStack(long index, long size) {
+        long result = (size - 1) - index;
+    //    System.out.println(this + ". ReverseStack " + index + " in size " + size + " = " + result);
+        return result;
+    }
+
+    private long reverseCut(long index, long size) {
+        long result;
+        if (amount > 0) {
+            if (index >= size - amount) {
+                result = index - (size - amount);
+            } else {
+                result = index + amount;
+            }
+        } else {
+            int absolute = Math.abs(amount);
+            if (index < absolute) {
+                result = index + (size - absolute);
+            } else {
+                result = index - absolute;
+            }
+        }
+    //    System.out.println(this + ". ReverseCut " + index + " in size " + size + " = " + result);
+        return result;
+    }
+
+    private long reverseIncrement(long index, long size) {
+
+        long count = 0;
+        long deckPointer = 0;
+        while (deckPointer != index) {
+        //    System.out.println("reverseIncrement " + deckPointer + ", " + index + ", " + count);
+            if (deckPointer < index) {
+                // hitta multiplier till index
+                long multiplier = (index - deckPointer) / amount;
+                count += multiplier;
+                deckPointer += multiplier * amount;
+        //        System.out.println("A (" + index + " - " + deckPointer + ") / " + amount + " = " + multiplier);
+                if (deckPointer == index) {
+                    break;
+                }
+            } else {
+                // hitta multiplier till size
+                long multiplier = (size - deckPointer) / amount;
+                count += multiplier;
+                deckPointer += multiplier * amount;
+        //        System.out.println("B (" + size + " - " + deckPointer + ") / " + amount + " = " + multiplier);
+
+
+            }
+            deckPointer += amount;
+        //    System.out.println("C " + deckPointer);
+            deckPointer = deckPointer % size;
+            count++;
+
+        }
+
+    //    System.out.println(this + ". ReverseIncrement " + index + " in size " + size + " = " + count);
+        return count;
+    }
+
+    @Override
+    public String toString() {
+        return "Action{" +
+                "type=" + type +
+                ", amount=" + amount +
+                '}';
     }
 
     public enum Type {NEW_STACK, CUT, DEAL_INCREMENT}
