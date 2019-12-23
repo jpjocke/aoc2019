@@ -56,8 +56,8 @@ public class IntMachine {
     }
 
     public void execute() {
-        System.out.println("-- Executing");
-        System.out.println("  " + intCodes);
+     //   System.out.println("-- Executing");
+      //  System.out.println("  " + intCodes);
 
         while (true) {
             Op op;
