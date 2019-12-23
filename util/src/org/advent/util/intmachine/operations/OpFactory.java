@@ -4,26 +4,28 @@ import org.advent.util.Util;
 import org.advent.util.intmachine.Input;
 import org.advent.util.intmachine.IntCodes;
 import org.advent.util.intmachine.NoMoreInputException;
+import org.advent.util.intmachine.Output;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OpFactory {
     private IntCodes intCodes;
-    private List<Long> output;
+   // private List<Long> output;
+    private Output output;
     private Input input;
 
-    public OpFactory(IntCodes intCodes, List<Long> output, Input input) {
+    public OpFactory(IntCodes intCodes, Output output, Input input) {
         setup(intCodes, output, input);
     }
 
-    public OpFactory(IntCodes intCodes, List<Long> output, int input) {
+    public OpFactory(IntCodes intCodes, Output output, int input) {
         Input i = new Input();
         i.addInput(input);
         setup(intCodes, output, i);
     }
 
-    private void setup(IntCodes intCodes, List<Long> output, Input input) {
+    private void setup(IntCodes intCodes, Output output, Input input) {
         this.intCodes = intCodes;
         this.output = output;
         this.input = input;

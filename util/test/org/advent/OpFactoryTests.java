@@ -2,6 +2,7 @@ package org.advent;
 
 import org.advent.util.intmachine.IntCodes;
 import org.advent.util.intmachine.NoMoreInputException;
+import org.advent.util.intmachine.Output;
 import org.advent.util.intmachine.operations.Op;
 import org.advent.util.intmachine.operations.OpAdd;
 import org.advent.util.intmachine.operations.OpEquals;
@@ -23,7 +24,7 @@ public class OpFactoryTests {
     public void toExit() throws NoMoreInputException {
         String input = "99";
         IntCodes ops = new IntCodes(input);
-        OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
+        OpFactory factory = new OpFactory(ops, new Output(), 0);
         Op op = factory.buildOp(0);
 
         Assert.assertTrue(op.isExit());
@@ -33,7 +34,7 @@ public class OpFactoryTests {
     public void toAdd() throws NoMoreInputException {
         String input = "1,1,1,1,1";
         IntCodes ops = new IntCodes(input);
-        OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
+        OpFactory factory = new OpFactory(ops, new Output(), 0);
         Op op = factory.buildOp(0);
 
         Assert.assertTrue(op instanceof OpAdd);
@@ -43,7 +44,7 @@ public class OpFactoryTests {
     public void toMultiply() throws NoMoreInputException {
         String input = "2,1,1,1,1";
         IntCodes ops = new IntCodes(input);
-        OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
+        OpFactory factory = new OpFactory(ops, new Output(), 0);
         Op op = factory.buildOp(0);
 
         Assert.assertTrue(op instanceof OpMultiply);
@@ -53,7 +54,7 @@ public class OpFactoryTests {
     public void toInput() throws NoMoreInputException {
         String input = "3,50";
         IntCodes ops = new IntCodes(input);
-        OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
+        OpFactory factory = new OpFactory(ops, new Output(), 0);
         Op op = factory.buildOp(0);
 
         Assert.assertTrue(op instanceof OpInput);
@@ -63,7 +64,7 @@ public class OpFactoryTests {
     public void toOutput() throws NoMoreInputException {
         String input = "4,50";
         IntCodes ops = new IntCodes(input);
-        OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
+        OpFactory factory = new OpFactory(ops, new Output(), 0);
         Op op = factory.buildOp(0);
 
         Assert.assertTrue(op instanceof OpOutput);
@@ -73,7 +74,7 @@ public class OpFactoryTests {
     public void toJumpIfTrue() throws NoMoreInputException {
         String input = "5,1,0";
         IntCodes ops = new IntCodes(input);
-        OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
+        OpFactory factory = new OpFactory(ops, new Output(), 0);
         Op op = factory.buildOp(0);
 
         Assert.assertTrue(op instanceof OpJumpIfTrue);
@@ -83,7 +84,7 @@ public class OpFactoryTests {
     public void toJumpIfFalse() throws NoMoreInputException {
         String input = "6,1,0";
         IntCodes ops = new IntCodes(input);
-        OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
+        OpFactory factory = new OpFactory(ops, new Output(), 0);
         Op op = factory.buildOp(0);
 
         Assert.assertTrue(op instanceof OpJumpIfFalse);
@@ -93,7 +94,7 @@ public class OpFactoryTests {
     public void toLessThan() throws NoMoreInputException {
         String input = "7,1,0,3";
         IntCodes ops = new IntCodes(input);
-        OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
+        OpFactory factory = new OpFactory(ops, new Output(), 0);
         Op op = factory.buildOp(0);
 
         Assert.assertTrue(op instanceof OpLessThan);
@@ -103,7 +104,7 @@ public class OpFactoryTests {
     public void toEquals() throws NoMoreInputException {
         String input = "8,1,0,3";
         IntCodes ops = new IntCodes(input);
-        OpFactory factory = new OpFactory(ops, new ArrayList<>(), 0);
+        OpFactory factory = new OpFactory(ops, new Output(), 0);
         Op op = factory.buildOp(0);
 
         Assert.assertTrue(op instanceof OpEquals);

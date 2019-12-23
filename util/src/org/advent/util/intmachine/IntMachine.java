@@ -4,7 +4,6 @@ package org.advent.util.intmachine;
 import org.advent.util.intmachine.operations.Op;
 import org.advent.util.intmachine.operations.OpFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IntMachine {
@@ -13,7 +12,7 @@ public class IntMachine {
     boolean isDone = false;
     Input input;
     private IntCodes intCodes;
-    private List<Long> output;
+    private Output output;
     private OpFactory factory;
 
     public IntMachine(IntCodes intCodes) {
@@ -33,7 +32,7 @@ public class IntMachine {
     private void setup(IntCodes intCodes, Input input) {
         this.intCodes = intCodes;
         this.input = input;
-        output = new ArrayList<>();
+        output = new Output();
         factory = new OpFactory(intCodes, output, input);
     }
 
@@ -49,7 +48,7 @@ public class IntMachine {
         if (output.size() == 0) {
             return -1;
         }
-        return output.get(output.size() - 1);
+        return output.getOutputAt(output.size() - 1);
     }
 
     public boolean isDone() {
@@ -108,6 +107,10 @@ public class IntMachine {
     }
 
     public List<Long> getOutput() {
+        return output.getFullOutput();
+    }
+
+    public Output getOutputObj() {
         return output;
     }
 

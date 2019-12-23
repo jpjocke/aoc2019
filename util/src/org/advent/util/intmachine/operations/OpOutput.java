@@ -1,14 +1,15 @@
 package org.advent.util.intmachine.operations;
 
 import org.advent.util.intmachine.IntCodes;
+import org.advent.util.intmachine.Output;
 
 import java.util.List;
 
 public class OpOutput extends Op {
     private Argument arg;
-    private List<Long> output;
+    private Output output;
 
-    public OpOutput(Argument arg, List<Long> output) {
+    public OpOutput(Argument arg, Output output) {
         this.arg = arg;
         this.output = output;
     }

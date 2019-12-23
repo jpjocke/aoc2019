@@ -12,7 +12,7 @@ public class Input {
         this.currentInput = 0;
     }
 
-    public void addInput(long next) {
+    public synchronized void addInput(long next) {
         input.add(next);
     }
 
@@ -20,7 +20,7 @@ public class Input {
         currentInput = 0;
     }
 
-    public long getNextInput() throws NoMoreInputException {
+    public synchronized long getNextInput() throws NoMoreInputException {
         if (currentInput >= input.size()) {
             throw new NoMoreInputException();
         }
