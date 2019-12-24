@@ -50,4 +50,24 @@ public class Verify {
 
         Assert.assertEquals(2129920, map.toValue());
     }
+
+    @Test
+    public void testStep2() {
+        String input = "....#\n" +
+                "#..#.\n" +
+                "#..##\n" +
+                "..#..\n" +
+                "#....";
+
+        BugsMapStep2 map = new BugsMapStep2(BugsMapParser.parse(input));
+        BugsMapInfinite inf = new BugsMapInfinite();
+        inf.setLevel0(map);
+        inf.print();
+
+        for (int i = 0; i < 10; i ++) {
+            inf.mutate();
+            inf.print();
+        }
+        Assert.assertEquals(99, inf.countAll());
+    }
 }
