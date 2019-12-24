@@ -18,7 +18,7 @@ public class OpInput extends Op {
         if (arg.getMode() == Argument.Mode.RELATIVE) {
             index = arg.getValue() + intCodes.getRelativeBase();
         }
-        System.out.println("  -> Input value is: " + input + ", stored at index: " + index);
+       // System.out.println("  -> Input value is: " + input + ", stored at index: " + index);
         intCodes.setValueAtIndex(index, input);
         return currentOp + 2;
     }

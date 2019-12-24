@@ -44,6 +44,11 @@ public class IntMachine {
         this.input.addInput(input);
     }
 
+    public synchronized void addInput(long a, long b) {
+        input.addInput(a);
+        input.addInput(b);
+    }
+
     public long getLastOutput() {
         if (output.size() == 0) {
             return -1;

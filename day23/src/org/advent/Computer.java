@@ -9,6 +9,7 @@ public class Computer extends Thread {
     private int index;
     private IntMachine im;
     private boolean stop;
+    private boolean idle = false;
 
     public Computer(int index, String input) {
 
@@ -28,17 +29,34 @@ public class Computer extends Thread {
         this.stop = true;
     }
 
-    public synchronized void addInput(long input) {
-        im.addInput(input);
+    public synchronized void addInput(long x, long y) {
+        im.addInput(x, y);
+        idle = false;
+    }
+
+    public boolean isIdle() {
+        return idle;
     }
 
     @Override
     public void run() {
         System.out.println("Computer " + index + " started.");
         while (!stop) {
-            im.execute();
-            System.out.println("Computer " + index + " idle (-1).");
-            im.addInput(-1);
+            if(!idle) {
+                im.execute();
+                im.addInput(-1);
+                idle = true;
+                im.execute();
+
+            }
+          //  System.out.println("Computer " + index + " idle (-1).");
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
         System.out.println("Computer " + index + " stopped.");
     }

@@ -16,6 +16,9 @@ public class Main {
 
         coordinator.start();
 
+        // step 2 -> 2251799813682806 too high
+        // 20665 too high
+        // 13369 too high
         System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
     }
 

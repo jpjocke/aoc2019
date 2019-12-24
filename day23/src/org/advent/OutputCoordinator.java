@@ -9,6 +9,10 @@ public class OutputCoordinator extends Thread {
     private List<Computer> computers;
     private List<Output> outputs;
     private List<Integer> outputPointers;
+    private long NATx;
+    private long NATy;
+    private long NATyGiven;
+    private boolean NATinit;
 
     public OutputCoordinator(int size) {
         outputs = new ArrayList<>();
@@ -17,6 +21,9 @@ public class OutputCoordinator extends Thread {
             outputPointers.add(0);
         }
         computers = new ArrayList<>();
+        NATy = -1;
+        NATyGiven = -1;
+        NATinit = false;
     }
 
     /**
@@ -34,27 +41,46 @@ public class OutputCoordinator extends Thread {
             computers.get(i).start();
         }
 
+        boolean allIdle = false;
         while (!stop) {
+            if (allIdle && NATinit) {
+                if (NATy == NATyGiven) {
+                    System.out.println("######## NAT SAME " + NATyGiven);
+                    stop = true;
+                }
+                NATyGiven = NATy;
+                System.out.println("++ All is idle sending NAT " + NATy + " to 0");
+                computers.get(0).addInput(NATx, NATy);
+            }
+
             for (int i = 0; i < outputPointers.size(); i++) {
                 int pointer = outputPointers.get(i);
                 Output o = outputs.get(i);
                 if (o.size() >= pointer + 3) {
-                    int to = (int)o.getOutputAt(pointer);
+                    int to = (int) o.getOutputAt(pointer);
                     long x = o.getOutputAt(pointer + 1);
                     long y = o.getOutputAt(pointer + 2);
-                    System.out.println("-- Output on index " + i + ", " + pointer + "/" + outputs.size());
+                    System.out.println("-- Output on index " + i + ", " + pointer + "/" + outputs.get(i).size());
 
                     System.out.println("-- To " + to + ", " + x + ", " + y);
                     if (to == 255) {
-                        System.out.println("######## To " + to + ", " + x + ", " + y);
-                        stop = true;
-                        break;
+                        NATinit = true;
+                        System.out.println("######## NAT " + y);
+                            NATx = x;
+                            NATy = y;
                     } else {
-                        computers.get(to).addInput(x);
-                        computers.get(to).addInput(y);
+                        computers.get(to).addInput(x, y);
                     }
                     pointer += 3;
                     outputPointers.set(i, pointer);
+                }
+            }
+
+            allIdle = true;
+            for (int i = 0; i < computers.size(); i++) {
+                if (!computers.get(i).isIdle()) {
+              //      System.out.println("++ Computer " + i + " is not idle.");
+                    allIdle = false;
                 }
             }
         }
