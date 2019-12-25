@@ -101,4 +101,98 @@ public class ASCIIUtil {
         im.addInput('N');
         im.addInput(NEW_LINE);
     }
+
+    public static void west(IntMachine im) {
+        im.addInput('w');
+        im.addInput('e');
+        im.addInput('s');
+        im.addInput('t');
+        im.addInput(NEW_LINE);
+    }
+
+    public static void east(IntMachine im) {
+        im.addInput('e');
+        im.addInput('a');
+        im.addInput('s');
+        im.addInput('t');
+        im.addInput(NEW_LINE);
+    }
+
+    public static void north(IntMachine im) {
+        im.addInput('n');
+        im.addInput('o');
+        im.addInput('r');
+        im.addInput('t');
+        im.addInput('h');
+        im.addInput(NEW_LINE);
+    }
+
+    public static void south(IntMachine im) {
+        im.addInput('s');
+        im.addInput('o');
+        im.addInput('u');
+        im.addInput('t');
+        im.addInput('h');
+        im.addInput(NEW_LINE);
+    }
+
+    public static void polygon(IntMachine im, boolean take) {
+        takeManual(im, take, "polygon");
+    }
+
+    public static void fixedPoint(IntMachine im, boolean take) {
+        takeManual(im, take, "fixed point");
+    }
+
+    public static void moltenLava(IntMachine im, boolean take) {
+        takeManual(im, take, "molten lava");
+    }
+
+    public static void aic(IntMachine im, boolean take) {
+        takeManual(im, take, "astronaut ice cream");
+    }
+
+    public static void easterEgg(IntMachine im, boolean take) {
+        takeManual(im, take, "easter egg");
+    }
+
+    public static void photons(IntMachine im, boolean take) {
+        takeManual(im, take, "photons");
+    }
+
+    public static void darkMatter(IntMachine im, boolean take) {
+        takeManual(im, take, "darkMatter");
+    }
+
+    public static void escapePod(IntMachine im, boolean take) {
+        takeManual(im, take, "escape pod");
+    }
+
+    public static void foodRations(IntMachine im, boolean take) {
+        takeManual(im, take, "food ration");
+    }
+
+    public static void asterisk(IntMachine im, boolean take) {
+        takeManual(im, take, "asterisk");
+    }
+
+    public static void weatherMachine(IntMachine im, boolean take) {
+        takeManual(im, take, "weather machine");
+    }
+
+
+    public static void takeManual(IntMachine im, boolean take, String line) {
+        if (take) {
+            manual(im, "take " + line);
+        } else {
+            manual(im, "drop " + line);
+        }
+    }
+
+    public static void manual(IntMachine im, String line) {
+        for (int i = 0; i < line.length(); i++) {
+            im.addInput(line.charAt(i));
+        }
+        im.addInput(NEW_LINE);
+    }
 }
