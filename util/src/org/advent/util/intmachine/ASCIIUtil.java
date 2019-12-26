@@ -161,7 +161,7 @@ public class ASCIIUtil {
     }
 
     public static void darkMatter(IntMachine im, boolean take) {
-        takeManual(im, take, "darkMatter");
+        takeManual(im, take, "dark matter");
     }
 
     public static void escapePod(IntMachine im, boolean take) {

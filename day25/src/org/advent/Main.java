@@ -4,6 +4,7 @@ import org.advent.util.intmachine.IntCodes;
 import org.advent.util.intmachine.IntMachine;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Main {
 
@@ -59,24 +60,89 @@ public class Main {
 	escape pod
 13 == Security Checkpoint ==
 14 == Pressure-Sensitive Floor ==
-	- Man måste vara tyngre
+
+Needed
+Items in your inventory:
+- astronaut ice cream
+- easter egg
+- dark matter
+- weather machine
+
      */
 
     public static void main(String[] args) {
         long tick = System.currentTimeMillis();
 
-        IntCodes codes = new IntCodes(input);
-        IntMachine im = new IntMachine(codes);
-
-        DroidManual droidManual = new DroidManual(im, true);
-        try {
-            droidManual.run();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+      //  manual();
+        abc();
 
 
         System.out.println("time: " + (System.currentTimeMillis() - tick) + " ms");
     }
 
+    private static void manual() {
+
+        IntCodes codes = new IntCodes(input);
+        IntMachine im = new IntMachine(codes);
+
+        DroidManual droidManual = new DroidManual(im);
+        try {
+            droidManual.run();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void abc() {
+        int a = -1;
+        int i = -1;
+        int j = -1;
+        int q = -1;
+        int w = -1;
+        int e = -1;
+        int r = -1;
+        int t = -1;
+        int y = -1;
+//        for (a = 0; a < 2; a++) {
+//            for (i = a + 1; i < 3; i++) {
+//                for (j = i + 1; j < 4; j++) {
+//                    for (q = j + 1; q < 5; q++) {
+//                        for (w = q + 1; w < 6; w++) {
+//                            for (e = w + 1; e < 7; e++) {
+                                for (r = e + 1; r < 8; r++) {
+                                    for (t = r + 1; t < 9; t++) {
+                                        for (y = t + 1; y < 10; y++) {
+                                            for (int u = y + 1; u < 11; u++) {
+
+                                                boolean[] items = new boolean[11];
+                                                for (int k = 0; k < 11; k++) {
+                                                    if (k == a || k == i || k == j || k == q || k == w || k == e || k == r || k == t || k == y || k == u) {
+                                                        items[k] = true;
+                                                    } else {
+                                                        items[k] = false;
+                                                    }
+                                                }
+
+                                                IntCodes codes = new IntCodes(input);
+                                                IntMachine im = new IntMachine(codes);
+                                                DroidManual droidManual = new DroidManual(im);
+                                                System.out.println("-------------------------------------");
+                                                System.out.println(Arrays.toString(items));
+                                                droidManual.pickup(items);
+                                                try {
+                                                    droidManual.runWithItems();
+                                                } catch (IOException ex) {
+                                                    ex.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+    }
 }

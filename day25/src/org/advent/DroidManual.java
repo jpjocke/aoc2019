@@ -14,70 +14,9 @@ public class DroidManual {
     BufferedReader br;
     private IntMachine im;
 
-    public DroidManual(IntMachine im, boolean takeAll) {
+    public DroidManual(IntMachine im) {
         this.im = im;
         br = new BufferedReader(new InputStreamReader(System.in));
-        if (takeAll) {
-            ASCIIUtil.west(im);
-            im.execute();
-            ASCIIUtil.west(im);
-            im.execute();
-            ASCIIUtil.photons(im, true);
-            im.execute();
-            ASCIIUtil.west(im);
-            im.execute();
-            ASCIIUtil.west(im);
-            im.execute();
-            ASCIIUtil.darkMatter(im, true);
-            im.execute();
-            ASCIIUtil.east(im);
-            im.execute();
-            ASCIIUtil.south(im);
-            im.execute();
-            ASCIIUtil.fixedPoint(im, true);
-            im.execute();
-            ASCIIUtil.west(im);
-            im.execute();
-            ASCIIUtil.foodRations(im, true);
-            im.execute();
-            ASCIIUtil.east(im);
-            im.execute();
-            ASCIIUtil.north(im);
-            im.execute();
-            ASCIIUtil.east(im);
-            im.execute();
-            ASCIIUtil.south(im);
-            im.execute();
-            ASCIIUtil.aic(im, true);
-            im.execute();
-            ASCIIUtil.west(im);
-            im.execute();
-            ASCIIUtil.moltenLava(im, true);
-            im.execute();
-            ASCIIUtil.east(im);
-            im.execute();
-            ASCIIUtil.south(im);
-            im.execute();
-            ASCIIUtil.polygon(im, true);
-            im.execute();
-            ASCIIUtil.east(im);
-            im.execute();
-            ASCIIUtil.easterEgg(im, true);
-            im.execute();
-            ASCIIUtil.north(im);
-            im.execute();
-            ASCIIUtil.escapePod(im, true);
-            im.execute();
-            ASCIIUtil.south(im);
-            im.execute();
-            ASCIIUtil.east(im);
-            im.execute();
-            ASCIIUtil.weatherMachine(im, true);
-            im.execute();
-            ASCIIUtil.north(im);
-            im.execute();
-            im.getOutputObj().clear();
-        }
     }
 
     public void run() throws IOException {
@@ -94,8 +33,135 @@ public class DroidManual {
         }
     }
 
-    public void runWithItems(boolean[] items) {
-        // TODO
+    public void pickup(boolean[] items) {
+        ASCIIUtil.west(im);
+        im.execute();
+        ASCIIUtil.south(im);
+        im.execute();
+        ASCIIUtil.south(im);
+        im.execute();
+        ASCIIUtil.south(im);
+        im.execute();
+        if (items[10]) {
+            ASCIIUtil.asterisk(im, true);
+            im.execute();
+        }
+        ASCIIUtil.north(im);
+        im.execute();
+        ASCIIUtil.north(im);
+        im.execute();
+        ASCIIUtil.north(im);
+        im.execute();
+        ASCIIUtil.west(im);
+        im.execute();
+        if (items[0]) {
+
+            ASCIIUtil.photons(im, true);
+            im.execute();
+        }
+        ASCIIUtil.west(im);
+        im.execute();
+        ASCIIUtil.west(im);
+        im.execute();
+        if (items[1]) {
+            ASCIIUtil.darkMatter(im, true);
+            im.execute();
+        }
+        ASCIIUtil.east(im);
+        im.execute();
+        ASCIIUtil.south(im);
+        im.execute();
+        if (items[2]) {
+            ASCIIUtil.fixedPoint(im, true);
+            im.execute();
+        }
+        ASCIIUtil.west(im);
+        im.execute();
+        if (items[3]) {
+            ASCIIUtil.foodRations(im, true);
+            im.execute();
+        }
+        ASCIIUtil.east(im);
+        im.execute();
+        ASCIIUtil.north(im);
+        im.execute();
+        ASCIIUtil.east(im);
+        im.execute();
+        ASCIIUtil.south(im);
+        im.execute();
+        if (items[4]) {
+            ASCIIUtil.aic(im, true);
+            im.execute();
+        }
+        ASCIIUtil.west(im);
+        im.execute();
+        if (items[5]) {
+            ASCIIUtil.moltenLava(im, true);
+            im.execute();
+        }
+        ASCIIUtil.east(im);
+        im.execute();
+        ASCIIUtil.south(im);
+        im.execute();
+        if (items[6]) {
+            ASCIIUtil.polygon(im, true);
+            im.execute();
+        }
+        ASCIIUtil.east(im);
+        im.execute();
+        if (items[7]) {
+            ASCIIUtil.easterEgg(im, true);
+            im.execute();
+        }
+        ASCIIUtil.north(im);
+        im.execute();
+        if (items[8]) {
+            ASCIIUtil.escapePod(im, true);
+            im.execute();
+        }
+        ASCIIUtil.south(im);
+        im.execute();
+        ASCIIUtil.east(im);
+        im.execute();
+        if (items[9]) {
+            ASCIIUtil.weatherMachine(im, true);
+            im.execute();
+        }
+        ASCIIUtil.north(im);
+        im.execute();
+        im.getOutputObj().clear();
+    }
+
+    public void runWithItems() throws IOException {
+        Output output = im.getOutputObj();
+
+        ASCIIUtil.manual(im, "inv");
+        im.execute();
+        String inv = getOutput(output.getFullOutput());
+        System.out.println(inv.substring(25, inv.length() - 10));
+
+        output.clear();
+        ASCIIUtil.north(im);
+        im.execute();
+
+        String o = getOutput(output.getFullOutput());
+       // System.out.println(o);
+        if(o.contains("heavier")) {
+            System.out.println("Too little stuff");
+        }
+        if (o.contains("lighter")) {
+
+            System.out.println("Too much stuff");
+        }
+        System.out.println("##");
+
+        if (o.contains("and you are ejected")) {
+            return;
+        }
+
+        System.out.println(o);
+        run();
+
     }
 
     private int getInput() throws IOException {
@@ -163,8 +229,19 @@ public class DroidManual {
         return 1;
     }
 
+    private String getOutput(List<Long> output) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < output.size(); i++) {
+            char c = new Character((char) output.get(i).intValue());
+
+            sb.append(c + "");
+        }
+        return sb.toString();
+    }
+
     private void printMessages(List<Long> output) {
         System.out.println("--------  MESSAGE --------------");
+        /*
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < output.size(); i++) {
             char c = new Character((char) output.get(i).intValue());
@@ -178,5 +255,7 @@ public class DroidManual {
             // System.out.println("i: " + i + ", val: " + output.get(i) + ", " + c);
         }
         System.out.println(sb.toString());
+         */
+        System.out.println(getOutput(output));
     }
 }
